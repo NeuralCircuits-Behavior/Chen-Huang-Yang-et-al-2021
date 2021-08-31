@@ -1,5 +1,5 @@
 # Chen-Huang-Yang-et-al-2021
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5346761.svg)](https://doi.org/10.5281/zenodo.5346761) 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5346760.svg)](https://doi.org/10.5281/zenodo.5346760) 
 
 Customized code for SMART and reconstruced neuron's swc files.
 
