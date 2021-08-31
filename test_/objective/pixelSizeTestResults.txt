@@ -1,0 +1,44 @@
+2018/3/13, 16x 
+used R1DS1P, Group 2 and Element 2
+
+[TestParameters]
+zStepRange = 11.468:0.001:11.575; % step 1 um
+
+[AnalysisParameters]
+path = 'D:\Data\confocalRelated\testData\pixelSizeTest\16x_100ms.tif';
+smoothPixel = 10;  % pixels
+group = 2; % see R1DS1P from thorlab website
+element = 2; % see R1DS1P from thorlab website
+
+objectMagnification = 16; % *x
+fTubeLensInMicroscope = 180; % mm, Olympus f = 180 mm
+fDesignTubeLensForObjective = 200; %mm, Nikon f = 200 mm
+sensorSize = 11; % 11 micorns per pixel
+
+[Results]
+Theoretical pixel size is 0.76389 ¦Ìm/pixel, magnification is 14.40
+Measured pixel size is 0.75576 ¦Ìm/pixel,magnification is 14.55
+Delta pixel size is 0.00813 ¦Ìm/pixel,error is 1.06%
+---------------------------------------------------------------------------------------------------------
+2018/3/13,40x
+used R1DS1P, Group 4 and Element 2
+
+[TestParameters]
+zStepRange = 8.037:0.001:8.0540; % step 1 um
+
+[AnalysisParameters]
+path = 'D:\Data\confocalRelated\testData\pixelSizeTest\40x_500ms.tif';
+smoothPixel = 10;  % pixels
+
+group = 4; % see R1DS1P from thorlab website
+element = 2; % see R1DS1P from thorlab website
+
+objectMagnification = 40; % *x
+fTubeLensInMicroscope = 180; % mm, Olympus	f = 180 mm
+fDesignTubeLensForObjective = 180; %mm, Nikon f = 200 mm
+sensorSize = 11; % 11 micorns per pixel
+
+[Results]
+Theoretical pixel size is 0.27500 ¦Ìm/pixel, magnification is 40.00
+Measured pixel size is 0.27361 ¦Ìm/pixel,magnification is 40.20
+Delta pixel size is 0.00139 ¦Ìm/pixel,error is 0.50%
