@@ -1,0 +1,12 @@
+LIBRARY func_sideMaxProjectionStack_mex.mexw64
+EXPORTS
+mexFunction
+mexfilerequiredapiversion
+emlrtMexFcnProperties
+func_sideMaxProjectionStack
+emxEnsureCapacity_uint16_T
+emxFree_uint16_T
+emxInit_uint16_T
+func_sideMaxProjectionStack_initialize
+func_sideMaxProjectionStack_terminate
+func_sideMaxProjectionStack_atexit
