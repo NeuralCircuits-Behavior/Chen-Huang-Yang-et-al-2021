@@ -1,0 +1,116 @@
+<deployment-project plugin="plugin.apptool" plugin-version="1.0">
+  <configuration file="E:\X\sigD\SignalDetector_v1_4_1.prj" location="E:\X\sigD" name="SignalDetector_v1_4_1" target="target.mlapps" target-name="打包为 App">
+    <param.appname>SignalDetector_v1_4_1</param.appname>
+    <param.authnamewatermark />
+    <param.email />
+    <param.company />
+    <param.icon />
+    <param.icons />
+    <param.summary />
+    <param.description />
+    <param.screenshot>C:\Users\dell\AppData\Local\Temp\tp270b7aa1_bdd4_4c3e_8a5a_d3182461ecda.png</param.screenshot>
+    <param.version>1.0</param.version>
+    <param.products.name />
+    <param.products.id />
+    <param.products.version />
+    <param.platforms>
+      <item>win64</item>
+    </param.platforms>
+    <param.output>E:\X\sigD</param.output>
+    <param.guid>b8df7a57-9a69-41de-9d33-e4c736ac93ba</param.guid>
+    <unset>
+      <param.authnamewatermark />
+      <param.email />
+      <param.company />
+      <param.icon />
+      <param.icons />
+      <param.summary />
+      <param.description />
+      <param.version />
+      <param.products.name />
+      <param.products.id />
+      <param.products.version />
+      <param.output />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}\SignalDetector_v1_4.mlapp</file>
+    </fileset.main>
+    <fileset.depfun>
+      <file>E:\X\general_func\beep2.m</file>
+      <file>${PROJECT_ROOT}\func_calEdgeStrengthH_mex.mexw64</file>
+      <file>${PROJECT_ROOT}\func_calEdgeStrengthHVFull.m</file>
+      <file>${PROJECT_ROOT}\func_calEdgeStrengthV_mex.mexw64</file>
+      <file>${PROJECT_ROOT}\func_sigDetctor16.m</file>
+      <file>${PROJECT_ROOT}\imadjust_.m</file>
+      <file>E:\X\xctrloop\funcs\func_writeTifFast16.m</file>
+    </fileset.depfun>
+    <fileset.resources />
+    <fileset.package />
+    <build-deliverables>
+      <file location="E:\X" name="sigD" optional="false">E:\X\sigD</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>E:\Prog\MATLAB\2018b</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+        <toolbox name="embeddedcoder" />
+        <toolbox name="gpucoder" />
+        <toolbox name="fixedpoint" />
+        <toolbox name="matlabhdlcoder" />
+        <toolbox name="polyspacebugfinder" />
+        <toolbox name="neuralnetwork" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+      <toolbox>
+        <embeddedcoder>
+          <enabled>true</enabled>
+        </embeddedcoder>
+      </toolbox>
+      <toolbox>
+        <gpucoder>
+          <enabled>true</enabled>
+        </gpucoder>
+      </toolbox>
+      <toolbox>
+        <fixedpoint>
+          <enabled>true</enabled>
+        </fixedpoint>
+      </toolbox>
+      <toolbox>
+        <matlabhdlcoder>
+          <enabled>true</enabled>
+        </matlabhdlcoder>
+      </toolbox>
+      <toolbox>
+        <polyspacebugfinder>
+          <enabled>true</enabled>
+        </polyspacebugfinder>
+      </toolbox>
+      <toolbox>
+        <neuralnetwork>
+          <enabled>true</enabled>
+        </neuralnetwork>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>false</unix>
+      <mac>false</mac>
+      <windows>true</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>6.1</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>win64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
