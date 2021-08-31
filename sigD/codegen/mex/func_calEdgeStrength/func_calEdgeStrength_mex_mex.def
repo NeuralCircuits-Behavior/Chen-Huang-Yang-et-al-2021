@@ -1,0 +1,15 @@
+LIBRARY func_calEdgeStrength_mex.mexw64
+EXPORTS
+mexFunction
+mexfilerequiredapiversion
+emlrtMexFcnProperties
+func_calEdgeStrength
+emxEnsureCapacity_int32_T
+emxEnsureCapacity_real_T
+emxFree_int32_T
+emxFree_real_T
+emxInit_int32_T
+emxInit_real_T
+func_calEdgeStrength_initialize
+func_calEdgeStrength_terminate
+func_calEdgeStrength_atexit
