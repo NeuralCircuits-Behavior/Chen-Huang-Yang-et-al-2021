@@ -1,0 +1,42 @@
+<!-- saved from url=(0014)about:internet -->
+<html>
+<body>
+<script src="resources/eml_report_loadable_data.js"></script>
+<pre class="code">
+<span class="srcline"><span class="lineno"><a href="1,1" id="srcline1"> 1</a></span><span class="line"><span class="keyword">function</span> <span class="var type1" id="S2T1U3">eh</span> = func_calEdgeStrengthH(<span class="var type1" id="S3T2U6">im</span>,<span class="var type1" id="S4T3U7">d</span>)</span></span>
+<span class="srcline"><span class="lineno"><a href="1,2" id="srcline2"> 2</a></span><span class="line"><span class="mxinfo " id="T4:U4"><span class="var type1" id="S5T4U10">im1</span> = <span class="mxinfo " id="T4:U6"><span class="fcn" id="F12N4:B12">pad</span>(<span class="var type1" id="S3T2U13">im</span>,<span class="var type1" id="S4T3U14">d</span>)</span></span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,3" id="srcline3"> 3</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,4" id="srcline4"> 4</a></span><span class="line"><span class="mxinfo " id="T5:U9"><span class="var type1" id="S7T5U17">sz</span> = <span class="mxinfo " id="T5:U11">size(<span class="var type1" id="S3T2U20">im</span>)</span></span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,5" id="srcline5"> 5</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,6" id="srcline6"> 6</a></span><span class="line"><span class="comment">% horiz</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,7" id="srcline7"> 7</a></span><span class="line"><span class="mxinfo " id="T1:U13"><span class="var type1" id="S2T1U23">eh</span> = <span class="mxinfo " id="T1:U15">zeros(<span class="var type1" id="S7T5U26">sz</span>)</span></span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,8" id="srcline8"> 8</a></span><span class="line"><span class="keyword">for</span> <span class="var type1" id="S10T3U29">k</span> = <span class="mxinfo " id="T3:U18">1</span>:<span class="mxinfo " id="T3:U19"><span class="var type1" id="S7T5U33">sz</span>(<span class="mxinfo " id="T6:U21">1</span>)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,9" id="srcline9"> 9</a></span><span class="line"><span class="mxinfo " id="T7:U22"><span class="mxinfo " id="T7:U23"><span class="var type1" id="S2T1U38">eh</span>(<span class="var type1" id="S10T3U39">k</span>,<span class="mxinfo " id="T8:U26">:</span>)</span> = <span class="mxinfo " id="T9:U27"><span class="fcn" id="F108N3:B42">core</span>(<span class="mxinfo " id="T10:U28"><span class="var type1" id="S5T4U44">im1</span>(<span class="mxinfo " id="T3:U30"><span class="var type1" id="S4T3U46">d</span>+<span class="var type1" id="S10T3U47">k</span></span>,<span class="mxinfo " id="T11:U33">:</span>)</span>,<span class="var type1" id="S4T3U49">d</span>)</span></span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,10" id="srcline10">10</a></span><span class="line"><span class="keyword">end</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,11" id="srcline11">11</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,12" id="srcline12">12</a></span><span class="line"><span class="keyword">end</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,13" id="srcline13">13</a></span><span class="line"></span></span>
+</pre>
+<div class="dead">
+<pre class="code">
+<span class="srcline"><span class="lineno"><a href="1,14" id="srcline14">14</a></span><span class="line">function im1 = pad(im,d)</span></span>
+<span class="srcline"><span class="lineno"><a href="1,15" id="srcline15">15</a></span><span class="line">im1 = zeros(size(im)+2*d,class(im));</span></span>
+<span class="srcline"><span class="lineno"><a href="1,16" id="srcline16">16</a></span><span class="line">im1(1:d,d+1:end-d) = flipud(im(1:d,:));</span></span>
+<span class="srcline"><span class="lineno"><a href="1,17" id="srcline17">17</a></span><span class="line">im1(end-d+1:end,d+1:end-d) = flipud(im(end-d+1:end,:));</span></span>
+<span class="srcline"><span class="lineno"><a href="1,18" id="srcline18">18</a></span><span class="line">im1(d+1:end-d,1:d) = fliplr(im(:,1:d));</span></span>
+<span class="srcline"><span class="lineno"><a href="1,19" id="srcline19">19</a></span><span class="line">im1(d+1:end-d,end-d+1:end) = fliplr(im(:,end-d+1:end));</span></span>
+<span class="srcline"><span class="lineno"><a href="1,20" id="srcline20">20</a></span><span class="line">im1(d+1:end-d,d+1:end-d) = im;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,21" id="srcline21">21</a></span><span class="line">end</span></span>
+<span class="srcline"><span class="lineno"><a href="1,22" id="srcline22">22</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,23" id="srcline23">23</a></span><span class="line">function col1 = core(col,d)</span></span>
+<span class="srcline"><span class="lineno"><a href="1,24" id="srcline24">24</a></span><span class="line">col1 = zeros(size(col));</span></span>
+<span class="srcline"><span class="lineno"><a href="1,25" id="srcline25">25</a></span><span class="line">for k = d+1:length(col)-d</span></span>
+<span class="srcline"><span class="lineno"><a href="1,26" id="srcline26">26</a></span><span class="line">    col1(k) = max(col(k)-(mean(col([-d,d]+k))+abs(diff(col([-d,d]+k)))),0);</span></span>
+<span class="srcline"><span class="lineno"><a href="1,27" id="srcline27">27</a></span><span class="line">end</span></span>
+<span class="srcline"><span class="lineno"><a href="1,28" id="srcline28">28</a></span><span class="line">col1 = col1(d+1:length(col)-d);</span></span>
+<span class="srcline"><span class="lineno"><a href="1,29" id="srcline29">29</a></span><span class="line">end</span></span>
+<span class="srcline"><span class="lineno"><a href="1,30" id="srcline30">30</a></span><span class="line"> </span></span>
+</pre>
+</div>
+</body>
+</html>
