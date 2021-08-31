@@ -1,0 +1,26 @@
+<!-- saved from url=(0014)about:internet -->
+<html>
+<body>
+<script src="resources/eml_report_loadable_data.js"></script>
+<pre class="code">
+<span class="srcline"><span class="lineno"><a href="1,1" id="srcline1"> 1</a></span><span class="line"><span class="keyword">function</span> [<span class="var type1" id="S2T1U3">im1</span>,<span class="var type1" id="S3T1U4">im2</span>] = func_overlapMaxProjectionStack(<span class="var type1" id="S4T2U7">ims0_</span>,<span class="var type1" id="S5T3U8">ims0Size</span>,<span class="var type1" id="S6T4U9">zSectionOverlap</span>)</span></span>
+<span class="srcline"><span class="lineno"><a href="1,2" id="srcline2"> 2</a></span><span class="line"><span class="comment">% 2019/9/30,CH</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,3" id="srcline3"> 3</a></span><span class="line"><span class="comment">% obj.zSectionOverlap x 1200 x 2</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,4" id="srcline4"> 4</a></span><span class="line"><span class="comment">%      1</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,5" id="srcline5"> 5</a></span><span class="line"><span class="comment">%    2   (3)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,6" id="srcline6"> 6</a></span><span class="line"><span class="comment">%      (4)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,7" id="srcline7"> 7</a></span><span class="line"><span class="comment">% only use 1,2</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,8" id="srcline8"> 8</a></span><span class="line"><span class="comment">% ims need from piezo small to big val</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,9" id="srcline9"> 9</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,10" id="srcline10">10</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,11" id="srcline11">11</a></span><span class="line"><span class="mxinfo " id="T5:U6"><span class="var type1" id="S7T5U12">ims0</span> = <span class="mxinfo " id="T5:U8">reshape(<span class="var type1" id="S4T2U15">ims0_</span>,<span class="var type1" id="S5T3U16">ims0Size</span>)</span></span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,12" id="srcline12">12</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,13" id="srcline13">13</a></span><span class="line"><span class="mxinfo " id="T1:U11"><span class="var type1" id="S2T1U19">im1</span> = <span class="keyword">...</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,14" id="srcline14">14</a></span><span class="line">    <span class="mxinfo " id="T1:U13">squeeze(<span class="mxinfo " id="T6:U14">max(<span class="mxinfo " id="T5:U15"><span class="var type1" id="S7T5U25">ims0</span>(<span class="mxinfo " id="T7:U17">:</span>,<span class="mxinfo " id="T7:U18">:</span>,<span class="mxinfo " id="T7:U19">:</span>,<span class="mxinfo " id="T8:U20"><span class="mxinfo " id="T4:U21"><span class="mxinfo " id="T4:U22"><span class="mxinfo " id="T4:U23">end</span>-<span class="var type1" id="S6T4U34">zSectionOverlap</span></span>+<span class="mxinfo " id="T4:U25">1</span></span>:end</span>)</span>,[],1)</span>)</span></span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,15" id="srcline15">15</a></span><span class="line"><span class="mxinfo " id="T1:U26"><span class="var type1" id="S3T1U43">im2</span> = <span class="keyword">...</span></span></span>
+<span class="srcline"><span class="lineno"><a href="1,16" id="srcline16">16</a></span><span class="line">    <span class="mxinfo " id="T1:U28">squeeze(<span class="mxinfo " id="T9:U29">max(<span class="mxinfo " id="T5:U30"><span class="var type1" id="S7T5U49">ims0</span>(<span class="mxinfo " id="T7:U32">:</span>,<span class="mxinfo " id="T7:U33">:</span>,<span class="mxinfo " id="T7:U34">:</span>,<span class="mxinfo " id="T8:U35"><span class="mxinfo " id="T4:U36"><span class="mxinfo " id="T4:U37"><span class="mxinfo " id="T4:U38">end</span>-<span class="var type1" id="S6T4U58">zSectionOverlap</span></span>+<span class="mxinfo " id="T4:U40">1</span></span>:end</span>)</span>,[],2)</span>)</span></span>;</span></span>
+<span class="srcline"><span class="lineno"><a href="1,17" id="srcline17">17</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="1,18" id="srcline18">18</a></span><span class="line"><span class="keyword">end</span></span></span>
+</pre>
+</body>
+</html>
