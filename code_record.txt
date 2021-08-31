@@ -1,0 +1,20 @@
+20210107 stageM line11
+iniPosition_xyz = [15,15,21]; % in mm
+        maxLimtPosition = [30,50,23];
+to
+iniPosition_xyz = [15,15,2]; % in mm
+        maxLimtPosition = [30,50,31];
+
+20210110
+buildUI 31
+obj.stageVObj.stageZStartEdit = col2('22');
+to
+obj.stageVObj.stageZStartEdit = col2('2');
+
+stageM line11
+iniPosition_xyz = [15,15,2]; % in mm
+        maxLimtPosition = [30,50,31];
+to
+iniPosition_xyz = [15,15,21]; % in mm
+        maxLimtPosition = [30,50,23];
+
