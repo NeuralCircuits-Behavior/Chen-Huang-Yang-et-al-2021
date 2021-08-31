@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding="utf-8"?>
+
+<toc version="2.0">
+<!-- First tocitem specifies top level in Help browser Contents pane -->
+<!-- This can be a roadmap page, as shown below, or a content page -->
+    <tocitem target="introduction.html">Zaber Device Control Toolbox
+        <!-- Nest tocitems to create hierarchical entries in  Contents-->
+        <!-- To include icons, use the following syntax for tocitems: -->
+        <!-- <tocitem target="foo.html" image="HelpIcon.NAME"> -->
+        <!-- Title-of-Section </tocitem> -->
+        <!-- where NAME is one of the following (use capital letters): -->
+        <!-- FUNCTION, USER_GUIDE, EXAMPLES, BLOCK, GETTING_STARTED, -->
+        <!-- DEMOS, RELEASE_NOTES --> 
+        <!-- Icon images used for these entries are also stored in -->
+        <!-- matlabroot/toolbox/matlab/icons -->
+        <!-- A Getting Started Guide usually comes first -->
+        <tocitem target="introduction.html" image="HelpIcon.GETTING_STARTED">
+            Getting Started with the Zaber Device Control Toolbox
+            <tocitem target="introduction.html#1">Welcome
+            </tocitem>
+            <tocitem target="introduction.html#2">Features
+            </tocitem>
+            <tocitem target="introduction.html#3">Requirements
+            </tocitem>
+            <tocitem target="introduction.html#$">BETA Software
+            </tocitem>
+        </tocitem>
+        <!-- User Guide comes next -->
+        <tocitem target="userguide.html" 
+            image="HelpIcon.USER_GUIDE">Zaber Device Control Toolbox User Guide
+            <tocitem target="userguide.html#1">Port and Protocol initialization
+            </tocitem>
+            <tocitem target="userguide.html#5">Identify Devices
+            </tocitem>
+            <tocitem target="userguide.html#6">Control Devices
+            </tocitem>
+            <tocitem target="userguide.html#7">Port leaks
+            </tocitem>
+        </tocitem>
+    </tocitem>
+</toc>

@@ -1,0 +1,877 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>AsciiMessage</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="AsciiMessage.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Public instance properties</a></li><li><a href="#4">Public instance methods</a></li><li><a href="#5">Public static methods</a></li><li><a href="#6">Private static methods</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> AsciiMessage &lt; handle
+</pre><pre class="codeinput"><span class="comment">%   ASCIIMESSAGE Helper class for Zaber ASCII protocol messages.</span>
+<span class="comment">%   This class helps serialize and deserialize string messages</span>
+<span class="comment">%   used by the Zaber ASCII protocol into their constituent parts.</span>
+<span class="comment">%</span>
+<span class="comment">%   See also AsciiProtocol, Device, AsciiDevice</span>
+
+<span class="comment">%   Author: Zaber Technologies Software Team &lt;contact@zaber.com&gt;</span>
+</pre><h2 id="3">Public instance properties</h2><pre class="codeinput">    properties
+        <span class="comment">% DEVICENO The address of a device on a serial daisy chain.</span>
+        <span class="comment">% For commands this will be the device the command is addressed</span>
+        <span class="comment">% to, in the range of 1-99, or 0 to address all devices.</span>
+        <span class="comment">% In replies this will be the address of the device responding.</span>
+        DeviceNo
+
+        <span class="comment">% AXISNO The index of the peripheral addressed, if relevant.</span>
+        <span class="comment">% If the device addressed by DeviceNo has multiple peripherals</span>
+        <span class="comment">% and a message is addressed to or from the peripheral, this</span>
+        <span class="comment">% property stores the 1-based index of the peripheral. Zero is</span>
+        <span class="comment">% treated as addressing the parent controller.</span>
+        AxisNo
+
+        <span class="comment">% COMMAND The main key word or phrase of the command, without data.</span>
+        <span class="comment">% For example, 'move abs'.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also Data</span>
+        Command
+
+        <span class="comment">% MESSAGEID Optional message ID for correlating messages.</span>
+        <span class="comment">% If message ID mode is enabled on a device, this value will</span>
+        <span class="comment">% be echoed back by the device in its replies. Use a negative value</span>
+        <span class="comment">% to disable sending a message ID (default).</span>
+        MessageId
+
+        <span class="comment">% DATA Numeric data payload for commands and replies.</span>
+        <span class="comment">% An array of 32-bit signed integers. This will contain any integer</span>
+        <span class="comment">% values successfully parsed from the payload section of the</span>
+        <span class="comment">% message. Note that some messages have numbers interspersed with</span>
+        <span class="comment">% non-numeric values; see the DataString property to retrieve</span>
+        <span class="comment">% those.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also DataString</span>
+        Data
+
+        <span class="comment">% DATASTRING Payload component of a message.</span>
+        <span class="comment">% This includes all the data associated with a command or response,</span>
+        <span class="comment">% without the device address components, device ID, flags or message</span>
+        <span class="comment">% checksum.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also Data</span>
+        DataString
+
+        <span class="comment">% FLAGS Device warning flags.</span>
+        <span class="comment">% Only applicable to device replies - indicates error or warning</span>
+        <span class="comment">% conditions in the device. See</span>
+        <span class="comment">% http://www.zaber.com/wiki/Manuals/ASCII_Protocol_Manual#Warning_Flags</span>
+        <span class="comment">% for a list of their meanings.</span>
+        Flags
+
+        <span class="comment">% ISERROR True if this message represents a device error state.</span>
+        IsError
+
+        <span class="comment">% ISIDLE True if the device was idle when the message was sent.</span>
+        IsIdle
+
+        <span class="comment">% MESSAGETYPE Identifies whether this message is a request (a</span>
+        <span class="comment">% command for a device), a response (a reply from the device), an</span>
+        <span class="comment">% informational message or an alert.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also Zaber.MessageType</span>
+        MessageType
+    <span class="keyword">end</span>
+</pre><h2 id="4">Public instance methods</h2><pre class="codeinput">    methods
+        <span class="keyword">function</span> obj = AsciiMessage(aDeviceNo, aCommand, aData, varargin)
+        <span class="comment">% ASCIIMESSAGE Construct an AsciiMessage object from values.</span>
+        <span class="comment">% message = Zaber.ASCIIMESSAGE(address, command, data)</span>
+        <span class="comment">% message = Zaber.ASCIIMESSAGE(address, command, data,</span>
+        <span class="comment">%               'MessageId' = id, 'AxisNo' = index)</span>
+        <span class="comment">%</span>
+        <span class="comment">% address     - The numeric address of a device, or 0 for all.</span>
+        <span class="comment">% command     - The command to send to the device.</span>
+        <span class="comment">% data        - Arguments to the command. Can be an array of</span>
+        <span class="comment">%               numbers if the command only has numeric</span>
+        <span class="comment">%               arguments, or a string otherwise. Use an empty</span>
+        <span class="comment">%               array if there are no arguments.</span>
+        <span class="comment">% 'MessageId' - Optional message ID. If included, the device</span>
+        <span class="comment">%               will include the same message ID in its</span>
+        <span class="comment">%               response.</span>
+        <span class="comment">% 'AxisNo'    - Optional axis number for peripheral-specific</span>
+        <span class="comment">%               commands and responses. Defaults to 0.</span>
+        <span class="comment">% message     - Return value: An initialized instance of the</span>
+        <span class="comment">%               AsciiMessage class.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This function constructs an instance of the AsciiMessage</span>
+        <span class="comment">% class with its properties initialized.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note construction and serialization from the MATLAB end are</span>
+        <span class="comment">% intended only for sending requests. Only the deserialize</span>
+        <span class="comment">% method can create instances that represent responses, alerts</span>
+        <span class="comment">% or info messages.</span>
+
+            obj.DeviceNo = 0;
+            obj.AxisNo = 0;
+            obj.Command = <span class="string">''</span>;
+            obj.MessageId = -1;
+            obj.Data = [];
+            obj.DataString = <span class="string">''</span>;
+            obj.Flags = <span class="string">''</span>;
+            obj.IsError = false;
+            obj.IsIdle = true;
+            obj.MessageType = Zaber.MessageType.Request;
+
+            p = inputParser;
+            addParameter(p, <span class="string">'MessageId'</span>, -1);
+            addParameter(p, <span class="string">'AxisNo'</span>, 0);
+            parse(p, varargin{:});
+            obj.MessageId = p.Results.MessageId;
+            obj.AxisNo = p.Results.AxisNo;
+
+            <span class="keyword">if</span> ((aDeviceNo &lt; 0) || (aDeviceNo &gt; 99))
+                error(<span class="string">'Zaber:AsciiMessage:badAddress'</span>, <span class="keyword">...</span>
+                      <span class="string">'Zaber device addresses must range from 0 to 99.'</span>);
+            <span class="keyword">end</span>
+
+            obj.DeviceNo = uint8(aDeviceNo);
+
+            <span class="keyword">if</span> (isnumeric(aData) &amp;&amp; ~isempty(aData))
+                obj.Data = aData;
+                <span class="keyword">if</span> (length(aData) &gt; 1)
+                    obj.DataString = [sprintf(<span class="string">'%d '</span>,aData(1:end-1)), num2str(aData(end))];
+                <span class="keyword">else</span>
+                    obj.DataString = num2str(aData(end));
+                <span class="keyword">end</span>
+
+            <span class="keyword">elseif</span> (isa(aData, <span class="string">'char'</span>))
+                sz = size(aData);
+                <span class="keyword">if</span> (sz(1) &lt; 2)
+                    obj.DataString = aData;
+                <span class="keyword">else</span>
+                    s = aData(1,:);
+                    <span class="keyword">for</span> (i = 2:sz(1))
+                        s = sprintf(<span class="string">'%s %s'</span>, s, aData(i,:));
+                    <span class="keyword">end</span>
+
+                    obj.DataString = s;
+                <span class="keyword">end</span>
+
+                parts = split(obj.DataString);
+                <span class="keyword">for</span> (i = 1:length(parts))
+                    num = str2double(parts{i});
+                    <span class="keyword">if</span> (isnumeric(num))
+                        obj.Data = [obj.Data num];
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (~isa(aCommand, <span class="string">'char'</span>))
+                error(<span class="string">'Zaber:AsciiMessage:missingCommand'</span>, <span class="keyword">...</span>
+                      <span class="string">'Zaber ASCII commands require a command string.'</span>);
+            <span class="keyword">end</span>
+
+            obj.Command = aCommand;
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> byteArray = serialize(obj, aUseChecksum)
+        <span class="comment">% SERIALIZE Convert to an array of bytes suitable for transmission.</span>
+        <span class="comment">% byteArray = message.SERIALIZE()</span>
+        <span class="comment">% byteArray = message.SERIALIZE(useChecksum)</span>
+        <span class="comment">%</span>
+        <span class="comment">% useChecksum - Optional. Set to true to include a checksum in</span>
+        <span class="comment">%               the serialized message. The receiving device</span>
+        <span class="comment">%               will verify the checksum before honoring the</span>
+        <span class="comment">%               command.</span>
+        <span class="comment">% byteArray   - Return value. An array of bytes to send.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Returns an array of bytes ready to be transmitted to a</span>
+        <span class="comment">% Zaber device using the ASCII protocol.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also deserialize</span>
+
+            paddedCmd = obj.Command;
+            <span class="keyword">if</span> (~isempty(paddedCmd))
+                paddedCmd = sprintf(<span class="string">' %s'</span>, paddedCmd);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (isnumeric(obj.MessageId) &amp;&amp; (obj.MessageId &gt;= 0))
+                s = sprintf(<span class="string">'%d %d %d%s'</span>, <span class="keyword">...</span>
+                    obj.DeviceNo, obj.AxisNo, obj.MessageId, <span class="keyword">...</span>
+                    paddedCmd);
+            <span class="keyword">else</span>
+                s = sprintf(<span class="string">'%d %d%s'</span>, <span class="keyword">...</span>
+                    obj.DeviceNo, obj.AxisNo, <span class="keyword">...</span>
+                    paddedCmd);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (~isempty(obj.DataString))
+                s = sprintf(<span class="string">'%s %s'</span>, s, obj.DataString);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> ((nargin &gt; 1) &amp;&amp; aUseChecksum)
+                checksum = int32(0);
+                temp = unicode2native(s, <span class="string">'US-ASCII'</span>);
+                <span class="keyword">for</span> (i = 1:length(temp))
+                    checksum = checksum + int32(temp(i));
+                <span class="keyword">end</span>
+                checksum = bitand(checksum, 255);
+                checksum = bitxor(checksum, 255) + 1;
+                checksum = bitand(checksum, 255);
+                s = sprintf(<span class="string">'%s:%02X'</span>, s, checksum);
+            <span class="keyword">end</span>
+
+            s = sprintf(<span class="string">'/%s\r\n'</span>, s);
+
+            byteArray = unicode2native(s, <span class="string">'US-ASCII'</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2 id="5">Public static methods</h2><pre class="codeinput">    methods (Static)
+        <span class="keyword">function</span> obj = deserialize(aBytes)
+        <span class="comment">% DESERIALIZE Convert an array of bytes or a string to an AsciiMessage.</span>
+        <span class="comment">% message = Zaber.AsciiMessage.DESERIALIZE(line)</span>
+        <span class="comment">%</span>
+        <span class="comment">% line    - A string or array of bytes containing a line of ASCII</span>
+        <span class="comment">%           text. Leading and trailing whitespace will be removed</span>
+        <span class="comment">%           automatically.</span>
+        <span class="comment">% message - Return value. An AsciiMessage object parsed from</span>
+        <span class="comment">%           the input line.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Given a string or an array of bytes representing an ASCII string,</span>
+        <span class="comment">% this method will construct a corresponding AsciiMessage class</span>
+        <span class="comment">% with the properties filled in accordingly. Use this to convert</span>
+        <span class="comment">% reply data from a device into a more convenient form.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Message IDs and checksums are automatically detected and</span>
+        <span class="comment">% checksums verified.</span>
+        <span class="comment">%</span>
+        <span class="comment">% If the message is not properly formatted, an error will be</span>
+        <span class="comment">% thrown.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also serialize</span>
+
+            obj = Zaber.AsciiMessage(0, <span class="string">' '</span>, <span class="string">''</span>);
+            obj.Command = <span class="string">''</span>;
+
+            s = aBytes;
+            <span class="keyword">if</span> (isnumeric(s))
+                sz = size(s);
+                <span class="keyword">if</span> ((sz(1) == 1) &amp;&amp; (sz(2) &gt;= 1))
+                    s = native2unicode(s);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (~isa(s, <span class="string">'char'</span>))
+                error(<span class="string">'Zaber:AsciiMessage:deserialize:badType'</span>, <span class="keyword">...</span>
+                      <span class="string">'AsciiMessage.deserialize() expects a string or byte array.'</span>);
+            <span class="keyword">end</span>
+
+            originalString = s;
+            s = strtrim(s);
+
+            <span class="comment">% Consume the message type identifier.</span>
+            obj.MessageType = Zaber.MessageType.Invalid;
+            <span class="keyword">switch</span>(s(1))
+                <span class="keyword">case</span> <span class="string">'!'</span>
+                    obj.MessageType = Zaber.MessageType.Alert;
+                <span class="keyword">case</span> <span class="string">'#'</span>
+                    obj.MessageType = Zaber.MessageType.Info;
+                <span class="keyword">case</span> <span class="string">'@'</span>
+                    obj.MessageType = Zaber.MessageType.Response;
+                <span class="keyword">case</span> <span class="string">'/'</span>
+                    obj.MessageType = Zaber.MessageType.Request;
+                <span class="keyword">otherwise</span>
+                    error(<span class="string">'Zaber:AsciiMessage:deserialize:parseFailure'</span>, <span class="keyword">...</span>
+                          <span class="string">'Unrecognized message type: %s'</span>, originalString);
+            <span class="keyword">end</span>
+
+            s = s(2:end);
+
+            <span class="comment">% Check checksum if present</span>
+            i = strfind(s, <span class="string">':'</span>);
+            <span class="keyword">if</span> (length(i) &gt; 1)
+                error(<span class="string">'Zaber:AsciiMessage:deserialize:multipleChecksums'</span>, <span class="keyword">...</span>
+                      <span class="string">'Message contains multiple checksum markers: %s'</span>, <span class="keyword">...</span>
+                      originalString);
+            <span class="keyword">elseif</span> (length(i) == 1)
+                <span class="keyword">if</span> (i(1) ~= (length(s) - 2))
+                    error(<span class="string">'Zaber:AsciiMessage:deserialize:malformedChecksum'</span>, <span class="keyword">...</span>
+                          <span class="string">'Malformed checksum in message: %s'</span>, originalString);
+                <span class="keyword">end</span>
+
+                checksum = hex2dec(s(i(1) + 1 : end));
+                s = s(1:i - 1);
+
+                verif = int32(0);
+                checkBytes = unicode2native(s, <span class="string">'US-ASCII'</span>);
+                <span class="keyword">for</span> (i = 1:length(checkBytes))
+                    verif = verif + int32(checkBytes(i));
+                <span class="keyword">end</span>
+
+                verif = bitand(verif, 255);
+                verif = bitxor(verif, 255) + 1;
+                verif = bitand(verif, 255);
+                <span class="keyword">if</span> (verif ~= checksum)
+                    error(<span class="string">'Zaber:AsciiMessage:deserialize:badChecksum'</span>, <span class="keyword">...</span>
+                          <span class="string">'Message checksum is incorrect (expected %02X): %s\r\n'</span>, <span class="keyword">...</span>
+                          verif, originalString);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="comment">% Extract address and message ID (if present)</span>
+            tokens = split(s);
+            <span class="keyword">if</span> (length(tokens) &gt; 1)
+                obj.DeviceNo = str2double(tokens{1});
+                tokens = tokens(2:end);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (~isnumeric(obj.DeviceNo) || (length(obj.DeviceNo) ~= 1) <span class="keyword">...</span>
+                 || isnan(obj.DeviceNo) || (obj.DeviceNo &lt; 1) || (obj.DeviceNo &gt; 99))
+                error(<span class="string">'Zaber:AsciiMessage:deserialize:invalidDeviceNo'</span>, <span class="keyword">...</span>
+                      <span class="string">'Invalid device number in message: %s'</span>, originalString);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (length(tokens) &gt; 1)
+                obj.AxisNo = str2double(tokens{1});
+                tokens = tokens(2:end);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (~isnumeric(obj.AxisNo) || (length(obj.AxisNo) ~= 1) || isnan(obj.AxisNo))
+                error(<span class="string">'Zaber:AsciiMessage:deserialize:invalidAxisNo'</span>, <span class="keyword">...</span>
+                      <span class="string">'Invalid axis number in message: %s'</span>, originalString);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (length(tokens) &gt; 1)
+                possibleId = str2double(tokens{1});
+                <span class="keyword">if</span> (isnumeric(possibleId) &amp;&amp; (length(possibleId) == 1) &amp;&amp; ~isnan(possibleId))
+                    obj.MessageId = possibleId;
+                    tokens = tokens(2:end);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="keyword">switch</span> (obj.MessageType)
+                <span class="keyword">case</span> Zaber.MessageType.Response
+                    <span class="keyword">if</span> (length(tokens) &lt; 4)
+                        error(<span class="string">'Zaber:AsciiMessage:deserialize:messageTruncated'</span>, <span class="keyword">...</span>
+                              <span class="string">'Not enough content in response: %s'</span>, originalString);
+                    <span class="keyword">end</span>
+
+                    obj.IsError = ~strcmp(tokens{1}, <span class="string">'OK'</span>);
+                    obj.IsIdle = strcmp(tokens{2}, <span class="string">'IDLE'</span>);
+                    obj.Flags = tokens{3};
+                    tokens = tokens(4:end);
+                    obj.DataString = join(tokens, <span class="string">' '</span>);
+                    obj.Data = Zaber.AsciiMessage.findnumbers(tokens);
+
+                <span class="keyword">case</span> Zaber.MessageType.Alert
+                    <span class="keyword">if</span> (length(tokens) &gt;= 2)
+                        obj.IsIdle = strcmp(tokens{1}, <span class="string">'IDLE'</span>);
+                        obj.Flags = tokens{2};
+                        tokens = tokens(3:end);
+                    <span class="keyword">end</span>
+
+                    obj.DataString = join(tokens, <span class="string">' '</span>);
+                    obj.Data = Zaber.AsciiMessage.findnumbers(tokens);
+
+                <span class="keyword">case</span> Zaber.MessageType.Request
+                    <span class="keyword">if</span> (length(tokens) &gt;= 1)
+                        obj.Command = tokens{1};
+                        obj.DataString = join(tokens(2:end), <span class="string">' '</span>);
+                        obj.Data = Zaber.AsciiMessage.findnumbers(tokens(2:end));
+                    <span class="keyword">end</span>
+
+                <span class="keyword">case</span> Zaber.MessageType.Info
+                    obj.DataString = join(tokens, <span class="string">' '</span>);
+                    obj.Data = Zaber.AsciiMessage.findnumbers(tokens);
+
+                <span class="keyword">otherwise</span>
+                    error(<span class="string">'Zaber:AsciiMessage:deserialize:invalidType'</span>, <span class="keyword">...</span>
+                          <span class="string">'Invalid message type detected.'</span>);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (ismissing(obj.DataString))
+                obj.DataString = <span class="string">''</span>;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2 id="6">Private static methods</h2><pre class="codeinput">    methods (Static, Access = private)
+
+        <span class="keyword">function</span> numArray = findnumbers(aStringArray)
+        <span class="comment">% Extracts all numeric values from an array of strings.</span>
+            nums = str2double(aStringArray);
+            mask = arrayfun(<span class="keyword">...</span>
+                @(x) isnumeric(x) &amp;&amp; ~isnan(x) &amp;&amp; (length(x) == 1), nums);
+            numArray = nums(mask)';
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef AsciiMessage < handle
+%   ASCIIMESSAGE Helper class for Zaber ASCII protocol messages.
+%   This class helps serialize and deserialize string messages 
+%   used by the Zaber ASCII protocol into their constituent parts.
+%
+%   See also AsciiProtocol, Device, AsciiDevice
+    
+%   Author: Zaber Technologies Software Team <contact@zaber.com>
+
+%% Public instance properties
+    properties
+        % DEVICENO The address of a device on a serial daisy chain.
+        % For commands this will be the device the command is addressed
+        % to, in the range of 1-99, or 0 to address all devices.
+        % In replies this will be the address of the device responding.
+        DeviceNo
+        
+        % AXISNO The index of the peripheral addressed, if relevant.
+        % If the device addressed by DeviceNo has multiple peripherals
+        % and a message is addressed to or from the peripheral, this
+        % property stores the 1-based index of the peripheral. Zero is
+        % treated as addressing the parent controller.
+        AxisNo
+        
+        % COMMAND The main key word or phrase of the command, without data.
+        % For example, 'move abs'.
+        %
+        % See also Data
+        Command
+        
+        % MESSAGEID Optional message ID for correlating messages.
+        % If message ID mode is enabled on a device, this value will
+        % be echoed back by the device in its replies. Use a negative value
+        % to disable sending a message ID (default).
+        MessageId
+        
+        % DATA Numeric data payload for commands and replies.
+        % An array of 32-bit signed integers. This will contain any integer
+        % values successfully parsed from the payload section of the
+        % message. Note that some messages have numbers interspersed with
+        % non-numeric values; see the DataString property to retrieve
+        % those.
+        %
+        % See also DataString
+        Data
+        
+        % DATASTRING Payload component of a message.
+        % This includes all the data associated with a command or response,
+        % without the device address components, device ID, flags or message
+        % checksum.
+        %
+        % See also Data
+        DataString
+        
+        % FLAGS Device warning flags. 
+        % Only applicable to device replies - indicates error or warning
+        % conditions in the device. See
+        % http://www.zaber.com/wiki/Manuals/ASCII_Protocol_Manual#Warning_Flags
+        % for a list of their meanings.
+        Flags
+        
+        % ISERROR True if this message represents a device error state.
+        IsError
+        
+        % ISIDLE True if the device was idle when the message was sent.
+        IsIdle
+        
+        % MESSAGETYPE Identifies whether this message is a request (a
+        % command for a device), a response (a reply from the device), an
+        % informational message or an alert.
+        %
+        % See also Zaber.MessageType
+        MessageType
+    end
+    
+ %% Public instance methods
+    methods
+        function obj = AsciiMessage(aDeviceNo, aCommand, aData, varargin)
+        % ASCIIMESSAGE Construct an AsciiMessage object from values.
+        % message = Zaber.ASCIIMESSAGE(address, command, data)
+        % message = Zaber.ASCIIMESSAGE(address, command, data,
+        %               'MessageId' = id, 'AxisNo' = index)
+        %
+        % address     - The numeric address of a device, or 0 for all.
+        % command     - The command to send to the device.
+        % data        - Arguments to the command. Can be an array of
+        %               numbers if the command only has numeric
+        %               arguments, or a string otherwise. Use an empty
+        %               array if there are no arguments.
+        % 'MessageId' - Optional message ID. If included, the device
+        %               will include the same message ID in its
+        %               response. 
+        % 'AxisNo'    - Optional axis number for peripheral-specific
+        %               commands and responses. Defaults to 0.
+        % message     - Return value: An initialized instance of the
+        %               AsciiMessage class.
+        %
+        % This function constructs an instance of the AsciiMessage
+        % class with its properties initialized.
+        %
+        % Note construction and serialization from the MATLAB end are
+        % intended only for sending requests. Only the deserialize
+        % method can create instances that represent responses, alerts
+        % or info messages.
+            
+            obj.DeviceNo = 0;
+            obj.AxisNo = 0;
+            obj.Command = '';
+            obj.MessageId = -1;
+            obj.Data = [];
+            obj.DataString = '';
+            obj.Flags = '';
+            obj.IsError = false;
+            obj.IsIdle = true;
+            obj.MessageType = Zaber.MessageType.Request;
+            
+            p = inputParser;
+            addParameter(p, 'MessageId', -1); 
+            addParameter(p, 'AxisNo', 0); 
+            parse(p, varargin{:});
+            obj.MessageId = p.Results.MessageId;
+            obj.AxisNo = p.Results.AxisNo;
+            
+            if ((aDeviceNo < 0) || (aDeviceNo > 99))
+                error('Zaber:AsciiMessage:badAddress', ...
+                      'Zaber device addresses must range from 0 to 99.');
+            end
+            
+            obj.DeviceNo = uint8(aDeviceNo);
+
+            if (isnumeric(aData) && ~isempty(aData))
+                obj.Data = aData;
+                if (length(aData) > 1)
+                    obj.DataString = [sprintf('%d ',aData(1:end-1)), num2str(aData(end))];
+                else
+                    obj.DataString = num2str(aData(end));
+                end
+                
+            elseif (isa(aData, 'char'))
+                sz = size(aData);
+                if (sz(1) < 2)
+                    obj.DataString = aData;
+                else
+                    s = aData(1,:);
+                    for (i = 2:sz(1))
+                        s = sprintf('%s %s', s, aData(i,:));
+                    end
+                    
+                    obj.DataString = s;
+                end
+                
+                parts = split(obj.DataString);
+                for (i = 1:length(parts))
+                    num = str2double(parts{i});
+                    if (isnumeric(num))
+                        obj.Data = [obj.Data num];
+                    end
+                end
+            end
+            
+            if (~isa(aCommand, 'char'))
+                error('Zaber:AsciiMessage:missingCommand', ...
+                      'Zaber ASCII commands require a command string.');
+            end
+            
+            obj.Command = aCommand;
+        end
+        
+        
+        function byteArray = serialize(obj, aUseChecksum)
+        % SERIALIZE Convert to an array of bytes suitable for transmission.
+        % byteArray = message.SERIALIZE()
+        % byteArray = message.SERIALIZE(useChecksum)
+        %
+        % useChecksum - Optional. Set to true to include a checksum in
+        %               the serialized message. The receiving device
+        %               will verify the checksum before honoring the
+        %               command.
+        % byteArray   - Return value. An array of bytes to send.
+        %
+        % Returns an array of bytes ready to be transmitted to a
+        % Zaber device using the ASCII protocol.
+        %
+        % See also deserialize
+            
+            paddedCmd = obj.Command;
+            if (~isempty(paddedCmd))
+                paddedCmd = sprintf(' %s', paddedCmd);
+            end
+            
+            if (isnumeric(obj.MessageId) && (obj.MessageId >= 0))
+                s = sprintf('%d %d %d%s', ...
+                    obj.DeviceNo, obj.AxisNo, obj.MessageId, ...
+                    paddedCmd);
+            else
+                s = sprintf('%d %d%s', ...
+                    obj.DeviceNo, obj.AxisNo, ...
+                    paddedCmd);
+            end
+            
+            if (~isempty(obj.DataString))
+                s = sprintf('%s %s', s, obj.DataString);
+            end
+            
+            if ((nargin > 1) && aUseChecksum)
+                checksum = int32(0);
+                temp = unicode2native(s, 'US-ASCII');
+                for (i = 1:length(temp))
+                    checksum = checksum + int32(temp(i));
+                end
+                checksum = bitand(checksum, 255);
+                checksum = bitxor(checksum, 255) + 1;
+                checksum = bitand(checksum, 255);
+                s = sprintf('%s:%02X', s, checksum);
+            end
+            
+            s = sprintf('/%s\r\n', s);
+            
+            byteArray = unicode2native(s, 'US-ASCII');
+        end
+    end
+    
+
+%% Public static methods
+    methods (Static)
+        function obj = deserialize(aBytes)
+        % DESERIALIZE Convert an array of bytes or a string to an AsciiMessage.
+        % message = Zaber.AsciiMessage.DESERIALIZE(line)
+        %
+        % line    - A string or array of bytes containing a line of ASCII
+        %           text. Leading and trailing whitespace will be removed
+        %           automatically.
+        % message - Return value. An AsciiMessage object parsed from
+        %           the input line.
+        %
+        % Given a string or an array of bytes representing an ASCII string,
+        % this method will construct a corresponding AsciiMessage class
+        % with the properties filled in accordingly. Use this to convert
+        % reply data from a device into a more convenient form.
+        %
+        % Message IDs and checksums are automatically detected and
+        % checksums verified.
+        %
+        % If the message is not properly formatted, an error will be
+        % thrown.
+        %
+        % See also serialize
+        
+            obj = Zaber.AsciiMessage(0, ' ', '');
+            obj.Command = '';
+            
+            s = aBytes;
+            if (isnumeric(s))
+                sz = size(s);
+                if ((sz(1) == 1) && (sz(2) >= 1))
+                    s = native2unicode(s);
+                end
+            end
+            
+            if (~isa(s, 'char'))
+                error('Zaber:AsciiMessage:deserialize:badType', ...
+                      'AsciiMessage.deserialize() expects a string or byte array.');
+            end
+            
+            originalString = s;
+            s = strtrim(s);
+            
+            % Consume the message type identifier.
+            obj.MessageType = Zaber.MessageType.Invalid;
+            switch(s(1))
+                case '!'
+                    obj.MessageType = Zaber.MessageType.Alert;
+                case '#'
+                    obj.MessageType = Zaber.MessageType.Info;
+                case '@'
+                    obj.MessageType = Zaber.MessageType.Response;
+                case '/'
+                    obj.MessageType = Zaber.MessageType.Request;
+                otherwise
+                    error('Zaber:AsciiMessage:deserialize:parseFailure', ...
+                          'Unrecognized message type: %s', originalString);
+            end
+            
+            s = s(2:end);
+            
+            % Check checksum if present
+            i = strfind(s, ':');
+            if (length(i) > 1)
+                error('Zaber:AsciiMessage:deserialize:multipleChecksums', ...
+                      'Message contains multiple checksum markers: %s', ...
+                      originalString);
+            elseif (length(i) == 1)
+                if (i(1) ~= (length(s) - 2))
+                    error('Zaber:AsciiMessage:deserialize:malformedChecksum', ...
+                          'Malformed checksum in message: %s', originalString);
+                end
+                
+                checksum = hex2dec(s(i(1) + 1 : end));
+                s = s(1:i - 1);
+                
+                verif = int32(0);
+                checkBytes = unicode2native(s, 'US-ASCII');
+                for (i = 1:length(checkBytes))
+                    verif = verif + int32(checkBytes(i));
+                end
+                
+                verif = bitand(verif, 255);
+                verif = bitxor(verif, 255) + 1;
+                verif = bitand(verif, 255);
+                if (verif ~= checksum)
+                    error('Zaber:AsciiMessage:deserialize:badChecksum', ...
+                          'Message checksum is incorrect (expected %02X): %s\r\n', ...
+                          verif, originalString);
+                end
+            end
+            
+            % Extract address and message ID (if present)
+            tokens = split(s);
+            if (length(tokens) > 1)
+                obj.DeviceNo = str2double(tokens{1});
+                tokens = tokens(2:end);
+            end
+            
+            if (~isnumeric(obj.DeviceNo) || (length(obj.DeviceNo) ~= 1) ...
+                 || isnan(obj.DeviceNo) || (obj.DeviceNo < 1) || (obj.DeviceNo > 99))
+                error('Zaber:AsciiMessage:deserialize:invalidDeviceNo', ...
+                      'Invalid device number in message: %s', originalString);
+            end
+            
+            if (length(tokens) > 1)
+                obj.AxisNo = str2double(tokens{1});
+                tokens = tokens(2:end);
+            end
+            
+            if (~isnumeric(obj.AxisNo) || (length(obj.AxisNo) ~= 1) || isnan(obj.AxisNo))
+                error('Zaber:AsciiMessage:deserialize:invalidAxisNo', ...
+                      'Invalid axis number in message: %s', originalString);
+            end
+            
+            if (length(tokens) > 1)
+                possibleId = str2double(tokens{1});
+                if (isnumeric(possibleId) && (length(possibleId) == 1) && ~isnan(possibleId))
+                    obj.MessageId = possibleId;
+                    tokens = tokens(2:end);
+                end
+            end
+                
+            switch (obj.MessageType)
+                case Zaber.MessageType.Response
+                    if (length(tokens) < 4)
+                        error('Zaber:AsciiMessage:deserialize:messageTruncated', ...
+                              'Not enough content in response: %s', originalString);
+                    end
+
+                    obj.IsError = ~strcmp(tokens{1}, 'OK');
+                    obj.IsIdle = strcmp(tokens{2}, 'IDLE');
+                    obj.Flags = tokens{3};
+                    tokens = tokens(4:end);
+                    obj.DataString = join(tokens, ' ');
+                    obj.Data = Zaber.AsciiMessage.findnumbers(tokens);
+                    
+                case Zaber.MessageType.Alert
+                    if (length(tokens) >= 2)
+                        obj.IsIdle = strcmp(tokens{1}, 'IDLE');
+                        obj.Flags = tokens{2};
+                        tokens = tokens(3:end);
+                    end
+
+                    obj.DataString = join(tokens, ' ');
+                    obj.Data = Zaber.AsciiMessage.findnumbers(tokens);
+
+                case Zaber.MessageType.Request
+                    if (length(tokens) >= 1)
+                        obj.Command = tokens{1};
+                        obj.DataString = join(tokens(2:end), ' ');
+                        obj.Data = Zaber.AsciiMessage.findnumbers(tokens(2:end));
+                    end
+                    
+                case Zaber.MessageType.Info
+                    obj.DataString = join(tokens, ' ');
+                    obj.Data = Zaber.AsciiMessage.findnumbers(tokens);
+                    
+                otherwise
+                    error('Zaber:AsciiMessage:deserialize:invalidType', ...
+                          'Invalid message type detected.');
+            end
+            
+            if (ismissing(obj.DataString))
+                obj.DataString = '';
+            end
+        end
+    end
+    
+    
+%% Private static methods
+    methods (Static, Access = private)
+
+        function numArray = findnumbers(aStringArray)
+        % Extracts all numeric values from an array of strings.
+            nums = str2double(aStringArray);
+            mask = arrayfun(...
+                @(x) isnumeric(x) && ~isnan(x) && (length(x) == 1), nums);
+            numArray = nums(mask)';
+        end
+    end
+end
+
+
+
+##### SOURCE END #####
+--></body></html>

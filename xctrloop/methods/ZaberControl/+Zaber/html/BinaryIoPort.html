@@ -1,0 +1,623 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>BinaryIoPort</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="BinaryIoPort.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Public instance methods</a></li><li><a href="#4">Internal static methods</a></li><li><a href="#5">Protected instance methods</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> BinaryIoPort &lt; Zaber.IoPort
+</pre><pre class="codeinput"><span class="comment">%   BINARYIOPORT Interface for the I/O ports on Zaber controllers.</span>
+<span class="comment">%</span>
+<span class="comment">%   This class implements the Zaber.IoPort interface for binary devices.</span>
+<span class="comment">%   Instances are automatically created and assigned to the Device.IO</span>
+<span class="comment">%   property during the device detection process.</span>
+<span class="comment">%</span>
+<span class="comment">%   See also Zaber.IoPort, Zaber.Device, Zaber.Device.IO</span>
+
+<span class="comment">%   Author: Zaber Technologies Software Team &lt;contact@zaber.com&gt;</span>
+</pre><h2 id="3">Public instance methods</h2><pre class="codeinput">    methods
+
+        <span class="keyword">function</span> value = readanaloginput(obj, aIndex)
+        <span class="comment">% READANALOGINPUT Read the value of an analog input.</span>
+        <span class="comment">% value = io.READANALOGINPUT(index);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - The 1-based index of the analog input to read.</span>
+        <span class="comment">% value - The voltage read on the specified input.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Will throw an error if the index is out of range or there is a</span>
+        <span class="comment">% communication error.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also AnalogInputCount, writeanalogoutput, readanalogoutput,</span>
+        <span class="comment">% readdigitalinput</span>
+
+            reply = obj.Device.request(<span class="keyword">...</span>
+                Zaber.BinaryCommandType.Read_Analog_Input, aIndex);
+
+            <span class="keyword">if</span> (isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) &amp;&amp; ~reply.IsError)
+                value = 0.0001 * double(reply.Data);
+            <span class="keyword">else</span>
+                error(<span class="string">'Zaber:BinaryIoPort:readanaloginput:deviceError'</span>, <span class="keyword">...</span>
+                      <span class="string">'Device %d returned an error when attempting to read analog input %d.'</span>, <span class="keyword">...</span>
+                      obj.Device.DeviceNo, aIndex);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> writeanalogoutput(~, ~, ~)
+        <span class="comment">% WRITEANALOGOUTPUT Set the value of an analog output</span>
+        <span class="comment">% io.WRITEANALOGOUTPUT(index, value);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - 1-based index of the port to write to.</span>
+        <span class="comment">% value - New voltage to output.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note The Zaber Binary protocol currently has no support for</span>
+        <span class="comment">% analog outputs, so this method will always throw an error.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also AnalogOutputCount, readanalogoutput, readanaloginput,</span>
+        <span class="comment">% writedigitaloutput</span>
+
+            error(<span class="string">'Zaber:BinaryIoPort:writeanalogoutput:notSupported'</span>, <span class="keyword">...</span>
+                  <span class="string">'Analog outputs are currently not supported.'</span>);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> value = readanalogoutput(~, ~)
+        <span class="comment">% READANALOGOUTPUT Read back the value of an analog output.</span>
+        <span class="comment">% value = io.READANALOGOUTPUT(index);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - The 1-based index of the analog output to read.</span>
+        <span class="comment">% value - The voltage currently being output on the specified port.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Will throw an error if the index is out of range or there is a</span>
+        <span class="comment">% communication error.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note The Zaber Binary protocol currently has no support for</span>
+        <span class="comment">% analog outputs, so this method will always throw an error.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also AnalogOutputCount, writeanalogoutput, readanaloginput,</span>
+        <span class="comment">% readdigitaloutput</span>
+
+            error(<span class="string">'Zaber:BinaryIoPort:readanalogoutput:notSupported'</span>, <span class="keyword">...</span>
+                  <span class="string">'Analog outputs are currently not supported.'</span>);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> bits = readdigitalinput(obj, aIndex)
+        <span class="comment">% READDIGITALINPUT Read one or more digital input bits.</span>
+        <span class="comment">% bits = io.READDIGITALINPUT();</span>
+        <span class="comment">% bit = io.READDIGITALINPUT(index);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - Optional 1-based index of the bit to read. If not given,</span>
+        <span class="comment">%         the output will be an array of bits starting with the</span>
+        <span class="comment">%         lowest-numbered input bit. If specified, the output will</span>
+        <span class="comment">%         be a single bit value.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also DigitalInputCount, writedigitaloutput,</span>
+        <span class="comment">% readdigitaloutput, readanaloginput</span>
+
+            <span class="keyword">if</span> (nargin &gt; 1)
+                reply = obj.Device.request(<span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Read_Digital_Input, aIndex);
+
+                <span class="keyword">if</span> (isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) &amp;&amp; ~reply.IsError)
+                    bits = reply.Data;
+                <span class="keyword">end</span>
+            <span class="keyword">else</span>
+                reply = obj.Device.request(<span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Read_All_Digital_Inputs, 0);
+
+                <span class="keyword">if</span> (isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) &amp;&amp; ~reply.IsError)
+                    bits = zeros(1, obj.DigitalInputCount);
+                    data = reply.Data;
+                    <span class="keyword">for</span> (i = 1:obj.DigitalInputCount)
+                        bits(i) = bitand(data, 1);
+                        data = bitshift(data, -1);
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (~isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) || reply.IsError)
+                error(<span class="string">'Zaber:BinaryIoPort:readdigitalinput:deviceError'</span>, <span class="keyword">...</span>
+                      <span class="string">'There was an error when reading digital inputs from device %d.'</span>, <span class="keyword">...</span>
+                      obj.Device.DeviceNo);
+            <span class="keyword">end</span>
+
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> writedigitaloutput(obj, aStartIndex, aBits)
+        <span class="comment">% WRITEDIGITALOUTPUT Set the value of one or more digital output bits.</span>
+        <span class="comment">% io.WRITEDIGITALOUTPUT(startIndex, bits);</span>
+        <span class="comment">%</span>
+        <span class="comment">% startIndex - 1-based index of the first bit to write.</span>
+        <span class="comment">% bits       - Array of bit values to write. The first entry will</span>
+        <span class="comment">%              be written to the output bit corresponding to</span>
+        <span class="comment">%              startIndex, end next entry to the next higher</span>
+        <span class="comment">%              numbered output bit, and so on.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Will issue a warning if the device returns an error.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also DigitalOutputCount, readdigitaloutput, readdigitalinput,</span>
+        <span class="comment">% writeanalogoutput</span>
+
+            reply = [];
+
+            <span class="keyword">if</span> ((length(aBits) == obj.DigitalOutputCount) &amp;&amp; (aStartIndex == 1))
+                <span class="comment">% Set all bits at once.</span>
+                data = 0;
+                <span class="keyword">for</span> (i = 1:obj.DigitalOutputCount)
+                    data = bitor(data, bitshift(aBits(i), i - 1));
+                <span class="keyword">end</span>
+
+                reply = obj.Device.request(<span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Write_All_Digital_Outputs, data);
+
+            <span class="keyword">else</span> <span class="comment">% One at a time.</span>
+                <span class="keyword">for</span> (i = 1:length(aBits))
+                    portIndex = i + aStartIndex - 1;
+                    <span class="keyword">if</span> (portIndex &lt;= obj.DigitalOutputCount)
+                        data = bitor(2 * portIndex, aBits(i));
+                        reply = obj.Device.request(<span class="keyword">...</span>
+                            Zaber.BinaryCommandType.Write_Digital_Output, data);
+
+                        <span class="keyword">if</span> (reply.IsError)
+                            <span class="keyword">break</span>;
+                        <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (~isempty(reply) &amp;&amp; reply.IsError)
+                warning(<span class="string">'Zaber:BinaryIoPort:writedigitaloutput:deviceError'</span>, <span class="keyword">...</span>
+                        <span class="string">'There was an error writing digital outputs on device %d.'</span>, <span class="keyword">...</span>
+                        obj.Device.DeviceNo);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> bits = readdigitaloutput(obj, aIndex)
+        <span class="comment">% READDIGITALOUTPUT Read back one or more digital output bits.</span>
+        <span class="comment">% bits = io.READDIGITALOUTPUT();</span>
+        <span class="comment">% bit = io.READDIGITALOUTPUT(index);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - Optional 1-based index of the bit to read. If not given,</span>
+        <span class="comment">%         the output will be an array of bits starting with the</span>
+        <span class="comment">%         lowest-numbered output port bit. If specified, the output</span>
+        <span class="comment">%         will be a single bit value.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also DigitalOutputCount, writedigitaloutput,</span>
+        <span class="comment">% readdigitalinput, writeanalogoutput</span>
+
+            <span class="keyword">if</span> (nargin &gt; 1)
+                reply = obj.Device.request(<span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Read_Digital_Output, aIndex);
+
+                <span class="keyword">if</span> (isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) &amp;&amp; ~reply.IsError)
+                    bits = reply.Data;
+                <span class="keyword">end</span>
+            <span class="keyword">else</span>
+                reply = obj.Device.request(<span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Read_All_Digital_Outputs, 0);
+
+                <span class="keyword">if</span> (isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) &amp;&amp; ~reply.IsError)
+                    bits = zeros(1,obj.DigitalOutputCount);
+                    data = reply.Data;
+                    <span class="keyword">for</span> (i = 1:obj.DigitalOutputCount)
+                        bits(i) = bitand(data, 1);
+                        data = bitshift(data, -1);
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (~isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) || reply.IsError)
+                error(<span class="string">'Zaber:BinaryIoPort:readdigitalinput:deviceError'</span>, <span class="keyword">...</span>
+                      <span class="string">'There was an error when reading digital outputs from device %d.'</span>, <span class="keyword">...</span>
+                      obj.Device.DeviceNo);
+            <span class="keyword">end</span>
+
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2 id="4">Internal static methods</h2><pre class="codeinput">    methods (Static, Access = { ?Zaber.BinaryDevice })
+        <span class="keyword">function</span> ports = detect(aDevice)
+        <span class="comment">% DETECT Identify the I/O ports present on the given controller.</span>
+        <span class="comment">% io = Zaber.BinaryIoPort.detect(device);</span>
+        <span class="comment">%</span>
+        <span class="comment">% device - An instance of Zaber.BinaryDevice.</span>
+        <span class="comment">% io     - An instance of Zaber.BinaryIoPort, if the device</span>
+        <span class="comment">%          supports I/O, or empty otherwise.</span>
+
+            ports = [];
+
+            temp = Zaber.BinaryIoPort(aDevice);
+            found = false;
+
+            reply = aDevice.request(<span class="keyword">...</span>
+                Zaber.BinaryCommandType.Return_Analog_Output_Count, 0);
+
+            <span class="keyword">if</span> (isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) &amp;&amp; ~reply.IsError &amp;&amp; (reply.Data &gt; 0))
+                found = true;
+                temp.AnalogOutputCount = reply.Data;
+            <span class="keyword">end</span>
+
+            reply = aDevice.request(<span class="keyword">...</span>
+                Zaber.BinaryCommandType.Return_Analog_Input_Count, 0);
+
+            <span class="keyword">if</span> (isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) &amp;&amp; ~reply.IsError &amp;&amp; (reply.Data &gt; 0))
+                found = true;
+                temp.AnalogInputCount = reply.Data;
+            <span class="keyword">end</span>
+
+            reply = aDevice.request(<span class="keyword">...</span>
+                Zaber.BinaryCommandType.Return_Digital_Output_Count, 0);
+
+            <span class="keyword">if</span> (isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) &amp;&amp; ~reply.IsError &amp;&amp; (reply.Data &gt; 0))
+                found = true;
+                temp.DigitalOutputCount = reply.Data;
+            <span class="keyword">end</span>
+
+            reply = aDevice.request(<span class="keyword">...</span>
+                Zaber.BinaryCommandType.Return_Digital_Input_Count, 0);
+
+            <span class="keyword">if</span> (isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) &amp;&amp; ~reply.IsError &amp;&amp; (reply.Data &gt; 0))
+                found = true;
+                temp.DigitalInputCount = reply.Data;
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (found)
+                ports = temp;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2 id="5">Protected instance methods</h2><pre class="codeinput">    methods (Access = protected)
+        <span class="keyword">function</span> obj = BinaryIoPort(aDevice)
+            <span class="comment">% BINARYIOPORT Initializes properties to their default values.</span>
+            obj = obj@Zaber.IoPort(aDevice);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef BinaryIoPort < Zaber.IoPort
+%   BINARYIOPORT Interface for the I/O ports on Zaber controllers.
+%
+%   This class implements the Zaber.IoPort interface for binary devices.
+%   Instances are automatically created and assigned to the Device.IO
+%   property during the device detection process.
+%
+%   See also Zaber.IoPort, Zaber.Device, Zaber.Device.IO
+
+%   Author: Zaber Technologies Software Team <contact@zaber.com>
+    
+%% Public instance methods    
+    methods
+        
+        function value = readanaloginput(obj, aIndex)
+        % READANALOGINPUT Read the value of an analog input.
+        % value = io.READANALOGINPUT(index);
+        %
+        % index - The 1-based index of the analog input to read.
+        % value - The voltage read on the specified input.
+        %
+        % Will throw an error if the index is out of range or there is a
+        % communication error.
+        %
+        % See also AnalogInputCount, writeanalogoutput, readanalogoutput,
+        % readdigitalinput
+            
+            reply = obj.Device.request(...
+                Zaber.BinaryCommandType.Read_Analog_Input, aIndex);
+            
+            if (isa(reply, 'Zaber.BinaryMessage') && ~reply.IsError)
+                value = 0.0001 * double(reply.Data);
+            else
+                error('Zaber:BinaryIoPort:readanaloginput:deviceError', ...
+                      'Device %d returned an error when attempting to read analog input %d.', ...
+                      obj.Device.DeviceNo, aIndex);
+            end
+        end
+        
+        
+        function writeanalogoutput(~, ~, ~)
+        % WRITEANALOGOUTPUT Set the value of an analog output
+        % io.WRITEANALOGOUTPUT(index, value);
+        %
+        % index - 1-based index of the port to write to.
+        % value - New voltage to output.
+        %
+        % Note The Zaber Binary protocol currently has no support for
+        % analog outputs, so this method will always throw an error.
+        %
+        % See also AnalogOutputCount, readanalogoutput, readanaloginput,
+        % writedigitaloutput
+            
+            error('Zaber:BinaryIoPort:writeanalogoutput:notSupported', ...
+                  'Analog outputs are currently not supported.');
+        end
+        
+        
+        function value = readanalogoutput(~, ~)
+        % READANALOGOUTPUT Read back the value of an analog output.
+        % value = io.READANALOGOUTPUT(index);
+        %
+        % index - The 1-based index of the analog output to read.
+        % value - The voltage currently being output on the specified port.
+        %
+        % Will throw an error if the index is out of range or there is a
+        % communication error.
+        %
+        % Note The Zaber Binary protocol currently has no support for
+        % analog outputs, so this method will always throw an error.
+        %
+        % See also AnalogOutputCount, writeanalogoutput, readanaloginput,
+        % readdigitaloutput
+            
+            error('Zaber:BinaryIoPort:readanalogoutput:notSupported', ...
+                  'Analog outputs are currently not supported.');
+        end
+        
+        
+        function bits = readdigitalinput(obj, aIndex)
+        % READDIGITALINPUT Read one or more digital input bits.
+        % bits = io.READDIGITALINPUT();
+        % bit = io.READDIGITALINPUT(index);
+        %
+        % index - Optional 1-based index of the bit to read. If not given,
+        %         the output will be an array of bits starting with the
+        %         lowest-numbered input bit. If specified, the output will
+        %         be a single bit value.
+        %
+        % See also DigitalInputCount, writedigitaloutput,
+        % readdigitaloutput, readanaloginput
+           
+            if (nargin > 1)
+                reply = obj.Device.request(...
+                    Zaber.BinaryCommandType.Read_Digital_Input, aIndex);
+                
+                if (isa(reply, 'Zaber.BinaryMessage') && ~reply.IsError)
+                    bits = reply.Data;
+                end
+            else
+                reply = obj.Device.request(...
+                    Zaber.BinaryCommandType.Read_All_Digital_Inputs, 0);
+                
+                if (isa(reply, 'Zaber.BinaryMessage') && ~reply.IsError)
+                    bits = zeros(1, obj.DigitalInputCount);
+                    data = reply.Data;
+                    for (i = 1:obj.DigitalInputCount)                        
+                        bits(i) = bitand(data, 1);
+                        data = bitshift(data, -1);
+                    end
+                end
+            end
+            
+            if (~isa(reply, 'Zaber.BinaryMessage') || reply.IsError)
+                error('Zaber:BinaryIoPort:readdigitalinput:deviceError', ...
+                      'There was an error when reading digital inputs from device %d.', ...
+                      obj.Device.DeviceNo);
+            end
+            
+        end
+        
+        
+        function writedigitaloutput(obj, aStartIndex, aBits)
+        % WRITEDIGITALOUTPUT Set the value of one or more digital output bits.
+        % io.WRITEDIGITALOUTPUT(startIndex, bits);
+        %
+        % startIndex - 1-based index of the first bit to write.
+        % bits       - Array of bit values to write. The first entry will
+        %              be written to the output bit corresponding to
+        %              startIndex, end next entry to the next higher
+        %              numbered output bit, and so on.
+        %
+        % Will issue a warning if the device returns an error.
+        %
+        % See also DigitalOutputCount, readdigitaloutput, readdigitalinput,
+        % writeanalogoutput
+            
+            reply = [];
+            
+            if ((length(aBits) == obj.DigitalOutputCount) && (aStartIndex == 1))
+                % Set all bits at once.
+                data = 0;
+                for (i = 1:obj.DigitalOutputCount)
+                    data = bitor(data, bitshift(aBits(i), i - 1));
+                end
+                
+                reply = obj.Device.request(...
+                    Zaber.BinaryCommandType.Write_All_Digital_Outputs, data);
+                
+            else % One at a time.
+                for (i = 1:length(aBits))
+                    portIndex = i + aStartIndex - 1;
+                    if (portIndex <= obj.DigitalOutputCount)
+                        data = bitor(2 * portIndex, aBits(i));
+                        reply = obj.Device.request(...
+                            Zaber.BinaryCommandType.Write_Digital_Output, data);
+
+                        if (reply.IsError)
+                            break;
+                        end
+                    end
+                end
+            end
+            
+            if (~isempty(reply) && reply.IsError)
+                warning('Zaber:BinaryIoPort:writedigitaloutput:deviceError', ...
+                        'There was an error writing digital outputs on device %d.', ...
+                        obj.Device.DeviceNo);
+            end
+        end
+        
+        
+        function bits = readdigitaloutput(obj, aIndex)
+        % READDIGITALOUTPUT Read back one or more digital output bits.
+        % bits = io.READDIGITALOUTPUT();
+        % bit = io.READDIGITALOUTPUT(index);
+        %
+        % index - Optional 1-based index of the bit to read. If not given,
+        %         the output will be an array of bits starting with the
+        %         lowest-numbered output port bit. If specified, the output 
+        %         will be a single bit value.
+        %
+        % See also DigitalOutputCount, writedigitaloutput,
+        % readdigitalinput, writeanalogoutput
+            
+            if (nargin > 1)
+                reply = obj.Device.request(...
+                    Zaber.BinaryCommandType.Read_Digital_Output, aIndex);
+                
+                if (isa(reply, 'Zaber.BinaryMessage') && ~reply.IsError)
+                    bits = reply.Data;
+                end
+            else
+                reply = obj.Device.request(...
+                    Zaber.BinaryCommandType.Read_All_Digital_Outputs, 0);
+                
+                if (isa(reply, 'Zaber.BinaryMessage') && ~reply.IsError)
+                    bits = zeros(1,obj.DigitalOutputCount);
+                    data = reply.Data;
+                    for (i = 1:obj.DigitalOutputCount)                        
+                        bits(i) = bitand(data, 1);
+                        data = bitshift(data, -1);
+                    end
+                end
+            end
+            
+            if (~isa(reply, 'Zaber.BinaryMessage') || reply.IsError)
+                error('Zaber:BinaryIoPort:readdigitalinput:deviceError', ...
+                      'There was an error when reading digital outputs from device %d.', ...
+                      obj.Device.DeviceNo);
+            end
+            
+        end
+    end
+
+ 
+ %% Internal static methods
+    methods (Static, Access = { ?Zaber.BinaryDevice })
+        function ports = detect(aDevice)
+        % DETECT Identify the I/O ports present on the given controller.
+        % io = Zaber.BinaryIoPort.detect(device);
+        %
+        % device - An instance of Zaber.BinaryDevice.
+        % io     - An instance of Zaber.BinaryIoPort, if the device
+        %          supports I/O, or empty otherwise.
+            
+            ports = [];
+            
+            temp = Zaber.BinaryIoPort(aDevice);
+            found = false;
+            
+            reply = aDevice.request(...
+                Zaber.BinaryCommandType.Return_Analog_Output_Count, 0);
+            
+            if (isa(reply, 'Zaber.BinaryMessage') && ~reply.IsError && (reply.Data > 0))
+                found = true;
+                temp.AnalogOutputCount = reply.Data;
+            end
+            
+            reply = aDevice.request(...
+                Zaber.BinaryCommandType.Return_Analog_Input_Count, 0);
+            
+            if (isa(reply, 'Zaber.BinaryMessage') && ~reply.IsError && (reply.Data > 0))
+                found = true;
+                temp.AnalogInputCount = reply.Data;
+            end
+
+            reply = aDevice.request(...
+                Zaber.BinaryCommandType.Return_Digital_Output_Count, 0);
+            
+            if (isa(reply, 'Zaber.BinaryMessage') && ~reply.IsError && (reply.Data > 0))
+                found = true;
+                temp.DigitalOutputCount = reply.Data;
+            end
+
+            reply = aDevice.request(...
+                Zaber.BinaryCommandType.Return_Digital_Input_Count, 0);
+            
+            if (isa(reply, 'Zaber.BinaryMessage') && ~reply.IsError && (reply.Data > 0))
+                found = true;
+                temp.DigitalInputCount = reply.Data;
+            end
+            
+            if (found)
+                ports = temp;
+            end
+        end
+    end
+    
+    
+ %% Protected instance methods
+    methods (Access = protected)
+        function obj = BinaryIoPort(aDevice)
+            % BINARYIOPORT Initializes properties to their default values.
+            obj = obj@Zaber.IoPort(aDevice);
+        end
+    end
+    
+end
+
+
+##### SOURCE END #####
+--></body></html>

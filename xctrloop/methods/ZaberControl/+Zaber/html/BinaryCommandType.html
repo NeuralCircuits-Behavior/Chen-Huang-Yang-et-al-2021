@@ -1,0 +1,277 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>BinaryCommandType</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="BinaryCommandType.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%   BINARYCOMMANDTYPE Enumeration to assist with interpreting Zaber Binary protocol codes.</span>
+
+<span class="comment">%   THIS IS A GENERATED FILE - DO NOT EDIT. See DeviceDatabaseUpdate.py.</span>
+
+<span class="keyword">classdef</span> BinaryCommandType &lt; uint8
+    <span class="keyword">enumeration</span>
+        Convert_to_ASCII                       (124),
+        Echo_Data                              (55),
+        Home                                   (1),
+        Load_Event_Instruction                 (30),
+        Move_Absolute                          (20),
+        Move_Index                             (78),
+        Move_Relative                          (21),
+        Move_at_Constant_Speed                 (22),
+        Move_to_Stored_Position                (18),
+        Read_All_Digital_Inputs                (69),
+        Read_All_Digital_Outputs               (72),
+        Read_Analog_Input                      (76),
+        Read_Digital_Input                     (68),
+        Read_Digital_Output                    (71),
+        Read_or_Write_Memory                   (35),
+        Renumber                               (2),
+        Reset                                  (0),
+        Restore_Settings                       (36),
+        Return_Analog_Input_Count              (75),
+        Return_Analog_Output_Count             (77),
+        Return_Calibrated_Encoder_Count        (83),
+        Return_Calibration_Error               (85),
+        Return_Calibration_Type                (84),
+        Return_Current_Position                (60),
+        Return_Device_ID                       (50),
+        Return_Digital_Input_Count             (67),
+        Return_Digital_Output_Count            (70),
+        Return_Encoder_Count                   (82),
+        Return_Event_Instruction               (31),
+        Return_Firmware_Build                  (56),
+        Return_Firmware_Version                (51),
+        Return_Power_Supply_Voltage            (52),
+        Return_Serial_Number                   (63),
+        Return_Setting                         (53),
+        Return_Status                          (54),
+        Return_Stored_Position                 (17),
+        Set_Acceleration                       (43),
+        Set_Acceleration_Only                  (113),
+        Set_Active_Axis                        (25),
+        Set_Alias_Number                       (48),
+        Set_Auto_Home_Disabled_Mode            (105),
+        Set_Auto_Reply_Disabled_Mode           (101),
+        Set_Axis_Device_Number                 (26),
+        Set_Axis_Inversion                     (27),
+        Set_Axis_Velocity_Profile              (28),
+        Set_Axis_Velocity_Scale                (29),
+        Set_Baud_Rate                          (122),
+        Set_Baudrate                           (122),
+        Set_Calibration_Mode                   (33),
+        Set_Closed_Loop_Mode                   (118),
+        Set_Current_Position                   (45),
+        Set_Cycle_Distance                     (80),
+        Set_Deceleration_Only                  (114),
+        Set_Device_Direction                   (121),
+        Set_Device_Mode                        (40),
+        Set_Filter_Holder_ID                   (81),
+        Set_Hold_Current                       (39),
+        Set_Home_Offset                        (47),
+        Set_Home_Sensor_Type                   (104),
+        Set_Home_Speed                         (41),
+        Set_Home_Status                        (103),
+        Set_Index_Distance                     (79),
+        Set_Joystick_Calibration_Mode          (33),
+        Set_Knob_Direction                     (108),
+        Set_Knob_Disabled_Mode                 (107),
+        Set_Knob_Jog_Size                      (110),
+        Set_Knob_Movement_Mode                 (109),
+        Set_Knob_Velocity_Profile              (112),
+        Set_Knob_Velocity_Scale                (111),
+        Set_Lock_State                         (49),
+        Set_Manual_Move_Tracking_Disabled_Mode (116),
+        Set_Maximum_Position                   (44),
+        Set_Maximum_Relative_Move              (46),
+        Set_Message_ID_Mode                    (102),
+        Set_Microstep_Resolution               (37),
+        Set_Minimum_Position                   (106),
+        Set_Move_Tracking_Mode                 (115),
+        Set_Move_Tracking_Period               (117),
+        Set_On_Time                            (27),
+        Set_Park_State                         (65),
+        Set_Peripheral_ID                      (66),
+        Set_Peripheral_Serial_Number           (86),
+        Set_Position                           (26),
+        Set_Protocol                           (123),
+        Set_Running_Current                    (38),
+        Set_Servo_Channel                      (25),
+        Set_Slip_Tracking_Period               (119),
+        Set_Stall_Timeout                      (120),
+        Set_Start_Speed                        (41),
+        Set_Target_Speed                       (42),
+        Stop                                   (23),
+        Store_Current_Position                 (16),
+        Write_All_Digital_Outputs              (74),
+        Write_Digital_Output                   (73)
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%   BINARYCOMMANDTYPE Enumeration to assist with interpreting Zaber Binary protocol codes.
+
+%   THIS IS A GENERATED FILE - DO NOT EDIT. See DeviceDatabaseUpdate.py.
+
+classdef BinaryCommandType < uint8
+    enumeration
+        Convert_to_ASCII                       (124),
+        Echo_Data                              (55),
+        Home                                   (1),
+        Load_Event_Instruction                 (30),
+        Move_Absolute                          (20),
+        Move_Index                             (78),
+        Move_Relative                          (21),
+        Move_at_Constant_Speed                 (22),
+        Move_to_Stored_Position                (18),
+        Read_All_Digital_Inputs                (69),
+        Read_All_Digital_Outputs               (72),
+        Read_Analog_Input                      (76),
+        Read_Digital_Input                     (68),
+        Read_Digital_Output                    (71),
+        Read_or_Write_Memory                   (35),
+        Renumber                               (2),
+        Reset                                  (0),
+        Restore_Settings                       (36),
+        Return_Analog_Input_Count              (75),
+        Return_Analog_Output_Count             (77),
+        Return_Calibrated_Encoder_Count        (83),
+        Return_Calibration_Error               (85),
+        Return_Calibration_Type                (84),
+        Return_Current_Position                (60),
+        Return_Device_ID                       (50),
+        Return_Digital_Input_Count             (67),
+        Return_Digital_Output_Count            (70),
+        Return_Encoder_Count                   (82),
+        Return_Event_Instruction               (31),
+        Return_Firmware_Build                  (56),
+        Return_Firmware_Version                (51),
+        Return_Power_Supply_Voltage            (52),
+        Return_Serial_Number                   (63),
+        Return_Setting                         (53),
+        Return_Status                          (54),
+        Return_Stored_Position                 (17),
+        Set_Acceleration                       (43),
+        Set_Acceleration_Only                  (113),
+        Set_Active_Axis                        (25),
+        Set_Alias_Number                       (48),
+        Set_Auto_Home_Disabled_Mode            (105),
+        Set_Auto_Reply_Disabled_Mode           (101),
+        Set_Axis_Device_Number                 (26),
+        Set_Axis_Inversion                     (27),
+        Set_Axis_Velocity_Profile              (28),
+        Set_Axis_Velocity_Scale                (29),
+        Set_Baud_Rate                          (122),
+        Set_Baudrate                           (122),
+        Set_Calibration_Mode                   (33),
+        Set_Closed_Loop_Mode                   (118),
+        Set_Current_Position                   (45),
+        Set_Cycle_Distance                     (80),
+        Set_Deceleration_Only                  (114),
+        Set_Device_Direction                   (121),
+        Set_Device_Mode                        (40),
+        Set_Filter_Holder_ID                   (81),
+        Set_Hold_Current                       (39),
+        Set_Home_Offset                        (47),
+        Set_Home_Sensor_Type                   (104),
+        Set_Home_Speed                         (41),
+        Set_Home_Status                        (103),
+        Set_Index_Distance                     (79),
+        Set_Joystick_Calibration_Mode          (33),
+        Set_Knob_Direction                     (108),
+        Set_Knob_Disabled_Mode                 (107),
+        Set_Knob_Jog_Size                      (110),
+        Set_Knob_Movement_Mode                 (109),
+        Set_Knob_Velocity_Profile              (112),
+        Set_Knob_Velocity_Scale                (111),
+        Set_Lock_State                         (49),
+        Set_Manual_Move_Tracking_Disabled_Mode (116),
+        Set_Maximum_Position                   (44),
+        Set_Maximum_Relative_Move              (46),
+        Set_Message_ID_Mode                    (102),
+        Set_Microstep_Resolution               (37),
+        Set_Minimum_Position                   (106),
+        Set_Move_Tracking_Mode                 (115),
+        Set_Move_Tracking_Period               (117),
+        Set_On_Time                            (27),
+        Set_Park_State                         (65),
+        Set_Peripheral_ID                      (66),
+        Set_Peripheral_Serial_Number           (86),
+        Set_Position                           (26),
+        Set_Protocol                           (123),
+        Set_Running_Current                    (38),
+        Set_Servo_Channel                      (25),
+        Set_Slip_Tracking_Period               (119),
+        Set_Stall_Timeout                      (120),
+        Set_Start_Speed                        (41),
+        Set_Target_Speed                       (42),
+        Stop                                   (23),
+        Store_Current_Position                 (16),
+        Write_All_Digital_Outputs              (74),
+        Write_Digital_Output                   (73)
+    end
+end
+
+##### SOURCE END #####
+--></body></html>

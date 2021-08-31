@@ -1,0 +1,225 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Example_FilterWheel</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="Example_FilterWheel.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">% This example shows how to use the Zaber Filter Wheel device,</span>
+<span class="comment">% or other Zaber devices that have indexed positions.</span>
+
+<span class="comment">% This example assumes your device is configured as device #1 and is using</span>
+<span class="comment">% the ASCII protocol. You will need to edit values in this example to make</span>
+<span class="comment">% it work for your particular setup.</span>
+
+<span class="comment">% Note for simplicity this example does no error checking.</span>
+
+
+<span class="comment">% Initialize port.</span>
+port = serial(<span class="string">'COM15'</span>);
+
+<span class="comment">% Set default serial port properties for the ASCII protocol.</span>
+set(port, <span class="keyword">...</span>
+    <span class="string">'BaudRate'</span>, 115200, <span class="keyword">...</span>
+    <span class="string">'DataBits'</span>, 8, <span class="keyword">...</span>
+    <span class="string">'FlowControl'</span>, <span class="string">'none'</span>, <span class="keyword">...</span>
+    <span class="string">'Parity'</span>, <span class="string">'none'</span>, <span class="keyword">...</span>
+    <span class="string">'StopBits'</span>, 1, <span class="keyword">...</span>
+    <span class="string">'Terminator'</span>,<span class="string">'CR/LF'</span>);
+
+<span class="comment">% There are cases where the Zaber toolbox deliberately waits for</span>
+<span class="comment">% port reception to time out. To reduce the wait time and suppress</span>
+<span class="comment">% timeout messages, use the following two commands.</span>
+set(port, <span class="string">'Timeout'</span>, 0.5)
+warning <span class="string">off</span> <span class="string">MATLAB:serial:fgetl:unsuccessfulRead</span>
+
+<span class="comment">% Open the port.</span>
+fopen(port);
+
+<span class="comment">% In this example we know we're using the ASCII protocol, so just</span>
+<span class="comment">% instantiate it directly.</span>
+protocol = Zaber.AsciiProtocol(port);
+
+<span class="keyword">try</span>
+    <span class="comment">% This example assumes we have a device in ASCII mode at address 1.</span>
+    <span class="comment">% Create a representation of it and query the device for its</span>
+    <span class="comment">% properties.</span>
+    device = Zaber.AsciiDevice.initialize(protocol, 1);
+    fprintf(<span class="string">'Device 1 is a %s with firmware version %f\n'</span>, <span class="keyword">...</span>
+        device.Name, device.FirmwareVersion);
+
+    <span class="comment">% Find out how many positions the device has.</span>
+    nPos = device.getnumindices();
+    choice = -1;
+    <span class="keyword">if</span> (nPos &gt; 1)
+        fprintf(<span class="string">'This device has %d indexed positions.\n'</span>, nPos);
+        choice = menu(<span class="string">'OK to make the device move?'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>);
+    <span class="keyword">else</span>
+        fprintf(<span class="string">'This device does not support index moves. Terminating.\n'</span>);
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> (choice == 1)
+        fprintf(<span class="string">'Homing the device...\n'</span>);
+        device.home();
+        device.waitforidle();
+
+        fprintf(<span class="string">'Moving to some random indices...\n'</span>);
+        <span class="keyword">for</span> (i = 1:20)
+            index = randi(nPos);
+            fprintf(<span class="string">'%d\n'</span>, index);
+            device.moveindexed(index);
+            device.waitforidle();
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">catch</span> exception
+    <span class="comment">% Clean up the port if an error occurs, otherwise it remains locked.</span>
+    fclose(port);
+    rethrow(exception);
+<span class="keyword">end</span>
+
+fclose(port);
+delete(port);
+clear <span class="string">all</span>;
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% This example shows how to use the Zaber Filter Wheel device,
+% or other Zaber devices that have indexed positions.
+
+% This example assumes your device is configured as device #1 and is using 
+% the ASCII protocol. You will need to edit values in this example to make
+% it work for your particular setup.
+
+% Note for simplicity this example does no error checking.
+
+
+% Initialize port.
+port = serial('COM15');
+
+% Set default serial port properties for the ASCII protocol.
+set(port, ...
+    'BaudRate', 115200, ...
+    'DataBits', 8, ...
+    'FlowControl', 'none', ...
+    'Parity', 'none', ...
+    'StopBits', 1, ...
+    'Terminator','CR/LF');
+
+% There are cases where the Zaber toolbox deliberately waits for
+% port reception to time out. To reduce the wait time and suppress
+% timeout messages, use the following two commands.
+set(port, 'Timeout', 0.5)
+warning off MATLAB:serial:fgetl:unsuccessfulRead
+
+% Open the port.
+fopen(port);
+
+% In this example we know we're using the ASCII protocol, so just
+% instantiate it directly.
+protocol = Zaber.AsciiProtocol(port);
+
+try
+    % This example assumes we have a device in ASCII mode at address 1.
+    % Create a representation of it and query the device for its
+    % properties.
+    device = Zaber.AsciiDevice.initialize(protocol, 1);   
+    fprintf('Device 1 is a %s with firmware version %f\n', ...
+        device.Name, device.FirmwareVersion);
+    
+    % Find out how many positions the device has.
+    nPos = device.getnumindices();
+    choice = -1;
+    if (nPos > 1)
+        fprintf('This device has %d indexed positions.\n', nPos);
+        choice = menu('OK to make the device move?','Yes','No');
+    else
+        fprintf('This device does not support index moves. Terminating.\n');
+    end
+
+    if (choice == 1)
+        fprintf('Homing the device...\n');
+        device.home();
+        device.waitforidle();
+        
+        fprintf('Moving to some random indices...\n');
+        for (i = 1:20)
+            index = randi(nPos);
+            fprintf('%d\n', index);
+            device.moveindexed(index);
+            device.waitforidle();
+        end
+    end
+    
+catch exception
+    % Clean up the port if an error occurs, otherwise it remains locked.
+    fclose(port);
+    rethrow(exception);
+end
+
+fclose(port);
+delete(port);
+clear all;
+
+##### SOURCE END #####
+--></body></html>

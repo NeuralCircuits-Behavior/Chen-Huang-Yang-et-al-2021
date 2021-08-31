@@ -1,0 +1,340 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>User Guide</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-07-18"><meta name="DC.source" content="userguide.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>User Guide</h1><!--introduction--><p>This toolbox provides some flexibility in its setup to allow for different use cases. The general progression is to set up your communication port, detect or choose a protocol, identify your devices, and then control the devices. The following sections go through these phases in that order.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Port and Protocol initialization</a></li><li><a href="#2">Binary Protocol</a></li><li><a href="#3">ASCII Protocol</a></li><li><a href="#4">Protocol and baud rate not known</a></li><li><a href="#5">Identify Devices</a></li><li><a href="#6">Control Devices</a></li><li><a href="#7">Port leaks</a></li></ul></div><h2 id="1">Port and Protocol initialization</h2><p>Assuming you have already set up your hardware and configured your Zaber devices (see &lt;introduction.html#3 Requirements), the first step is to configure and open a serial port in MATLAB.</p><p>Some of the recommended port settings depend on the baud rate and protocol you have configured your devices to use.</p><h2 id="2">Binary Protocol</h2><pre class="language-matlab">port = serial(<span class="string">'COM3'</span>); <span class="comment">% Substitute the correct name of your port.</span>
+</pre><p>Set default serial port properties for the binary protocol.</p><pre class="language-matlab">set(port, <span class="keyword">...</span>
+    <span class="string">'BaudRate'</span>, 9600, <span class="keyword">...</span>
+    <span class="string">'DataBits'</span>, 8, <span class="keyword">...</span>
+    <span class="string">'FlowControl'</span>, <span class="string">'none'</span>, <span class="keyword">...</span>
+    <span class="string">'Parity'</span>, <span class="string">'none'</span>, <span class="keyword">...</span>
+    <span class="string">'StopBits'</span>, 1);
+</pre><p>There are cases where the Zaber toolbox deliberately waits for port reception to time out. To reduce the wait time and suppress timeout messages, use the following two commands.</p><pre class="language-matlab">set(port, <span class="string">'Timeout'</span>, 0.5)
+warning <span class="string">off</span> <span class="string">MATLAB:serial:fread:unsuccessfulRead</span>
+</pre><p>Open the port.</p><pre class="language-matlab">fopen(port);
+</pre><p>In this example we know we're using the binary protocol, so just instantiate it directly.</p><pre class="language-matlab">protocol = Zaber.BinaryProtocol(port);
+</pre><h2 id="3">ASCII Protocol</h2><pre class="language-matlab">port = serial(<span class="string">'COM3'</span>); <span class="comment">% Substitute the correct name for your port.</span>
+</pre><p>Set default serial port properties for the ASCII protocol. Note the ASCII protocol supports multiple baud rates from 9600 up to 115200, but the latter is the most commonly used.</p><pre class="language-matlab">set(port, <span class="keyword">...</span>
+    <span class="string">'BaudRate'</span>, 115200, <span class="keyword">...</span>
+    <span class="string">'DataBits'</span>, 8, <span class="keyword">...</span>
+    <span class="string">'FlowControl'</span>, <span class="string">'none'</span>, <span class="keyword">...</span>
+    <span class="string">'Parity'</span>, <span class="string">'none'</span>, <span class="keyword">...</span>
+    <span class="string">'StopBits'</span>, 1, <span class="keyword">...</span>
+    <span class="string">'Terminator'</span>,<span class="string">'CR/LF'</span>);
+</pre><p>There are cases where the Zaber toolbox deliberately waits for port reception to time out. To reduce the wait time and suppress timeout messages, use the following two commands.</p><pre class="language-matlab">set(port, <span class="string">'Timeout'</span>, 0.5)
+warning <span class="string">off</span> <span class="string">MATLAB:serial:fgetl:unsuccessfulRead</span>
+</pre><p>Open the port.</p><pre class="language-matlab">fopen(port);
+</pre><p>In this example we know we're using the ASCII protocol, so just instantiate it directly.</p><pre class="language-matlab">protocol = Zaber.AsciiProtocol(port);
+</pre><h2 id="4">Protocol and baud rate not known</h2><p>This toolbox also provides the ability to detect which protocol your first device (the one directly connected to the computer) is using. If you don't know the baud rate your device is set to, you can attempt detection at multiple baud rates in a loop until you get a response. See  Example_Advanced.m for a full example, but the general steps are: initialize the port as in the above examples, pick a baud rate, open the port, then call:</p><pre class="language-matlab">protocol = Zaber.Protocol.detect(port);
+</pre><p>If 'protocol' is empty after this call, then detection failed and you should close the port, reopen it at a different baud rate, and try again.</p><p>Note that it is possible to have a situation where you have multiple devices in a daisy chain, each using different protocol and baud rate settings, and also possibly having conflicting addresses. In such cases protocol detection may fail, or device detection may not find all of your devices. <a href="http://www.zaber.com/wiki/Software/Zaber_Console">Zaber Console</a> can be used to force all devices into a consistent and non-conflicting configuration.</p><h2 id="5">Identify Devices</h2><p>If you know which protocol you are using and have instantiated it as above, and you know what addresses your devices are configured to use on the serial port, then you can just manually create a device class instance for each one as follows:</p><p>Binary protocol, device address 1</p><pre class="language-matlab">device1 = Zaber.BinaryDevice.initialize(protocol, 1);
+</pre><p>or ASCII protocol, device address 1</p><pre class="language-matlab">device1 = Zaber.AsciiDevice.initialize(protocol, 1);
+</pre><p>Note that 'initialize' means 'initialize the device class', not 'initialize the device hardware'. This method creates a class instance and fills it in using data read from the device and from the device database included with this toolbox. You will see the communication lights on the device flash, but the software is not changing any settings on the device during this process.</p><p>If you are using the protocol-agnostic interface and don't know or care which protocol is in use or what the device addresses are, you can automatically enumerate all of the devices like this:</p><pre class="language-matlab">devices = protocol.finddevices();
+</pre><p>This gives you back an array of initialized device instances, and you can start calling their methods to make the devices move. Note that the indices of the devices in this array do NOT correspond to the device addresses; use the DeviceNo property on an instance to learn its address.</p><h2 id="6">Control Devices</h2><p>Once you have an initialized device instance, you can make calls on it to make the device move. For example, to start with you should move the device to its home position to ensure it has a reference position:</p><pre class="language-matlab">device.home();
+device.waitforidle();
+</pre><p>Now let's say you have a linear stage and you want to move it to a position 10cm from its home position. You can do the unit conversion and the move as follows:</p><pre class="language-matlab">position = device.Units.positiontonative(0.1); <span class="comment">% 10cm = 0.1m.</span>
+device.moveabsolute(position); <span class="comment">% Tell the device to move.</span>
+device.waitforidle(); <span class="comment">% Wait for the move to finish.</span>
+</pre><p>The generic device class provides methods for moving to absolute, relative or indexed positions, moving at a specified velocity, moving to the home position, stopping, waiting for completion, and getting the device's current position and range of motion.</p><p>Most Zaber devices have additional capabilities not covered by the above set of functions, as well as many settings that can be read and written. To access those capabilities you need to know which protocol you are using in order to formulate a command and interpret the response from the device. For example, here's how to read the device's serial number in both protocols:</p><p>Binary - commands and data are all numbers. Enumerations are provided to give symbolic names to the numbers. A full protocol description is available here: <a href="http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual">http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual</a></p><pre class="language-matlab">reply = device.request(Zaber.BinaryCommandType.Return_Serial_Number, 0);
+<span class="keyword">if</span> (isempty(reply))
+    fprintf(<span class="string">'The device did not respond to the serial number request.\n'</span>);
+<span class="keyword">elseif</span> (reply.IsError)
+    fprintf(<span class="string">'The device responsed with error %d (%s).\n'</span>, <span class="keyword">...</span>
+        reply.Data, char(Zaber.BinaryErrorType(reply.Data)));
+<span class="keyword">else</span>
+    fprintf(<span class="string">'Device serial number is %d.\n'</span>, reply.Data);
+<span class="keyword">end</span>
+</pre><p>ASCII - all commands are strings, and data can be strings or numbers. A full protocol description is available here: <a href="http://www.zaber.com/wiki/Manuals/ASCII_Protocol_Manual">http://www.zaber.com/wiki/Manuals/ASCII_Protocol_Manual</a></p><pre class="language-matlab">reply = device.request(<span class="string">'get'</span>, <span class="string">'system.serial'</span>);
+<span class="keyword">if</span> (isempty(reply))
+    fprintf(<span class="string">'The device did not respond to the serial number request.\n'</span>);
+<span class="keyword">elseif</span> (reply.IsError)
+    fprintf(<span class="string">'The device responsed with error %d (%s).\n'</span>, <span class="keyword">...</span>
+        reply.Data, char(Zaber.BinaryErrorType(reply.Data)));
+<span class="keyword">else</span>
+    fprintf(<span class="string">'Device serial number is %d.\n'</span>, reply.Data);
+<span class="keyword">end</span>
+</pre><h2 id="7">Port leaks</h2><p>If a device error or a communication error occurs, many methods in this toolbox will throw an error. When this happens the port is not automatically closed, and attempts to reopen it will fail. It is easy to leak open ports by assigning a new serial port instance to the same name without first closing the previous instance. When this happens you can find and close the previous instance as in this example:</p><pre class="language-matlab">&gt;&gt; serialObj = instrfind
+</pre><pre class="language-matlab">Instrument <span class="string">Object</span> <span class="string">Array</span>
+</pre><pre class="language-matlab">Index:    Type:     Status:   Name:
+1         serial    <span class="string">closed</span>    <span class="string">Serial-COM3</span>
+2         serial    <span class="string">open</span>      <span class="string">Serial-COM3</span>
+3         serial    <span class="string">closed</span>    <span class="string">Serial-COM3</span>
+</pre><pre class="language-matlab">&gt;&gt; fclose(serialObj(2))
+</pre><p>To avoid this, we recommend that you enclose all usage of the Zaber toolbox in try/catch blocks, and clean up the serial port in the catch block - see the examples.</p><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% User Guide
+% This toolbox provides some flexibility in its setup to allow for
+% different use cases. The general progression is to set up your
+% communication port, detect or choose a protocol, identify your devices,
+% and then control the devices. The following sections go through these
+% phases in that order.
+
+%% Port and Protocol initialization
+% Assuming you have already set up your hardware and configured your Zaber
+% devices (see <introduction.html#3 Requirements), the first step is to
+% configure and open a serial port in MATLAB.
+%
+% Some of the recommended port settings depend on the baud rate and
+% protocol you have configured your devices to use. 
+%
+%%% Binary Protocol
+%
+%   port = serial('COM3'); % Substitute the correct name of your port.
+%
+% Set default serial port properties for the binary protocol.
+%
+%   set(port, ...
+%       'BaudRate', 9600, ...
+%       'DataBits', 8, ...
+%       'FlowControl', 'none', ...
+%       'Parity', 'none', ...
+%       'StopBits', 1);
+%
+% There are cases where the Zaber toolbox deliberately waits for
+% port reception to time out. To reduce the wait time and suppress
+% timeout messages, use the following two commands.
+%
+%   set(port, 'Timeout', 0.5)
+%   warning off MATLAB:serial:fread:unsuccessfulRead
+%
+% Open the port.
+%
+%   fopen(port);
+%
+% In this example we know we're using the binary protocol, so just
+% instantiate it directly.
+%
+%   protocol = Zaber.BinaryProtocol(port);
+
+%%% ASCII Protocol
+%
+%   port = serial('COM3'); % Substitute the correct name for your port.
+%
+% Set default serial port properties for the ASCII protocol.
+% Note the ASCII protocol supports multiple baud rates from 9600 up to
+% 115200, but the latter is the most commonly used.
+%
+%   set(port, ...
+%       'BaudRate', 115200, ...
+%       'DataBits', 8, ...
+%       'FlowControl', 'none', ...
+%       'Parity', 'none', ...
+%       'StopBits', 1, ...
+%       'Terminator','CR/LF');
+%
+% There are cases where the Zaber toolbox deliberately waits for
+% port reception to time out. To reduce the wait time and suppress
+% timeout messages, use the following two commands.
+%
+%   set(port, 'Timeout', 0.5)
+%   warning off MATLAB:serial:fgetl:unsuccessfulRead
+%
+% Open the port.
+%
+%   fopen(port);
+%
+% In this example we know we're using the ASCII protocol, so just
+% instantiate it directly.
+%
+%   protocol = Zaber.AsciiProtocol(port);
+
+%%% Protocol and baud rate not known
+% This toolbox also provides the ability to detect which protocol your
+% first device (the one directly connected to the computer) is using. If
+% you don't know the baud rate your device is set to, you can attempt
+% detection at multiple baud rates in a loop until you get a response. See
+%  Example_Advanced.m for a full example, but the
+% general steps are: initialize the port as in the above examples, pick a
+% baud rate, open the port, then call:
+%
+%   protocol = Zaber.Protocol.detect(port);
+%
+% If 'protocol' is empty after this call, then detection failed and you
+% should close the port, reopen it at a different baud rate, and try
+% again.
+%
+% Note that it is possible to have a situation where you have multiple
+% devices in a daisy chain, each using different protocol and baud rate
+% settings, and also possibly having conflicting addresses. In such cases
+% protocol detection may fail, or device detection may not find all of your
+% devices. <http://www.zaber.com/wiki/Software/Zaber_Console Zaber Console>
+% can be used to force all devices into a consistent and non-conflicting
+% configuration.
+
+%% Identify Devices
+% If you know which protocol you are using and have instantiated it as
+% above, and you know what addresses your devices are configured to use on
+% the serial port, then you can just manually create a device class
+% instance for each one as follows:
+%
+% Binary protocol, device address 1
+%
+%   device1 = Zaber.BinaryDevice.initialize(protocol, 1); 
+%
+% or ASCII protocol, device address 1
+%
+%   device1 = Zaber.AsciiDevice.initialize(protocol, 1);
+%
+% Note that 'initialize' means 'initialize the device class', not
+% 'initialize the device hardware'. This method creates a class instance
+% and fills it in using data read from the device and from the device
+% database included with this toolbox. You will see the communication
+% lights on the device flash, but the software is not changing any settings
+% on the device during this process.
+%
+% If you are using the protocol-agnostic interface and don't know or care
+% which protocol is in use or what the device addresses are, you can
+% automatically enumerate all of the devices like this:
+%
+%   devices = protocol.finddevices();
+%
+% This gives you back an array of initialized device instances, and you can
+% start calling their methods to make the devices move. Note that the
+% indices of the devices in this array do NOT correspond to the device
+% addresses; use the DeviceNo property on an instance to learn its address.
+
+%% Control Devices
+% Once you have an initialized device instance, you can make calls on it to
+% make the device move. For example, to start with you should move the
+% device to its home position to ensure it has a reference position:
+%
+%   device.home();
+%   device.waitforidle();
+%
+% Now let's say you have a linear stage and you want to move it to a
+% position 10cm from its home position. You can do the unit conversion and
+% the move as follows:
+%
+%   position = device.Units.positiontonative(0.1); % 10cm = 0.1m.
+%   device.moveabsolute(position); % Tell the device to move.
+%   device.waitforidle(); % Wait for the move to finish.
+%
+% The generic device class provides methods for moving to absolute,
+% relative or indexed positions, moving at a specified velocity, moving to
+% the home position, stopping, waiting for completion, and getting the
+% device's current position and range of motion. 
+%
+% Most Zaber devices have additional capabilities not covered by the above
+% set of functions, as well as many settings that can be read and written.
+% To access those capabilities you need to know which protocol you are
+% using in order to formulate a command and interpret the response from the
+% device. For example, here's how to read the device's serial number in
+% both protocols:
+%
+% Binary - commands and data are all numbers. Enumerations are provided to
+% give symbolic names to the numbers. A full protocol description is available
+% here: http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual
+%
+%   reply = device.request(Zaber.BinaryCommandType.Return_Serial_Number, 0);
+%   if (isempty(reply))
+%       fprintf('The device did not respond to the serial number request.\n');
+%   elseif (reply.IsError)
+%       fprintf('The device responsed with error %d (%s).\n', ...
+%           reply.Data, char(Zaber.BinaryErrorType(reply.Data)));
+%   else
+%       fprintf('Device serial number is %d.\n', reply.Data);
+%   end
+%
+% ASCII - all commands are strings, and data can be strings or numbers. A full
+% protocol description is available here: 
+% http://www.zaber.com/wiki/Manuals/ASCII_Protocol_Manual
+%
+%   reply = device.request('get', 'system.serial');
+%   if (isempty(reply))
+%       fprintf('The device did not respond to the serial number request.\n');
+%   elseif (reply.IsError)
+%       fprintf('The device responsed with error %d (%s).\n', ...
+%           reply.Data, char(Zaber.BinaryErrorType(reply.Data)));
+%   else
+%       fprintf('Device serial number is %d.\n', reply.Data);
+%   end
+
+%% Port leaks
+%
+% If a device error or a communication error occurs, many methods in this
+% toolbox will throw an error. When this happens the port is not
+% automatically closed, and attempts to reopen it will fail. It is easy to
+% leak open ports by assigning a new serial port instance to the same name
+% without first closing the previous instance. When this happens you can
+% find and close the previous instance as in this example:
+%
+%   >> serialObj = instrfind
+% 
+%   Instrument Object Array
+% 
+%   Index:    Type:     Status:   Name:  
+%   1         serial    closed    Serial-COM3
+%   2         serial    open      Serial-COM3
+%   3         serial    closed    Serial-COM3
+% 
+%   >> fclose(serialObj(2))
+%
+% To avoid this, we recommend that you enclose all usage of the Zaber
+% toolbox in try/catch blocks, and clean up the serial port in the catch
+% block - see the examples.
+
+##### SOURCE END #####
+--></body></html>

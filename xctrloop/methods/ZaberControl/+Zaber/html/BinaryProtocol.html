@@ -1,0 +1,455 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>BinaryProtocol</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="BinaryProtocol.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Public instance methods</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> BinaryProtocol &lt; Zaber.Protocol
+</pre><pre class="codeinput"><span class="comment">%   BINARYPROTOCOL Zaber Binary protocol communication helper.</span>
+<span class="comment">%   This class wraps a port instance and provides facilities for sending</span>
+<span class="comment">%   and receiving device messages using the BinaryMessage helper class.</span>
+<span class="comment">%</span>
+<span class="comment">%   See also Zaber.BinaryMessage, Zaber.Device, Zaber.Protocol,</span>
+<span class="comment">%   Zaber.AsciiProtocol</span>
+
+<span class="comment">%   Author: Zaber Technologies Software Team &lt;contact@zaber.com&gt;</span>
+</pre><h2 id="3">Public instance methods</h2><pre class="codeinput">    methods
+        <span class="keyword">function</span> obj = BinaryProtocol(aPort)
+        <span class="comment">% BINARYPROTOCOL Constructor. Initializes the object properties.</span>
+        <span class="comment">% protocol = Zaber.BINARYPROTOCOL(port)</span>
+        <span class="comment">%</span>
+        <span class="comment">% port     - An port that has already been configured and opened.</span>
+        <span class="comment">% protocol - The initialized BinaryProtocol instance.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This assumes you are certain the port is connected to Zaber</span>
+        <span class="comment">% devices that are using the Binary protocol, and that the port is</span>
+        <span class="comment">% set to the correct baud rate already.</span>
+
+            obj = obj@Zaber.Protocol(aPort);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> send(obj, aCommand)
+        <span class="comment">% SEND Send a binary command out over the port.</span>
+        <span class="comment">% protocol.SEND(message)</span>
+        <span class="comment">%</span>
+        <span class="comment">% message - Either a BinaryMessage instance or an array of six</span>
+        <span class="comment">%           bytes.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Transmits a message over the port without waitinf for a</span>
+        <span class="comment">% response. If the argument is a BinaryMessage, it will</span>
+        <span class="comment">% automatically be serialized to six bytes and then sent.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also receive, request</span>
+
+            packet = aCommand;
+            <span class="keyword">if</span> (isa(aCommand, <span class="string">'Zaber.BinaryMessage'</span>))
+                packet = aCommand.serialize();
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (length(packet) ~= 6)
+                error(<span class="string">'Zaber:BinaryProtocol:send:badDataType'</span>, <span class="keyword">...</span>
+                      <span class="string">'Binary protocol expects a BinaryMessage or 6 bytes.'</span>);
+            <span class="keyword">end</span>
+
+            fwrite(obj.Port, packet, <span class="string">'uint8'</span>);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> response = receive(obj, aMessageIdsEnabled)
+        <span class="comment">% RECEIVE Wait for a reply from any device</span>
+        <span class="comment">% message = protocol.RECEIVE()</span>
+        <span class="comment">% message = protocol.RECEIVE(idsenabled)</span>
+        <span class="comment">%</span>
+        <span class="comment">% idsenabled - Optional. Pass in true if the device has message</span>
+        <span class="comment">%              ID mode enabled. This will cause the message IDs</span>
+        <span class="comment">%              to automatically be separated from the data.</span>
+        <span class="comment">% message    - The deserialized message, or the empty array if</span>
+        <span class="comment">%              the port timed out.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This method attempts to read six bytes from the port, and if</span>
+        <span class="comment">% successful will attempt to parse that data into a BinaryMessage</span>
+        <span class="comment">% object and return that.</span>
+        <span class="comment">%</span>
+        <span class="comment">% If the read attempt times out (using the port's timeout setting)</span>
+        <span class="comment">% then an empty array is returned.</span>
+        <span class="comment">%</span>
+        <span class="comment">% If data is read but there is an error attempting to parse it, an</span>
+        <span class="comment">% error may be thrown.</span>
+        <span class="comment">%</span>
+        <span class="comment">% NOTE: This function blocks until either six bytes are received</span>
+        <span class="comment">% or the port times out. To change the timeout and suppress the</span>
+        <span class="comment">% timeout watning message, use these commands before opening the</span>
+        <span class="comment">% port:</span>
+        <span class="comment">%   set(port, 'Timeout', 0.5)</span>
+        <span class="comment">%   warning off MATLAB:serial:fread:unsuccessfulRead</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also send, request, canreceive</span>
+
+            data = fread(obj.Port, 6, <span class="string">'uint8'</span>)';
+
+            response = [];
+            <span class="keyword">if</span> (length(data) == 6)
+                <span class="keyword">if</span> (nargin &gt; 1)
+                    response = Zaber.BinaryMessage.deserialize(data, <span class="keyword">...</span>
+                        aMessageIdsEnabled);
+                <span class="keyword">else</span>
+                    response = Zaber.BinaryMessage.deserialize(data);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> ok = canreceive(obj)
+        <span class="comment">% CANRECEIVE Non-blocking check to see if a message is</span>
+        <span class="comment">% available to receive.</span>
+        <span class="comment">%</span>
+        <span class="comment">% ok = protocol.canreceive();</span>
+        <span class="comment">%</span>
+        <span class="comment">% ok - Return value. True if six or more bytes are available in the</span>
+        <span class="comment">%      port receive buffer. False otherwise.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also receive</span>
+
+            ok = (obj.Port.BytesAvailable &gt;= 6);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> response = request(obj, aCommand)
+        <span class="comment">% REQUEST Send a command and return the next reply.</span>
+        <span class="comment">% reply = protocol.REQUEST(command)</span>
+        <span class="comment">%</span>
+        <span class="comment">% Transmits the given BinaryMessage over the port and blocks until</span>
+        <span class="comment">% either the first reply is received or the port times out.</span>
+        <span class="comment">%</span>
+        <span class="comment">% NOTE this method is only safe to use if you use one device at</span>
+        <span class="comment">% a time and one command at a time. This method does not</span>
+        <span class="comment">% correlate replies with commands so if there are multiple</span>
+        <span class="comment">% devices in use or overlapping commands, it is possible the</span>
+        <span class="comment">% reply you receive came from a device other than the one you</span>
+        <span class="comment">% sent the command to, or that the reply is for a different</span>
+        <span class="comment">% command.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also send, receive</span>
+
+            obj.send(aCommand);
+            <span class="keyword">if</span> (aCommand.MessageId ~= 0)
+                response = obj.receive(true);
+            <span class="keyword">else</span>
+                response = obj.receive();
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> deviceArray = finddevices(obj)
+        <span class="comment">% FINDDEVICES Enumerate all available devices.</span>
+        <span class="comment">% deviceArray = protocol.FINDDEVICES()</span>
+        <span class="comment">%</span>
+        <span class="comment">% Attempts to identify all Zaber devices available on the given</span>
+        <span class="comment">% port using the Binary protocol. Returns an array of Zaber.Device</span>
+        <span class="comment">% objects, which may be empty if none were found.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Warning messages are printed if any devices respond with an error</span>
+        <span class="comment">% status.</span>
+        <span class="comment">%</span>
+        <span class="comment">% NOTE this method always waits for the port to time out in order</span>
+        <span class="comment">% to be certain all device messages have been received. To reduce</span>
+        <span class="comment">% the wait time and suppress the timeout warning messages, use the</span>
+        <span class="comment">% following commands before opening the port:</span>
+        <span class="comment">%   set(port, 'Timeout', 0.5)</span>
+        <span class="comment">%   warning off MATLAB:serial:fread:unsuccessfulRead</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also Zaber.Device, Zaber.AsciiProtocol.finddevices</span>
+
+            deviceArray = [];
+            deviceIdArray = [];
+            obj.send(<span class="keyword">...</span>
+                Zaber.BinaryMessage(0, <span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Return_Device_ID, 0));
+
+            message = obj.receive();
+            <span class="keyword">while</span> (isa(message, <span class="string">'Zaber.BinaryMessage'</span>))
+                <span class="keyword">if</span> ((message.Command == Zaber.BinaryCommandType.Return_Device_ID) || <span class="keyword">...</span>
+                    (message.Command == 3))
+                    row = {message.DeviceNo message.Data};
+                    deviceIdArray = [deviceIdArray ; row];
+                <span class="keyword">elseif</span> (message.IsError)
+                    warning(<span class="string">'Zaber:BinaryProtocol:finddevices:deviceError'</span>, <span class="keyword">...</span>
+                            <span class="string">'Got error response %d from device %d.'</span>, <span class="keyword">...</span>
+                            message.Data, message.DeviceNo);
+                <span class="keyword">end</span>
+
+                message = obj.receive();
+            <span class="keyword">end</span>
+
+            sz = size(deviceIdArray);
+            <span class="keyword">for</span> (i = 1:sz(1))
+                pair = deviceIdArray(i,:);
+                device = Zaber.Device.initialize(obj, pair{1}, pair{2});
+                <span class="keyword">if</span> (isa(device, <span class="string">'Zaber.Device'</span>))
+                    deviceArray = [deviceArray device];
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef BinaryProtocol < Zaber.Protocol
+%   BINARYPROTOCOL Zaber Binary protocol communication helper.
+%   This class wraps a port instance and provides facilities for sending 
+%   and receiving device messages using the BinaryMessage helper class.
+%
+%   See also Zaber.BinaryMessage, Zaber.Device, Zaber.Protocol,
+%   Zaber.AsciiProtocol
+ 
+%   Author: Zaber Technologies Software Team <contact@zaber.com>
+
+
+%% Public instance methods
+    methods
+        function obj = BinaryProtocol(aPort)
+        % BINARYPROTOCOL Constructor. Initializes the object properties.
+        % protocol = Zaber.BINARYPROTOCOL(port)
+        %
+        % port     - An port that has already been configured and opened.
+        % protocol - The initialized BinaryProtocol instance.
+        %
+        % This assumes you are certain the port is connected to Zaber
+        % devices that are using the Binary protocol, and that the port is
+        % set to the correct baud rate already.
+            
+            obj = obj@Zaber.Protocol(aPort);
+        end
+        
+        
+        function send(obj, aCommand)
+        % SEND Send a binary command out over the port.
+        % protocol.SEND(message)
+        %
+        % message - Either a BinaryMessage instance or an array of six
+        %           bytes.
+        %
+        % Transmits a message over the port without waitinf for a
+        % response. If the argument is a BinaryMessage, it will
+        % automatically be serialized to six bytes and then sent. 
+        %
+        % See also receive, request
+        
+            packet = aCommand;
+            if (isa(aCommand, 'Zaber.BinaryMessage'))
+                packet = aCommand.serialize();
+            end
+            
+            if (length(packet) ~= 6)
+                error('Zaber:BinaryProtocol:send:badDataType', ...
+                      'Binary protocol expects a BinaryMessage or 6 bytes.');
+            end
+            
+            fwrite(obj.Port, packet, 'uint8');
+        end
+        
+        
+        function response = receive(obj, aMessageIdsEnabled)
+        % RECEIVE Wait for a reply from any device
+        % message = protocol.RECEIVE()
+        % message = protocol.RECEIVE(idsenabled)
+        %
+        % idsenabled - Optional. Pass in true if the device has message
+        %              ID mode enabled. This will cause the message IDs
+        %              to automatically be separated from the data.
+        % message    - The deserialized message, or the empty array if
+        %              the port timed out.
+        %
+        % This method attempts to read six bytes from the port, and if
+        % successful will attempt to parse that data into a BinaryMessage
+        % object and return that. 
+        %
+        % If the read attempt times out (using the port's timeout setting)
+        % then an empty array is returned.
+        %
+        % If data is read but there is an error attempting to parse it, an
+        % error may be thrown.
+        %
+        % NOTE: This function blocks until either six bytes are received 
+        % or the port times out. To change the timeout and suppress the 
+        % timeout watning message, use these commands before opening the
+        % port:
+        %   set(port, 'Timeout', 0.5)
+        %   warning off MATLAB:serial:fread:unsuccessfulRead
+        %
+        % See also send, request, canreceive
+        
+            data = fread(obj.Port, 6, 'uint8')';
+            
+            response = [];
+            if (length(data) == 6)
+                if (nargin > 1)
+                    response = Zaber.BinaryMessage.deserialize(data, ...
+                        aMessageIdsEnabled);
+                else
+                    response = Zaber.BinaryMessage.deserialize(data);
+                end
+            end
+        end
+        
+        
+        function ok = canreceive(obj)
+        % CANRECEIVE Non-blocking check to see if a message is
+        % available to receive.
+        %
+        % ok = protocol.canreceive();
+        %
+        % ok - Return value. True if six or more bytes are available in the
+        %      port receive buffer. False otherwise.
+        %
+        % See also receive
+        
+            ok = (obj.Port.BytesAvailable >= 6);
+        end
+        
+        
+        function response = request(obj, aCommand)
+        % REQUEST Send a command and return the next reply.
+        % reply = protocol.REQUEST(command)
+        %
+        % Transmits the given BinaryMessage over the port and blocks until
+        % either the first reply is received or the port times out. 
+        %
+        % NOTE this method is only safe to use if you use one device at 
+        % a time and one command at a time. This method does not
+        % correlate replies with commands so if there are multiple
+        % devices in use or overlapping commands, it is possible the
+        % reply you receive came from a device other than the one you
+        % sent the command to, or that the reply is for a different
+        % command. 
+        %
+        % See also send, receive
+        
+            obj.send(aCommand);
+            if (aCommand.MessageId ~= 0)
+                response = obj.receive(true);
+            else
+                response = obj.receive();
+            end
+        end
+        
+        
+        function deviceArray = finddevices(obj)
+        % FINDDEVICES Enumerate all available devices.
+        % deviceArray = protocol.FINDDEVICES()
+        %
+        % Attempts to identify all Zaber devices available on the given
+        % port using the Binary protocol. Returns an array of Zaber.Device
+        % objects, which may be empty if none were found. 
+        %
+        % Warning messages are printed if any devices respond with an error
+        % status.
+        %
+        % NOTE this method always waits for the port to time out in order
+        % to be certain all device messages have been received. To reduce
+        % the wait time and suppress the timeout warning messages, use the
+        % following commands before opening the port:
+        %   set(port, 'Timeout', 0.5)
+        %   warning off MATLAB:serial:fread:unsuccessfulRead
+        %
+        % See also Zaber.Device, Zaber.AsciiProtocol.finddevices
+        
+            deviceArray = [];
+            deviceIdArray = [];
+            obj.send(...
+                Zaber.BinaryMessage(0, ...
+                    Zaber.BinaryCommandType.Return_Device_ID, 0));
+                
+            message = obj.receive();
+            while (isa(message, 'Zaber.BinaryMessage'))
+                if ((message.Command == Zaber.BinaryCommandType.Return_Device_ID) || ...
+                    (message.Command == 3))
+                    row = {message.DeviceNo message.Data};
+                    deviceIdArray = [deviceIdArray ; row];
+                elseif (message.IsError)
+                    warning('Zaber:BinaryProtocol:finddevices:deviceError', ...
+                            'Got error response %d from device %d.', ...
+                            message.Data, message.DeviceNo);
+                end
+                
+                message = obj.receive();
+            end
+            
+            sz = size(deviceIdArray);
+            for (i = 1:sz(1))
+                pair = deviceIdArray(i,:);
+                device = Zaber.Device.initialize(obj, pair{1}, pair{2});
+                if (isa(device, 'Zaber.Device'))
+                    deviceArray = [deviceArray device];
+                end
+            end
+        end
+    end
+end
+
+
+##### SOURCE END #####
+--></body></html>

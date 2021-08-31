@@ -1,0 +1,1208 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>BinaryDevice</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="BinaryDevice.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Public instance properties</a></li><li><a href="#4">Public instance methods</a></li><li><a href="#5">Public static methods</a></li><li><a href="#6">Protected instance methods</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> BinaryDevice &lt; Zaber.Device
+</pre><pre class="codeinput"><span class="comment">%   BINARYDEVICE Implements the Zaber.Device interface for the Binary protocol.</span>
+<span class="comment">%</span>
+<span class="comment">%   device = Zaber.BINARYDEVICE.initialize(protocol, address);</span>
+<span class="comment">%   protocol - An instance of Zaber.BinaryProtocol.</span>
+<span class="comment">%   address  - The numeric address of the device on a daisy chain.</span>
+<span class="comment">%              Legal values are 1-99.</span>
+<span class="comment">%   device   - Output: An initialized instance of this class.</span>
+<span class="comment">%</span>
+<span class="comment">%   This class represents a single Zaber device on a possible daisy chain</span>
+<span class="comment">%   of multiple devices. An instance of this class can be used to</span>
+<span class="comment">%   communicate with the device, and its peripherals if it has any. The</span>
+<span class="comment">%   generic methods and properties defined by the base class can be used</span>
+<span class="comment">%   for interaction with basic features. More advanced usage requires</span>
+<span class="comment">%   use of protocol-specific commands; the request method is useful for</span>
+<span class="comment">%   that as it will automatically ensure your message is addressed to the</span>
+<span class="comment">%   device represented by the class instance.</span>
+<span class="comment">%</span>
+<span class="comment">%   See also Zaber.Device, Zaber.Protocol.detect, Zaber.BinaryProtocol</span>
+
+<span class="comment">%   Author: Zaber Technologies Software Team &lt;contact@zaber.com&gt;</span>
+</pre><h2 id="3">Public instance properties</h2><pre class="codeinput">    properties (SetAccess = protected)
+        <span class="comment">% MESSAGEIDSENABLED Set to true if the device is using message IDs.</span>
+        MessageIdsEnabled
+    <span class="keyword">end</span>
+</pre><h2 id="4">Public instance methods</h2><pre class="codeinput">    methods
+        <span class="keyword">function</span> reply = request(obj, aCommand, aData)
+        <span class="comment">% REQUEST Convenience method to transact with a device.</span>
+        <span class="comment">% reply = device.REQUEST(command, data);</span>
+        <span class="comment">%</span>
+        <span class="comment">% command - Command to send the device. This is a byte.</span>
+        <span class="comment">% data    - Integer argument for the command.</span>
+        <span class="comment">% reply   - Response from the device, as a BinaryMessage.</span>
+        <span class="comment">%           Note that if there are overlapping requests this</span>
+        <span class="comment">%           will actually be the next response received on the</span>
+        <span class="comment">%           port, which could potentially be from another</span>
+        <span class="comment">%           device or another command.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This method ignores timeouts and will block until a message</span>
+        <span class="comment">% is received.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also Zaber.BinaryProtocol.request, Zaber.BinaryProtocol.send,</span>
+        <span class="comment">% Zaber.BinaryProtocol.receive, Zaber.BinaryErrorType</span>
+
+            message = Zaber.BinaryMessage(obj.DeviceNo, aCommand, aData);
+
+            obj.Protocol.send(message);
+            <span class="keyword">while</span> (~obj.Protocol.canreceive())
+                pause(0.01);
+            <span class="keyword">end</span>
+
+            reply = obj.Protocol.receive(obj.MessageIdsEnabled);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> value = get(obj, aSetting)
+        <span class="comment">% GET Read a setting from the device.</span>
+        <span class="comment">% value = device.get(setting)</span>
+        <span class="comment">%</span>
+        <span class="comment">% setting - Numeric identifier for the setting to read. See the</span>
+        <span class="comment">%           Zaber Binary protocol manual for legal values:</span>
+        <span class="comment">%           http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Return_Setting_-_Cmd_53</span>
+        <span class="comment">%           or use the Zaber.BinaryCommandType enumeration.</span>
+        <span class="comment">% value   - Current value of the setting, as a 32-bit integer.</span>
+        <span class="comment">%</span>
+        <span class="comment">% In the event of a communication error, an error will be thrown.</span>
+        <span class="comment">% If the device returns an error result, a warning will occur and</span>
+        <span class="comment">% the method will return the empty array.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also set, Zaber.BinaryCommandType, Zaber.BinaryErrorType</span>
+
+            value = [];
+            reply = obj.request(Zaber.BinaryCommandType.Return_Setting, aSetting);
+
+            <span class="keyword">if</span> (~isa(reply, <span class="string">'Zaber.BinaryMessage'</span>))
+                error(<span class="string">'Zaber:BinaryDevice:get:communicationError'</span>, <span class="keyword">...</span>
+                      <span class="string">'Device %d failed to respond to request to read setting %d.'</span>, <span class="keyword">...</span>
+                      obj.DeviceNo, aSetting);
+            <span class="keyword">elseif</span> (reply.IsError)
+                warning(<span class="string">'Zaber:BinaryDevice:get:readError'</span>, <span class="keyword">...</span>
+                        <span class="string">'Attempt to read setting %d from device %d resulted in error %d (%s).'</span>, <span class="keyword">...</span>
+                        aSetting, obj.DeviceNo, reply.Data, <span class="keyword">...</span>
+                        char(Zaber.BinaryErrorType(reply.Data)));
+            <span class="keyword">elseif</span> (reply.Command ~= aSetting)
+                error(<span class="string">'Zaber:BinaryDevice:get:badSetting'</span>, <span class="keyword">...</span>
+                      <span class="string">'Device %d responded with wrong setting number when reading setting %d.'</span>, <span class="keyword">...</span>
+                      obj.DeviceNo, aSetting);
+            <span class="keyword">else</span>
+                value = reply.Data;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> result = set(obj, aSetting, aValue)
+        <span class="comment">% SET Write a value to a device setting.</span>
+        <span class="comment">% result = device.set(setting, value)</span>
+        <span class="comment">%</span>
+        <span class="comment">% setting - Numeric identifier for the setting to write. For legal</span>
+        <span class="comment">%           values, see the Zaber binary protocol manual:</span>
+        <span class="comment">%           http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual</span>
+        <span class="comment">%           or use the Zaber.BinaryCommandType enumeration.</span>
+        <span class="comment">% value   - New value of the setting, as a 32-bit integer.</span>
+        <span class="comment">% result  - True if the write succeeded, or the reply message if</span>
+        <span class="comment">%           the device returned an error response.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Errors will be thrown if there is a communication error. If the</span>
+        <span class="comment">% setting does not exist, if the setting is read-only, or if the</span>
+        <span class="comment">% value provided is out of range for the setting then a warning</span>
+        <span class="comment">% will occur and the device's response message will be returned.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also get, Zaber.BinaryCommandType, Zaber.BinaryErrorType</span>
+
+            result = false;
+            reply = obj.Protocol.request(<span class="keyword">...</span>
+                Zaber.BinaryMessage(obj.DeviceNo, int32(aSetting), aValue));
+
+            <span class="keyword">if</span> (~isa(reply, <span class="string">'Zaber.BinaryMessage'</span>))
+                error(<span class="string">'Zaber:BinaryDevice:set:commandFailed'</span>, <span class="keyword">...</span>
+                      <span class="string">'Device %d failed to respond to request to write setting %d.'</span>, <span class="keyword">...</span>
+                      obj.DeviceNo, aSetting);
+            <span class="keyword">elseif</span> (reply.IsError)
+                warning(<span class="string">'Zaber:BinaryDevice:set:writeError'</span>, <span class="keyword">...</span>
+                        <span class="string">'Attempt to read setting %d from device %d resulted in error %d (%s).'</span>, <span class="keyword">...</span>
+                        aSetting, obj.DeviceNo, reply.Data, <span class="keyword">...</span>
+                        char(Zaber.BinaryErrorType(reply.Data)));
+            <span class="keyword">else</span>
+                result = true;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> range = getrange(obj)
+        <span class="comment">% GETRANGE Determine the movement limits of the device.</span>
+        <span class="comment">% range = device.GETRANGE();</span>
+        <span class="comment">%</span>
+        <span class="comment">% range - A 1x2 matrix with the first entry being the lower bound</span>
+        <span class="comment">%         on legal device position and the second entry being the</span>
+        <span class="comment">%         upper bound. Empty array if the concept doesn't apply.</span>
+        <span class="comment">%         For a multi-axis controller the result will be an Nx2</span>
+        <span class="comment">%         array where N is the number of axes. For rotary devices</span>
+        <span class="comment">%         the result is the range for one full rotation. Note</span>
+        <span class="comment">%         that the range returned may not reflect physical limits</span>
+        <span class="comment">%         if the device has been configured to use less than its</span>
+        <span class="comment">%         full range of travel.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Reads device settings to determine the device's current idea of</span>
+        <span class="comment">% its range of movement. Returns the empty array if the concept</span>
+        <span class="comment">% does not apply to the device type.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also getposition, moveabsolute, getnumindices, Units</span>
+
+            minPos = 0;
+            <span class="keyword">if</span> (obj.FirmwareVersion &gt;= 6.0)
+                minPos = obj.get(Zaber.BinaryCommandType.Set_Minimum_Position);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (obj.MotionType == Zaber.MotionType.Rotary)
+                <span class="keyword">if</span> (obj.FirmwareVersion &gt;= 6.22)
+                    maxPos = obj.get(Zaber.BinaryCommandType.Set_Cycle_Distance);
+                <span class="keyword">else</span>
+                    maxPos = obj.get(Zaber.BinaryCommandType.Set_Maximum_Position);
+                <span class="keyword">end</span>
+
+                circle = obj.Units.positiontonative(360.0);
+                maxPos = min(circle, maxPos);
+
+            <span class="keyword">else</span>
+                maxPos = obj.get(Zaber.BinaryCommandType.Set_Maximum_Position);
+            <span class="keyword">end</span>
+
+            range = [minPos maxPos];
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> error = waitforidle(obj, aPingInterval)
+        <span class="comment">% WAITFORIDLE Block until the device stops moving.</span>
+        <span class="comment">% error = device.WAITFORIDLE();</span>
+        <span class="comment">% error = device.WAITFORIDLE(interval);</span>
+        <span class="comment">%</span>
+        <span class="comment">% interval - Optional; number of seconds to wait between checks</span>
+        <span class="comment">%            of the device's state. Defaults to 0.1 seconds.</span>
+        <span class="comment">% error    - Return value, normally empty. If the device</span>
+        <span class="comment">%            entered an error state while this method was</span>
+        <span class="comment">%            checking for idleness, this method will return the</span>
+        <span class="comment">%            error message.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This method will ping the device repeatedly until the device</span>
+        <span class="comment">% either becomes idle or produces an error response.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note this command is of little utility when using the Binary</span>
+        <span class="comment">% protocol because most of the command helpers block until they get</span>
+        <span class="comment">% a response. It's included for API completeness and to aid protocol</span>
+        <span class="comment">% independence. This method returns immediately if there is a</span>
+        <span class="comment">% device error, the device is stalled or the device is parked.</span>
+
+            interval = 0.1;
+            <span class="keyword">if</span> (nargin &gt; 1)
+                interval = aPingInterval;
+            <span class="keyword">end</span>
+
+            moving = true;
+            <span class="keyword">if</span> (~obj.IsAxis)
+                moving = false;
+            <span class="keyword">end</span>
+
+            <span class="keyword">while</span> (moving)
+                reply = obj.request(<span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Return_Status, 0);
+
+                <span class="keyword">if</span> (~isa(reply, <span class="string">'Zaber.BinaryMessage'</span>))
+                    error = reply;
+                    moving = false;
+                <span class="keyword">elseif</span> (reply.IsError || <span class="keyword">...</span>
+                    (reply.Data == Zaber.BinaryStatusType.Idle) || <span class="keyword">...</span>
+                    (reply.Data == Zaber.BinaryStatusType.Stalled_or_Displaced) || <span class="keyword">...</span>
+                    (reply.Data == Zaber.BinaryStatusType.Parked))
+                    error = reply.Data;
+                    moving = false;
+                <span class="keyword">else</span>
+                    pause(interval);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> error = home(obj)
+        <span class="comment">% HOME Move the device to its home position.</span>
+        <span class="comment">% error = device.HOME();</span>
+        <span class="comment">%</span>
+        <span class="comment">% error - Error code from the device, if the command fails. See</span>
+        <span class="comment">%         the list of error codes in the Zaber Binary protocol</span>
+        <span class="comment">%         manual:</span>
+        <span class="comment">%         http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes</span>
+        <span class="comment">%         or use the Zaber.BinaryErrorType enumeration.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This command will block until the move completes or an error</span>
+        <span class="comment">% occurs - potentially a long time.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also moveabsolute, moverelative, moveatvelocity, moveindexed,</span>
+        <span class="comment">% getposition, stop, waitforidle, Zaber.BinaryErrorType</span>
+
+            error = [];
+
+            response = obj.request(Zaber.BinaryCommandType.Home, 0);
+            <span class="keyword">if</span> (response.IsError)
+                error = response.Data;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> error = moveabsolute(obj, aPosition)
+        <span class="comment">% MOVEABSOLUTE Move the state to an absolute position.</span>
+        <span class="comment">% error = device.moveabsolute(position);</span>
+        <span class="comment">%</span>
+        <span class="comment">% position - Position to move to, in native device units.</span>
+        <span class="comment">% error    - Error code from the device, if the command fails. See</span>
+        <span class="comment">%            the list of error codes in the Zaber Binary protocol</span>
+        <span class="comment">%            manual:</span>
+        <span class="comment">%            http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes</span>
+        <span class="comment">%            or use the Zaber.BinaryErrorType enumeration.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This command will block until the move completes or an error</span>
+        <span class="comment">% occurs - potentially a long time.</span>
+        <span class="comment">% If the move completes successfully, the empty array is returned.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also home, stop, waitforidle, getposition, moverelative,</span>
+        <span class="comment">% moveatvelocity, moveindexed, Units, Zaber.BinaryErrorType</span>
+
+            error = [];
+
+            response = obj.request(<span class="keyword">...</span>
+                Zaber.BinaryCommandType.Move_Absolute, int32(aPosition));
+
+            <span class="keyword">if</span> (response.IsError)
+                error = response.Data;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> error = moverelative(obj, aDelta)
+        <span class="comment">% MOVERELATIVE Move the device by a relative amount.</span>
+        <span class="comment">% error = device.MOVERELATIVE(delta);</span>
+        <span class="comment">%</span>
+        <span class="comment">% delta    - Distance to move by, in native device units.</span>
+        <span class="comment">% error    - Error code from the device, if the command fails. See</span>
+        <span class="comment">%            the list of error codes in the Zaber Binary protocol</span>
+        <span class="comment">%            manual:</span>
+        <span class="comment">%            http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes</span>
+        <span class="comment">%            or use the Zaber.BinaryErrorType enumeration.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This method blocks until the move completes.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also home, stop, waitforidle, getposition, moveabsolute,</span>
+        <span class="comment">% moveatvelocity, moveindexed, Units, Zaber.BinaryErrorType</span>
+
+            error = [];
+
+            response = obj.request(<span class="keyword">...</span>
+                Zaber.BinaryCommandType.Move_Relative, int32(aDelta));
+
+            <span class="keyword">if</span> (response.IsError)
+                error = response.Data;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> error = moveatvelocity(obj, aVelocity)
+        <span class="comment">% MOVEATVELOCITY Move the device at a specified velocity.</span>
+        <span class="comment">% error = device.MOVEATVELOCITY(velocity);</span>
+        <span class="comment">%</span>
+        <span class="comment">% velocity - Speed to move at, in native device units.</span>
+        <span class="comment">% error    - Error code from the device, if the command fails. See</span>
+        <span class="comment">%            the list of error codes in the Zaber Binary protocol</span>
+        <span class="comment">%            manual:</span>
+        <span class="comment">%            http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes</span>
+        <span class="comment">%            or use the Zaber.BinaryErrorType enumeration.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This method blocks until the move completes.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also home, stop, waitforidle, getposition, moverelative,</span>
+        <span class="comment">% moveabsolute, moveindexed, Units, Zaber.BinaryErrorType</span>
+
+            error = [];
+
+            response = obj.request(<span class="keyword">...</span>
+                Zaber.BinaryCommandType.Move_at_Constant_Speed, int32(aVelocity));
+
+            <span class="keyword">if</span> (response.IsError)
+                error = response.Data;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> error = stop(obj)
+        <span class="comment">% STOP Stop the device if it is moving.</span>
+        <span class="comment">% error = device.STOP();</span>
+        <span class="comment">%</span>
+        <span class="comment">% error     - Error code from the device, if the command fails. See</span>
+        <span class="comment">%             the list of error codes in the Zaber Binary protocol</span>
+        <span class="comment">%             manual:</span>
+        <span class="comment">%             http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes</span>
+        <span class="comment">%             or use the Zaber.BinaryErrorType enumeration.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also home, waitforidle, getposition, moveabsolute,</span>
+        <span class="comment">% moverelative, moveatvelocity, moveindexed, Units,</span>
+        <span class="comment">% Zaber.BinaryErrorType</span>
+
+            error = [];
+
+            response = obj.request(Zaber.BinaryCommandType.Stop, 0);
+            <span class="keyword">if</span> (response.IsError)
+                error = response.Data;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> pos = getposition(obj)
+        <span class="comment">% GETPOSITION Get the current device position in native units.</span>
+        <span class="comment">% pos = device.GETPOSITION();</span>
+        <span class="comment">%</span>
+        <span class="comment">% If there is a communication error or the device is not an axis,</span>
+        <span class="comment">% the empty array will be returned.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also range, stop, Units, moveabsolute, moverelative,</span>
+        <span class="comment">% moveatvelocity, moveindexed, waitforidle</span>
+
+            pos = [];
+
+            response = obj.request(<span class="keyword">...</span>
+                Zaber.BinaryCommandType.Return_Current_Position, 0);
+
+            <span class="keyword">if</span> (~response.IsError)
+                pos = response.Data;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> num = getnumindices(obj)
+        <span class="comment">% GETNUMINDICES Determine how many indexed positions the device has.</span>
+        <span class="comment">% num = getvice.GETNUMINDICES();</span>
+        <span class="comment">%</span>
+        <span class="comment">% Return value is the maximum position that can be passed to</span>
+        <span class="comment">% MOVEINDEXED. Returns zero on devices that do not support the</span>
+        <span class="comment">% MOVEINDEXED command.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also range, moveindexed, getposition</span>
+
+            num = 0;
+
+            range = obj.getrange();
+            indexSize = obj.get(Zaber.BinaryCommandType.Set_Index_Distance);
+
+            <span class="keyword">if</span> (~isempty(range) &amp;&amp; ~isempty(indexSize))
+                num = range(2) / indexSize;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> error = moveindexed(obj, aIndex)
+        <span class="comment">% MOVEINDEXED Move to an indexed position.</span>
+        <span class="comment">% error = device.MOVEINDEXED(index);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - The index of the position to move to. Minimum value is 1,</span>
+        <span class="comment">%         and maximum value is the number returned by</span>
+        <span class="comment">%         GETNUMINDICES. Will be rejected on devices that don't</span>
+        <span class="comment">%         support indexed moves.</span>
+        <span class="comment">% error - Error code from the device, if the command fails. See</span>
+        <span class="comment">%         the list of error codes in the Zaber Binary protocol</span>
+        <span class="comment">%         manual:</span>
+        <span class="comment">%         http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes</span>
+        <span class="comment">%         or use the Zaber.BinaryErrorType enumeration.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This command is intended for use with indexed-position devices</span>
+        <span class="comment">% such as the Filter Wheel. Although the other movement commands</span>
+        <span class="comment">% will often work with such devices, this method provides an easier</span>
+        <span class="comment">% way to reach a useful position.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This command will block until the movement completes.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also home, stop, waitforidle, moveabsolute, moverelative,</span>
+        <span class="comment">% moveatvelocity, Zaber.BinaryErrorType</span>
+
+            error = [];
+
+            response = obj.request(<span class="keyword">...</span>
+                Zaber.BinaryCommandType.Move_Index, int32(aIndex));
+
+            <span class="keyword">if</span> (response.IsError)
+                error = response.Data;
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+    <span class="keyword">end</span>
+</pre><h2 id="5">Public static methods</h2><pre class="codeinput">    methods (Static)
+        <span class="keyword">function</span> instance = initialize(aProtocol, aDeviceNumber, aDeviceId)
+        <span class="comment">% INITIALIZE Construct a representation for a single device.</span>
+        <span class="comment">% device = Zaber.BinaryDevice.INITIALIZE(protocol, address, id)</span>
+        <span class="comment">%</span>
+        <span class="comment">% protocol - A BinaryProtocol instance.</span>
+        <span class="comment">% address  - The daisy chain address of a device to represent.</span>
+        <span class="comment">% id       - The numeric device type ID of the device.</span>
+        <span class="comment">%            Optional. If not provided it will be queried for.</span>
+        <span class="comment">% obj      - An initialized BinaryDevice instance.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Given the daisy chain address and device type ID for a device</span>
+        <span class="comment">% that has been found using the given protocol, queries the device</span>
+        <span class="comment">% for its properties and constructs a new Zaber.Device subclass</span>
+        <span class="comment">% instance to represent that device.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also Zaber.BinaryProtocol, Zaber.Device,</span>
+        <span class="comment">% Zaber.AsciiDevice.initialize</span>
+
+            <span class="keyword">if</span> (~isa(aProtocol, <span class="string">'Zaber.BinaryProtocol'</span>))
+                error(<span class="string">'Zaber:BinaryDevice:initialize:badProtocol'</span>, <span class="keyword">...</span>
+                      <span class="string">'Protocol must be binary to use this method.'</span>);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (nargin &gt; 2)
+                deviceId = aDeviceId;
+            <span class="keyword">else</span>
+                reply = aProtocol.request(<span class="keyword">...</span>
+                    Zaber.BinaryMessage(aDeviceNumber, <span class="keyword">...</span>
+                        Zaber.BinaryCommandType.Return_Device_ID, 0));
+
+                <span class="keyword">if</span> (~isempty(reply) &amp;&amp; ~reply.IsError)
+                    deviceId = reply.Data;
+                <span class="keyword">else</span>
+                    error(<span class="string">'Zaber:BinaryDevice:initialize:idError'</span>, <span class="keyword">...</span>
+                          <span class="string">'Failed to get the type ID for device %d.'</span>, <span class="keyword">...</span>
+                          aDeviceNumber);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+
+            instance = Zaber.BinaryDevice(aProtocol, aDeviceNumber, deviceId);
+
+            <span class="comment">% Get the firmware version.</span>
+            reply = aProtocol.request(<span class="keyword">...</span>
+                Zaber.BinaryMessage(instance.DeviceNo, <span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Return_Firmware_Version, 0));
+
+            <span class="keyword">if</span> (~reply.IsError)
+                instance.FirmwareVersion = double(reply.Data) / 100.0;
+            <span class="keyword">end</span>
+
+            <span class="comment">% Determine if message ID mode is enabled.</span>
+            <span class="keyword">if</span> (instance.FirmwareVersion &lt; 6.0)
+                data = instance.get(Zaber.BinaryCommandType.Set_Device_Mode);
+                <span class="keyword">if</span> (isnumeric(data))
+                    instance.MessageIdsEnabled = (0 ~= bitand(data, 64));
+                <span class="keyword">else</span>
+                    error(<span class="string">'Zaber:BinaryDevice:initialize:messageIdCheckFailed'</span>, <span class="keyword">...</span>
+                          <span class="string">'Failed to determine message ID mode on device %d.'</span>, <span class="keyword">...</span>
+                          aDeviceNumber);
+                <span class="keyword">end</span>
+            <span class="keyword">else</span>
+                data = instance.get(Zaber.BinaryCommandType.Set_Message_ID_Mode);
+                <span class="keyword">if</span> (isnumeric(data))
+                    instance.MessageIdsEnabled = (data == 1);
+                <span class="keyword">else</span>
+                    error(<span class="string">'Zaber:BinaryDevice:initialize:messageIdCheckFailed'</span>, <span class="keyword">...</span>
+                          <span class="string">'Failed to determine message ID mode on device %d.'</span>, <span class="keyword">...</span>
+                          aDeviceNumber);
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            <span class="comment">% Get the peripheral ID.</span>
+            reply = instance.Protocol.request(<span class="keyword">...</span>
+                Zaber.BinaryMessage(instance.DeviceNo, <span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Return_Setting, <span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Set_Peripheral_ID));
+
+            <span class="keyword">if</span> (isa(reply, <span class="string">'Zaber.BinaryMessage'</span>) &amp;&amp; <span class="keyword">...</span>
+                ~reply.IsError &amp;&amp; (reply.Command == Zaber.BinaryCommandType.Set_Peripheral_ID))
+                instance.PeripheralId = reply.Data;
+            <span class="keyword">end</span>
+
+            <span class="comment">% Find database records for this device and peripheral.</span>
+            db = Zaber.DeviceDatabase.instance();
+            deviceRecord = db.finddevice(instance.DeviceId);
+            periRecord = db.findperipheral(deviceRecord, instance.PeripheralId);
+            instance.Name = db.getdevicename(deviceRecord, periRecord);
+
+            <span class="comment">% Get unit conversion properties from the database.</span>
+            <span class="keyword">if</span> (~isempty(periRecord))
+                [instance.MotionType, instance.Units] = <span class="keyword">...</span>
+                    db.determinemotiontype(deviceRecord, periRecord);
+                <span class="comment">% Get the current resolution.</span>
+                instance.Units.Resolution = instance.get(<span class="keyword">...</span>
+                    Zaber.BinaryCommandType.Set_Microstep_Resolution);
+            <span class="keyword">end</span>
+
+            instance.IsAxis = (instance.MotionType ~= Zaber.MotionType.None);
+
+            instance.IO = Zaber.BinaryIoPort.detect(instance);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2 id="6">Protected instance methods</h2><pre class="codeinput">    methods (Access = protected)
+        <span class="keyword">function</span> obj = BinaryDevice(aProtocol, aDeviceNumber, aDeviceId)
+        <span class="comment">% BINARYDEVICE Initializes properties to their default values.</span>
+        <span class="comment">% device = Zaber.BINARYDEVICE(protocol, address, id)</span>
+        <span class="comment">%</span>
+        <span class="comment">% protocol - A BinaryProtocol instance.</span>
+        <span class="comment">% address  - The daisy chain address of a device to represent.</span>
+        <span class="comment">% id       - The numeric device type ID of the device.</span>
+        <span class="comment">% obj      - An initialized BinaryDevice instance.</span>
+        <span class="comment">%</span>
+        <span class="comment">% The device ID argument is the type number of the device. If not</span>
+        <span class="comment">% detected through code, you can look these IDs up on Zaber's</span>
+        <span class="comment">% website at: http://www.zaber.com/support/?tab=ID%20Mapping</span>
+        <span class="comment">%</span>
+        <span class="comment">% This constructor does not fill in the properties of the</span>
+        <span class="comment">% device. Use the static initialize method to do that.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also initialize, Device</span>
+
+            obj = obj@Zaber.Device(aProtocol, aDeviceNumber, aDeviceId);
+            obj.MessageIdsEnabled = false;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef BinaryDevice < Zaber.Device
+%   BINARYDEVICE Implements the Zaber.Device interface for the Binary protocol.
+%
+%   device = Zaber.BINARYDEVICE.initialize(protocol, address);
+%   protocol - An instance of Zaber.BinaryProtocol.
+%   address  - The numeric address of the device on a daisy chain. 
+%              Legal values are 1-99.
+%   device   - Output: An initialized instance of this class.
+%
+%   This class represents a single Zaber device on a possible daisy chain
+%   of multiple devices. An instance of this class can be used to
+%   communicate with the device, and its peripherals if it has any. The
+%   generic methods and properties defined by the base class can be used
+%   for interaction with basic features. More advanced usage requires
+%   use of protocol-specific commands; the request method is useful for
+%   that as it will automatically ensure your message is addressed to the
+%   device represented by the class instance.
+%
+%   See also Zaber.Device, Zaber.Protocol.detect, Zaber.BinaryProtocol 
+
+%   Author: Zaber Technologies Software Team <contact@zaber.com>
+    
+    
+%% Public instance properties
+    properties (SetAccess = protected)
+        % MESSAGEIDSENABLED Set to true if the device is using message IDs.
+        MessageIdsEnabled
+    end
+    
+    
+%% Public instance methods
+    methods
+        function reply = request(obj, aCommand, aData)
+        % REQUEST Convenience method to transact with a device.
+        % reply = device.REQUEST(command, data);
+        %
+        % command - Command to send the device. This is a byte.
+        % data    - Integer argument for the command.
+        % reply   - Response from the device, as a BinaryMessage. 
+        %           Note that if there are overlapping requests this
+        %           will actually be the next response received on the
+        %           port, which could potentially be from another
+        %           device or another command.
+        %
+        % This method ignores timeouts and will block until a message
+        % is received.
+        %
+        % See also Zaber.BinaryProtocol.request, Zaber.BinaryProtocol.send,
+        % Zaber.BinaryProtocol.receive, Zaber.BinaryErrorType
+            
+            message = Zaber.BinaryMessage(obj.DeviceNo, aCommand, aData);
+            
+            obj.Protocol.send(message);
+            while (~obj.Protocol.canreceive())
+                pause(0.01);
+            end
+            
+            reply = obj.Protocol.receive(obj.MessageIdsEnabled);
+        end
+        
+        
+        function value = get(obj, aSetting)
+        % GET Read a setting from the device.
+        % value = device.get(setting)
+        %
+        % setting - Numeric identifier for the setting to read. See the 
+        %           Zaber Binary protocol manual for legal values:
+        %           http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Return_Setting_-_Cmd_53
+        %           or use the Zaber.BinaryCommandType enumeration.
+        % value   - Current value of the setting, as a 32-bit integer. 
+        %
+        % In the event of a communication error, an error will be thrown.
+        % If the device returns an error result, a warning will occur and
+        % the method will return the empty array.
+        %
+        % See also set, Zaber.BinaryCommandType, Zaber.BinaryErrorType
+        
+            value = [];
+            reply = obj.request(Zaber.BinaryCommandType.Return_Setting, aSetting);
+            
+            if (~isa(reply, 'Zaber.BinaryMessage'))
+                error('Zaber:BinaryDevice:get:communicationError', ...
+                      'Device %d failed to respond to request to read setting %d.', ...
+                      obj.DeviceNo, aSetting);
+            elseif (reply.IsError)
+                warning('Zaber:BinaryDevice:get:readError', ...
+                        'Attempt to read setting %d from device %d resulted in error %d (%s).', ...
+                        aSetting, obj.DeviceNo, reply.Data, ...
+                        char(Zaber.BinaryErrorType(reply.Data)));
+            elseif (reply.Command ~= aSetting)
+                error('Zaber:BinaryDevice:get:badSetting', ...
+                      'Device %d responded with wrong setting number when reading setting %d.', ...
+                      obj.DeviceNo, aSetting);
+            else
+                value = reply.Data;
+            end
+        end
+            
+        
+        function result = set(obj, aSetting, aValue)
+        % SET Write a value to a device setting.
+        % result = device.set(setting, value)
+        %
+        % setting - Numeric identifier for the setting to write. For legal
+        %           values, see the Zaber binary protocol manual:
+        %           http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual
+        %           or use the Zaber.BinaryCommandType enumeration.
+        % value   - New value of the setting, as a 32-bit integer.
+        % result  - True if the write succeeded, or the reply message if
+        %           the device returned an error response.
+        %
+        % Errors will be thrown if there is a communication error. If the
+        % setting does not exist, if the setting is read-only, or if the
+        % value provided is out of range for the setting then a warning
+        % will occur and the device's response message will be returned.
+        %
+        % See also get, Zaber.BinaryCommandType, Zaber.BinaryErrorType
+        
+            result = false;
+            reply = obj.Protocol.request(...
+                Zaber.BinaryMessage(obj.DeviceNo, int32(aSetting), aValue));
+            
+            if (~isa(reply, 'Zaber.BinaryMessage'))
+                error('Zaber:BinaryDevice:set:commandFailed', ...
+                      'Device %d failed to respond to request to write setting %d.', ...
+                      obj.DeviceNo, aSetting);
+            elseif (reply.IsError)
+                warning('Zaber:BinaryDevice:set:writeError', ...
+                        'Attempt to read setting %d from device %d resulted in error %d (%s).', ...
+                        aSetting, obj.DeviceNo, reply.Data, ...
+                        char(Zaber.BinaryErrorType(reply.Data)));
+            else
+                result = true;
+            end
+        end
+        
+        
+        function range = getrange(obj)
+        % GETRANGE Determine the movement limits of the device.
+        % range = device.GETRANGE();
+        %
+        % range - A 1x2 matrix with the first entry being the lower bound
+        %         on legal device position and the second entry being the
+        %         upper bound. Empty array if the concept doesn't apply.
+        %         For a multi-axis controller the result will be an Nx2
+        %         array where N is the number of axes. For rotary devices
+        %         the result is the range for one full rotation. Note
+        %         that the range returned may not reflect physical limits
+        %         if the device has been configured to use less than its
+        %         full range of travel.
+        %
+        % Reads device settings to determine the device's current idea of
+        % its range of movement. Returns the empty array if the concept
+        % does not apply to the device type.
+        %
+        % See also getposition, moveabsolute, getnumindices, Units
+        
+            minPos = 0;
+            if (obj.FirmwareVersion >= 6.0)
+                minPos = obj.get(Zaber.BinaryCommandType.Set_Minimum_Position);
+            end
+        
+            if (obj.MotionType == Zaber.MotionType.Rotary)
+                if (obj.FirmwareVersion >= 6.22)
+                    maxPos = obj.get(Zaber.BinaryCommandType.Set_Cycle_Distance);
+                else
+                    maxPos = obj.get(Zaber.BinaryCommandType.Set_Maximum_Position);
+                end
+                
+                circle = obj.Units.positiontonative(360.0);
+                maxPos = min(circle, maxPos);
+                
+            else
+                maxPos = obj.get(Zaber.BinaryCommandType.Set_Maximum_Position);
+            end
+            
+            range = [minPos maxPos];
+        end
+        
+        
+        function error = waitforidle(obj, aPingInterval)
+        % WAITFORIDLE Block until the device stops moving.
+        % error = device.WAITFORIDLE();
+        % error = device.WAITFORIDLE(interval);
+        %
+        % interval - Optional; number of seconds to wait between checks
+        %            of the device's state. Defaults to 0.1 seconds.
+        % error    - Return value, normally empty. If the device
+        %            entered an error state while this method was
+        %            checking for idleness, this method will return the
+        %            error message.
+        %
+        % This method will ping the device repeatedly until the device
+        % either becomes idle or produces an error response.
+        %
+        % Note this command is of little utility when using the Binary
+        % protocol because most of the command helpers block until they get
+        % a response. It's included for API completeness and to aid protocol
+        % independence. This method returns immediately if there is a
+        % device error, the device is stalled or the device is parked.
+            
+            interval = 0.1;
+            if (nargin > 1)
+                interval = aPingInterval;
+            end
+        
+            moving = true;
+            if (~obj.IsAxis)
+                moving = false;
+            end
+            
+            while (moving)
+                reply = obj.request(...
+                    Zaber.BinaryCommandType.Return_Status, 0);
+                
+                if (~isa(reply, 'Zaber.BinaryMessage'))
+                    error = reply;
+                    moving = false;
+                elseif (reply.IsError || ...
+                    (reply.Data == Zaber.BinaryStatusType.Idle) || ...
+                    (reply.Data == Zaber.BinaryStatusType.Stalled_or_Displaced) || ...
+                    (reply.Data == Zaber.BinaryStatusType.Parked))
+                    error = reply.Data;
+                    moving = false;
+                else
+                    pause(interval);
+                end
+            end
+        end
+
+        
+        function error = home(obj)
+        % HOME Move the device to its home position.
+        % error = device.HOME();
+        %
+        % error - Error code from the device, if the command fails. See
+        %         the list of error codes in the Zaber Binary protocol
+        %         manual:
+        %         http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes
+        %         or use the Zaber.BinaryErrorType enumeration.
+        %
+        % This command will block until the move completes or an error
+        % occurs - potentially a long time. 
+        %
+        % See also moveabsolute, moverelative, moveatvelocity, moveindexed,
+        % getposition, stop, waitforidle, Zaber.BinaryErrorType
+        
+            error = [];
+            
+            response = obj.request(Zaber.BinaryCommandType.Home, 0);
+            if (response.IsError)
+                error = response.Data;
+            end
+        end
+        
+        
+        function error = moveabsolute(obj, aPosition)
+        % MOVEABSOLUTE Move the state to an absolute position.
+        % error = device.moveabsolute(position);
+        % 
+        % position - Position to move to, in native device units.
+        % error    - Error code from the device, if the command fails. See
+        %            the list of error codes in the Zaber Binary protocol
+        %            manual:
+        %            http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes
+        %            or use the Zaber.BinaryErrorType enumeration.
+        %
+        % This command will block until the move completes or an error
+        % occurs - potentially a long time. 
+        % If the move completes successfully, the empty array is returned.
+        %
+        % See also home, stop, waitforidle, getposition, moverelative,
+        % moveatvelocity, moveindexed, Units, Zaber.BinaryErrorType  
+        
+            error = [];
+            
+            response = obj.request(...
+                Zaber.BinaryCommandType.Move_Absolute, int32(aPosition));
+            
+            if (response.IsError)
+                error = response.Data;
+            end
+        end        
+        
+        
+        function error = moverelative(obj, aDelta)
+        % MOVERELATIVE Move the device by a relative amount.
+        % error = device.MOVERELATIVE(delta);
+        % 
+        % delta    - Distance to move by, in native device units.
+        % error    - Error code from the device, if the command fails. See
+        %            the list of error codes in the Zaber Binary protocol
+        %            manual:
+        %            http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes
+        %            or use the Zaber.BinaryErrorType enumeration.
+        %
+        % This method blocks until the move completes.
+        %
+        % See also home, stop, waitforidle, getposition, moveabsolute,
+        % moveatvelocity, moveindexed, Units, Zaber.BinaryErrorType  
+        
+            error = [];
+            
+            response = obj.request(...
+                Zaber.BinaryCommandType.Move_Relative, int32(aDelta));
+            
+            if (response.IsError)
+                error = response.Data;
+            end
+        end
+        
+        
+        function error = moveatvelocity(obj, aVelocity)
+        % MOVEATVELOCITY Move the device at a specified velocity.
+        % error = device.MOVEATVELOCITY(velocity);
+        % 
+        % velocity - Speed to move at, in native device units.
+        % error    - Error code from the device, if the command fails. See
+        %            the list of error codes in the Zaber Binary protocol
+        %            manual:
+        %            http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes
+        %            or use the Zaber.BinaryErrorType enumeration.
+        %
+        % This method blocks until the move completes.
+        %
+        % See also home, stop, waitforidle, getposition, moverelative,
+        % moveabsolute, moveindexed, Units, Zaber.BinaryErrorType 
+        
+            error = [];
+            
+            response = obj.request(...
+                Zaber.BinaryCommandType.Move_at_Constant_Speed, int32(aVelocity));
+            
+            if (response.IsError)
+                error = response.Data;
+            end
+        end
+        
+        
+        function error = stop(obj)
+        % STOP Stop the device if it is moving.
+        % error = device.STOP();
+        %
+        % error     - Error code from the device, if the command fails. See
+        %             the list of error codes in the Zaber Binary protocol
+        %             manual:
+        %             http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes
+        %             or use the Zaber.BinaryErrorType enumeration.
+        %
+        % See also home, waitforidle, getposition, moveabsolute,
+        % moverelative, moveatvelocity, moveindexed, Units,
+        % Zaber.BinaryErrorType 
+        
+            error = [];
+            
+            response = obj.request(Zaber.BinaryCommandType.Stop, 0);
+            if (response.IsError)
+                error = response.Data;
+            end
+        end
+        
+        
+        function pos = getposition(obj)
+        % GETPOSITION Get the current device position in native units.
+        % pos = device.GETPOSITION();
+        %
+        % If there is a communication error or the device is not an axis,
+        % the empty array will be returned.
+        %
+        % See also range, stop, Units, moveabsolute, moverelative,
+        % moveatvelocity, moveindexed, waitforidle
+        
+            pos = [];
+            
+            response = obj.request(...
+                Zaber.BinaryCommandType.Return_Current_Position, 0);
+            
+            if (~response.IsError)
+                pos = response.Data;
+            end
+        end
+        
+        
+        function num = getnumindices(obj)
+        % GETNUMINDICES Determine how many indexed positions the device has.
+        % num = getvice.GETNUMINDICES();
+        %
+        % Return value is the maximum position that can be passed to
+        % MOVEINDEXED. Returns zero on devices that do not support the
+        % MOVEINDEXED command.
+        %
+        % See also range, moveindexed, getposition
+            
+            num = 0;
+            
+            range = obj.getrange();
+            indexSize = obj.get(Zaber.BinaryCommandType.Set_Index_Distance);
+            
+            if (~isempty(range) && ~isempty(indexSize))
+                num = range(2) / indexSize;
+            end
+        end
+        
+        
+        function error = moveindexed(obj, aIndex)
+        % MOVEINDEXED Move to an indexed position.
+        % error = device.MOVEINDEXED(index);
+        %
+        % index - The index of the position to move to. Minimum value is 1,
+        %         and maximum value is the number returned by
+        %         GETNUMINDICES. Will be rejected on devices that don't
+        %         support indexed moves.
+        % error - Error code from the device, if the command fails. See
+        %         the list of error codes in the Zaber Binary protocol
+        %         manual:
+        %         http://www.zaber.com/wiki/Manuals/Binary_Protocol_Manual#Error_Codes
+        %         or use the Zaber.BinaryErrorType enumeration.
+        %
+        % This command is intended for use with indexed-position devices
+        % such as the Filter Wheel. Although the other movement commands
+        % will often work with such devices, this method provides an easier
+        % way to reach a useful position.
+        %
+        % This command will block until the movement completes.
+        %
+        % See also home, stop, waitforidle, moveabsolute, moverelative,
+        % moveatvelocity, Zaber.BinaryErrorType
+        
+            error = [];
+            
+            response = obj.request(...
+                Zaber.BinaryCommandType.Move_Index, int32(aIndex));
+            
+            if (response.IsError)
+                error = response.Data;
+            end
+        end
+        
+    end
+    
+    
+ %% Public static methods
+    methods (Static)
+        function instance = initialize(aProtocol, aDeviceNumber, aDeviceId)
+        % INITIALIZE Construct a representation for a single device.
+        % device = Zaber.BinaryDevice.INITIALIZE(protocol, address, id)
+        %
+        % protocol - A BinaryProtocol instance.
+        % address  - The daisy chain address of a device to represent.
+        % id       - The numeric device type ID of the device.
+        %            Optional. If not provided it will be queried for.
+        % obj      - An initialized BinaryDevice instance.
+        %
+        % Given the daisy chain address and device type ID for a device
+        % that has been found using the given protocol, queries the device
+        % for its properties and constructs a new Zaber.Device subclass
+        % instance to represent that device.
+        %
+        % See also Zaber.BinaryProtocol, Zaber.Device,
+        % Zaber.AsciiDevice.initialize
+            
+            if (~isa(aProtocol, 'Zaber.BinaryProtocol'))
+                error('Zaber:BinaryDevice:initialize:badProtocol', ...
+                      'Protocol must be binary to use this method.');
+            end
+            
+            if (nargin > 2)
+                deviceId = aDeviceId;
+            else
+                reply = aProtocol.request(...
+                    Zaber.BinaryMessage(aDeviceNumber, ...
+                        Zaber.BinaryCommandType.Return_Device_ID, 0));
+                
+                if (~isempty(reply) && ~reply.IsError)
+                    deviceId = reply.Data;
+                else
+                    error('Zaber:BinaryDevice:initialize:idError', ...
+                          'Failed to get the type ID for device %d.', ...
+                          aDeviceNumber);
+                end
+            end
+                  
+            
+            instance = Zaber.BinaryDevice(aProtocol, aDeviceNumber, deviceId);
+            
+            % Get the firmware version.
+            reply = aProtocol.request(...
+                Zaber.BinaryMessage(instance.DeviceNo, ...
+                    Zaber.BinaryCommandType.Return_Firmware_Version, 0));
+                
+            if (~reply.IsError)
+                instance.FirmwareVersion = double(reply.Data) / 100.0;
+            end
+            
+            % Determine if message ID mode is enabled.
+            if (instance.FirmwareVersion < 6.0)                
+                data = instance.get(Zaber.BinaryCommandType.Set_Device_Mode);
+                if (isnumeric(data))
+                    instance.MessageIdsEnabled = (0 ~= bitand(data, 64));
+                else
+                    error('Zaber:BinaryDevice:initialize:messageIdCheckFailed', ...
+                          'Failed to determine message ID mode on device %d.', ...
+                          aDeviceNumber);
+                end
+            else
+                data = instance.get(Zaber.BinaryCommandType.Set_Message_ID_Mode);
+                if (isnumeric(data))
+                    instance.MessageIdsEnabled = (data == 1);
+                else
+                    error('Zaber:BinaryDevice:initialize:messageIdCheckFailed', ...
+                          'Failed to determine message ID mode on device %d.', ...
+                          aDeviceNumber);
+                end
+            end
+            
+            % Get the peripheral ID.
+            reply = instance.Protocol.request(...
+                Zaber.BinaryMessage(instance.DeviceNo, ...
+                    Zaber.BinaryCommandType.Return_Setting, ...
+                    Zaber.BinaryCommandType.Set_Peripheral_ID));
+            
+            if (isa(reply, 'Zaber.BinaryMessage') && ...
+                ~reply.IsError && (reply.Command == Zaber.BinaryCommandType.Set_Peripheral_ID))
+                instance.PeripheralId = reply.Data;
+            end
+            
+            % Find database records for this device and peripheral.
+            db = Zaber.DeviceDatabase.instance();
+            deviceRecord = db.finddevice(instance.DeviceId);
+            periRecord = db.findperipheral(deviceRecord, instance.PeripheralId);
+            instance.Name = db.getdevicename(deviceRecord, periRecord);
+            
+            % Get unit conversion properties from the database.
+            if (~isempty(periRecord))
+                [instance.MotionType, instance.Units] = ...
+                    db.determinemotiontype(deviceRecord, periRecord);
+                % Get the current resolution.
+                instance.Units.Resolution = instance.get(...
+                    Zaber.BinaryCommandType.Set_Microstep_Resolution);
+            end
+            
+            instance.IsAxis = (instance.MotionType ~= Zaber.MotionType.None);
+            
+            instance.IO = Zaber.BinaryIoPort.detect(instance);
+        end
+    end
+
+    
+ %% Protected instance methods
+    methods (Access = protected)
+        function obj = BinaryDevice(aProtocol, aDeviceNumber, aDeviceId)
+        % BINARYDEVICE Initializes properties to their default values.
+        % device = Zaber.BINARYDEVICE(protocol, address, id)
+        %
+        % protocol - A BinaryProtocol instance.
+        % address  - The daisy chain address of a device to represent.
+        % id       - The numeric device type ID of the device.
+        % obj      - An initialized BinaryDevice instance.
+        %
+        % The device ID argument is the type number of the device. If not
+        % detected through code, you can look these IDs up on Zaber's
+        % website at: http://www.zaber.com/support/?tab=ID%20Mapping
+        %
+        % This constructor does not fill in the properties of the
+        % device. Use the static initialize method to do that.
+        %
+        % See also initialize, Device
+            
+            obj = obj@Zaber.Device(aProtocol, aDeviceNumber, aDeviceId);
+            obj.MessageIdsEnabled = false;
+        end
+    end
+end
+
+
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,19 @@
+1.1.0 (2018/01)
+---------------
+* Fixed incorrect velocity unit conversions.
+* Fixed compatibility with MATLAB R2016a and R2017a.
+* Changed behavior for unrecognized devices. Devices not listed in 
+  DeviceDatabase.mat will now function instead of throwing an error, but 
+  unit conversions will be incorrect and a generic device name will 
+  be assigned.
+* Changed the behavior of the Python script that updates the device 
+  database. The default behavior is now to update both the device table 
+  and the enumerations, but not to download the source database if it
+  is already present. To force a fresh download, either use the --download
+  command-line option or delete any existing sqlite3 file in the directory.
+
+1.0.0 (2016/11)
+---------------
+* Initial implementation. First public release.
+
+

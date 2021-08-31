@@ -1,0 +1,493 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>DeviceDatabase</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="DeviceDatabase.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Protected instance properties</a></li><li><a href="#4">Public static methods</a></li><li><a href="#5">Public instance methods</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> DeviceDatabase &lt; handle
+</pre><pre class="codeinput"><span class="comment">%   DEVICEDATABASE Access point for table lookups about Zaber devices.</span>
+<span class="comment">%   This class is a singleton that Zaber.Device instances consult to learn</span>
+<span class="comment">%   the properties of devices, such as their names, types and physical</span>
+<span class="comment">%   units of measure.</span>
+<span class="comment">%</span>
+<span class="comment">%   The default implementation loads the information from a .mat file that</span>
+<span class="comment">%   is generated offline by a Python script. Zaber provides a publicly</span>
+<span class="comment">%   downloadable sqlite3 database of device information, and the Python</span>
+<span class="comment">%   script translates this into a MATLAB .mat file. You can optionally</span>
+<span class="comment">%   re-run the Python script yourself to update the data.</span>
+<span class="comment">%</span>
+<span class="comment">%   You can also optionally replace the singleton instance of this class</span>
+<span class="comment">%   with your own implementation that reads the sqlite3 database directly,</span>
+<span class="comment">%   or for fast, low-memory results have it just return hardcoded values</span>
+<span class="comment">%   for the devices you know you have. To do this, define your own class</span>
+<span class="comment">%   with the same methods and pass an instance of it to the instance()</span>
+<span class="comment">%   method before using any other parts of this toolbox.</span>
+<span class="comment">%</span>
+<span class="comment">%   See also Zaber.Device, Zaber.AsciiDevice, Zaber.BinaryDevice</span>
+
+<span class="comment">%   Author: Zaber Technologies Software Team &lt;contact@zaber.com&gt;</span>
+</pre><h2 id="3">Protected instance properties</h2><pre class="codeinput">    properties (Access = protected)
+        Data
+    <span class="keyword">end</span>
+</pre><h2 id="4">Public static methods</h2><pre class="codeinput">    methods (Static)
+        <span class="keyword">function</span> obj = instance(aImplementation)
+        <span class="comment">% INSTANCE Get or replace the singleton instance of the device database.</span>
+        <span class="comment">% db = Zaber.DeviceDatabase.instance()</span>
+        <span class="comment">% db = Zaber.DeviceDatabase.instance(myImpl)</span>
+        <span class="comment">%</span>
+        <span class="comment">% myImpl - Optional; allows overriding the default</span>
+        <span class="comment">%          implementation with a customized one. Pass in an</span>
+        <span class="comment">%          instance of your custom implementation. If providing</span>
+        <span class="comment">%          your own implementation, you should only pass it in</span>
+        <span class="comment">%          once. You can also pass in the empty array to force</span>
+        <span class="comment">%          use of the default implementation.</span>
+        <span class="comment">% db     - Return value - the single instance of this class or</span>
+        <span class="comment">%          of the custom version passed in.</span>
+
+            <span class="keyword">persistent</span> sTheInstance;
+
+            <span class="keyword">if</span> (nargin &gt; 0)
+                <span class="keyword">if</span> (isempty(aImplementation))
+                    <span class="keyword">if</span> (isempty(sTheInstance) || ~isa(sTheInstance, <span class="string">'Zaber.DeviceDatabase'</span>))
+                        sTheInstance = Zaber.DeviceDatabase();
+                    <span class="keyword">end</span>
+                <span class="keyword">else</span>
+                    sTheInstance = aImplementation;
+                <span class="keyword">end</span>
+            <span class="keyword">elseif</span> isempty(sTheInstance)
+                sTheInstance = Zaber.DeviceDatabase();
+            <span class="keyword">end</span>
+
+            obj = sTheInstance;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2 id="5">Public instance methods</h2><pre class="codeinput">    methods
+        <span class="keyword">function</span> obj = DeviceDatabase(aFile)
+        <span class="comment">% DEVICEDATABASE Constructor. Loads a .mat file.</span>
+        <span class="comment">% db = DEVICEDATABASE();</span>
+        <span class="comment">% db = Zaber.DeviceDatabase.instance(DEVICEDATABASE('myfile.mat'));</span>
+        <span class="comment">%</span>
+        <span class="comment">% aFile - Optional. Specifies the file name of a .mat table to</span>
+        <span class="comment">%         load. By default this class loads DeviceDatabase.mat</span>
+        <span class="comment">%         from the same location as this class.</span>
+        <span class="comment">% db    - An initialized instance of this database object.</span>
+
+            obj.Data = [];
+            <span class="keyword">if</span> (nargin &gt; 0)
+                filename = aFile;
+            <span class="keyword">else</span>
+                myPath = mfilename(<span class="string">'fullpath'</span>);
+                [path, name, ext] = fileparts(myPath);
+                path = sprintf(<span class="string">'%s/DeviceDatabase.mat'</span>, path);
+                filename = fullfile(path);
+            <span class="keyword">end</span>
+
+            table = load(filename);
+            obj.Data = table.devices;
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> ids = getalldeviceids(obj)
+        <span class="comment">% GETALLDEVICEIDS Get all known device IDs.</span>
+        <span class="comment">% list = dg.GETALLDEVICEIDS();</span>
+        <span class="comment">%</span>
+        <span class="comment">% Returns an array of integers representing all the device IDs</span>
+        <span class="comment">% in the database. This exists mainly for testing purposes.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also finddevice, getallperipheralids</span>
+
+            ids = [obj.Data.DeviceId];
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> record = finddevice(obj, aDeviceId)
+        <span class="comment">% FINDDEVICE Get the database record for a device.</span>
+        <span class="comment">% record = db.FINDDEVICE(deviceId);</span>
+        <span class="comment">%</span>
+        <span class="comment">% deviceId     - Numeric ID of the device to look for.</span>
+        <span class="comment">% record       - Output. An opaque type that represents the</span>
+        <span class="comment">%                database record for the specified device. This</span>
+        <span class="comment">%                is meant to be used as a handle and passed to</span>
+        <span class="comment">%                other database methods to get specific data</span>
+        <span class="comment">%                out of it. Returns the empty array on failure.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also findperipheral</span>
+
+            record = obj.Data([obj.Data.DeviceId] == aDeviceId);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> ids = getallperipheralids(obj, aDeviceRecord)
+        <span class="comment">% GETALLPERIPHERALIDS Get all valid peripheral IDs for the</span>
+        <span class="comment">% given device.</span>
+        <span class="comment">% list = dg.GETALLPERIPHERALIDS(deviceRecord);</span>
+        <span class="comment">%</span>
+        <span class="comment">% Returns an array of integers representing all the peripheral IDs</span>
+        <span class="comment">% in the database that correspond with the given device record.</span>
+        <span class="comment">% This exists mainly for testing purposes.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also findperipheral, getalldeviceids</span>
+
+            ids = [aDeviceRecord.Peripherals.PeripheralId];
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> record = findperipheral(obj, aDeviceRecord, aPeripheralId)
+        <span class="comment">% FINDPERIPHERAL Get the database record for a device's peripheral.</span>
+        <span class="comment">% record = db.FINDPERIPHERAL(deviceRecord, peripheralId);</span>
+        <span class="comment">%</span>
+        <span class="comment">% deviceRecord - A record returned by FINDDEVICE.</span>
+        <span class="comment">% peripheralId - Numeric ID of the peripheral to look for.</span>
+        <span class="comment">% record       - Output. An opaque type that represents the</span>
+        <span class="comment">%                database record for the specified peripheral. This</span>
+        <span class="comment">%                is meant to be used as a handle and passed to</span>
+        <span class="comment">%                other database methods to get specific data</span>
+        <span class="comment">%                out of it. Returns the empty array on failure.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note that integrated devices will always have a peripheral</span>
+        <span class="comment">% record, but the peripheral ID will be 0 in the case that the</span>
+        <span class="comment">% device is not a standalone controller. This is to enable some</span>
+        <span class="comment">% consistency in where physical properties are stored in the</span>
+        <span class="comment">% database.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also finddevice</span>
+
+            record = aDeviceRecord.Peripherals(<span class="keyword">...</span>
+                [aDeviceRecord.Peripherals.PeripheralId] == aPeripheralId);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> name = getdevicename(obj, aDeviceRecord, aPeripheralRecord)
+        <span class="comment">% GETDEVICENAME Get a human-readable name for a device.</span>
+        <span class="comment">% name = db.GETDEVICENAME(deviceRecord, peripheralRecord);</span>
+        <span class="comment">%</span>
+        <span class="comment">% deviceRecord     - Device information from FINDDEVICE.</span>
+        <span class="comment">% peripheralRecord - Peripheral information from % FINDPERIPHERAL.</span>
+        <span class="comment">% name             - Name for the device + peripheral combination.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also finddevice, findperipheral</span>
+
+            <span class="keyword">if</span> ((nargin &gt; 2) &amp;&amp; ~isempty(aPeripheralRecord.Name))
+                name = sprintf(<span class="string">'%s + %s'</span>, aDeviceRecord.Name, aPeripheralRecord.Name);
+            <span class="keyword">else</span>
+                name = aDeviceRecord.Name;
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> (isempty(name))
+                name = sprintf(<span class="string">'Device type %d + peripheral type %d'</span>, <span class="keyword">...</span>
+                    aDeviceRecord.DeviceId, aPeripheralRecord.PeripheralId);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> [type, units] = determinemotiontype(obj, aDeviceRecord, aPeripheralRecord)
+        <span class="comment">% DETERMINEMOTIONTYPE Get the motion type and unit conversions</span>
+        <span class="comment">% for a device and peripheral.</span>
+        <span class="comment">% [type, units] = db.DETERMINEMOTIONTYPE(deviceRecord, peripheralRecord);</span>
+        <span class="comment">%</span>
+        <span class="comment">% deviceRecord     - Device information from FINDDEVICE.</span>
+        <span class="comment">% peripheralRecord - Peripheral information from % FINDPERIPHERAL.</span>
+        <span class="comment">% type             - Motion type of the device. See also</span>
+        <span class="comment">%                    Zaber.MotionType.</span>
+        <span class="comment">% units            - Unit conversion table for the device. See</span>
+        <span class="comment">%                    also Zaber.DeviceUnits.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also finddevice, findperipheral</span>
+
+            <span class="keyword">if</span> (nargin &gt; 2)
+                peripheral = aPeripheralRecord;
+            <span class="keyword">else</span>
+                peripheral = aDeviceRecord.Peripherals(1);
+            <span class="keyword">end</span>
+
+            type = Zaber.MotionType(peripheral.MotionType);
+            units = Zaber.DeviceUnits();
+            units.PositionUnitScale = double(peripheral.PositionUnitScale);
+            units.VelocityUnitScale = double(peripheral.VelocityUnitScale);
+            units.AccelerationUnitScale = double(peripheral.AccelerationUnitScale);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef DeviceDatabase < handle
+%   DEVICEDATABASE Access point for table lookups about Zaber devices.
+%   This class is a singleton that Zaber.Device instances consult to learn
+%   the properties of devices, such as their names, types and physical
+%   units of measure.
+%
+%   The default implementation loads the information from a .mat file that
+%   is generated offline by a Python script. Zaber provides a publicly
+%   downloadable sqlite3 database of device information, and the Python
+%   script translates this into a MATLAB .mat file. You can optionally
+%   re-run the Python script yourself to update the data.
+%
+%   You can also optionally replace the singleton instance of this class
+%   with your own implementation that reads the sqlite3 database directly,
+%   or for fast, low-memory results have it just return hardcoded values
+%   for the devices you know you have. To do this, define your own class
+%   with the same methods and pass an instance of it to the instance()
+%   method before using any other parts of this toolbox.
+%
+%   See also Zaber.Device, Zaber.AsciiDevice, Zaber.BinaryDevice
+
+%   Author: Zaber Technologies Software Team <contact@zaber.com>
+    
+    
+    
+%% Protected instance properties
+    properties (Access = protected)
+        Data
+    end
+
+    
+%% Public static methods
+    methods (Static)
+        function obj = instance(aImplementation)
+        % INSTANCE Get or replace the singleton instance of the device database.
+        % db = Zaber.DeviceDatabase.instance()
+        % db = Zaber.DeviceDatabase.instance(myImpl)
+        %
+        % myImpl - Optional; allows overriding the default
+        %          implementation with a customized one. Pass in an
+        %          instance of your custom implementation. If providing
+        %          your own implementation, you should only pass it in
+        %          once. You can also pass in the empty array to force
+        %          use of the default implementation.
+        % db     - Return value - the single instance of this class or
+        %          of the custom version passed in.
+        
+            persistent sTheInstance;
+
+            if (nargin > 0)
+                if (isempty(aImplementation))
+                    if (isempty(sTheInstance) || ~isa(sTheInstance, 'Zaber.DeviceDatabase'))
+                        sTheInstance = Zaber.DeviceDatabase();
+                    end
+                else
+                    sTheInstance = aImplementation;
+                end
+            elseif isempty(sTheInstance)
+                sTheInstance = Zaber.DeviceDatabase();
+            end
+            
+            obj = sTheInstance;
+        end
+    end
+
+    
+ %% Public instance methods
+    methods
+        function obj = DeviceDatabase(aFile)
+        % DEVICEDATABASE Constructor. Loads a .mat file.
+        % db = DEVICEDATABASE();
+        % db = Zaber.DeviceDatabase.instance(DEVICEDATABASE('myfile.mat'));
+        %
+        % aFile - Optional. Specifies the file name of a .mat table to
+        %         load. By default this class loads DeviceDatabase.mat
+        %         from the same location as this class.
+        % db    - An initialized instance of this database object.
+            
+            obj.Data = [];
+            if (nargin > 0)
+                filename = aFile;
+            else
+                myPath = mfilename('fullpath');
+                [path, name, ext] = fileparts(myPath);
+                path = sprintf('%s/DeviceDatabase.mat', path);
+                filename = fullfile(path);
+            end
+            
+            table = load(filename);
+            obj.Data = table.devices;
+        end
+        
+        
+        function ids = getalldeviceids(obj)
+        % GETALLDEVICEIDS Get all known device IDs.
+        % list = dg.GETALLDEVICEIDS();
+        %
+        % Returns an array of integers representing all the device IDs
+        % in the database. This exists mainly for testing purposes.
+        %
+        % See also finddevice, getallperipheralids
+            
+            ids = [obj.Data.DeviceId];
+        end
+        
+        
+        function record = finddevice(obj, aDeviceId)
+        % FINDDEVICE Get the database record for a device.
+        % record = db.FINDDEVICE(deviceId);
+        %
+        % deviceId     - Numeric ID of the device to look for.
+        % record       - Output. An opaque type that represents the
+        %                database record for the specified device. This
+        %                is meant to be used as a handle and passed to
+        %                other database methods to get specific data
+        %                out of it. Returns the empty array on failure.
+        %
+        % See also findperipheral
+            
+            record = obj.Data([obj.Data.DeviceId] == aDeviceId);
+        end
+        
+        
+        function ids = getallperipheralids(obj, aDeviceRecord)
+        % GETALLPERIPHERALIDS Get all valid peripheral IDs for the
+        % given device.
+        % list = dg.GETALLPERIPHERALIDS(deviceRecord);
+        %
+        % Returns an array of integers representing all the peripheral IDs
+        % in the database that correspond with the given device record.
+        % This exists mainly for testing purposes. 
+        %
+        % See also findperipheral, getalldeviceids
+            
+            ids = [aDeviceRecord.Peripherals.PeripheralId];
+        end
+
+        
+        function record = findperipheral(obj, aDeviceRecord, aPeripheralId)
+        % FINDPERIPHERAL Get the database record for a device's peripheral.
+        % record = db.FINDPERIPHERAL(deviceRecord, peripheralId);
+        %
+        % deviceRecord - A record returned by FINDDEVICE.
+        % peripheralId - Numeric ID of the peripheral to look for.
+        % record       - Output. An opaque type that represents the
+        %                database record for the specified peripheral. This
+        %                is meant to be used as a handle and passed to
+        %                other database methods to get specific data
+        %                out of it. Returns the empty array on failure.
+        %
+        % Note that integrated devices will always have a peripheral
+        % record, but the peripheral ID will be 0 in the case that the
+        % device is not a standalone controller. This is to enable some
+        % consistency in where physical properties are stored in the
+        % database.
+        %
+        % See also finddevice
+            
+            record = aDeviceRecord.Peripherals(...
+                [aDeviceRecord.Peripherals.PeripheralId] == aPeripheralId);
+        end
+        
+        
+        function name = getdevicename(obj, aDeviceRecord, aPeripheralRecord)
+        % GETDEVICENAME Get a human-readable name for a device.
+        % name = db.GETDEVICENAME(deviceRecord, peripheralRecord);
+        %
+        % deviceRecord     - Device information from FINDDEVICE.
+        % peripheralRecord - Peripheral information from % FINDPERIPHERAL.
+        % name             - Name for the device + peripheral combination.
+        %
+        % See also finddevice, findperipheral
+        
+            if ((nargin > 2) && ~isempty(aPeripheralRecord.Name))
+                name = sprintf('%s + %s', aDeviceRecord.Name, aPeripheralRecord.Name);
+            else
+                name = aDeviceRecord.Name;
+            end
+            
+            if (isempty(name))
+                name = sprintf('Device type %d + peripheral type %d', ...
+                    aDeviceRecord.DeviceId, aPeripheralRecord.PeripheralId);
+            end
+        end
+        
+        
+        function [type, units] = determinemotiontype(obj, aDeviceRecord, aPeripheralRecord)
+        % DETERMINEMOTIONTYPE Get the motion type and unit conversions
+        % for a device and peripheral.
+        % [type, units] = db.DETERMINEMOTIONTYPE(deviceRecord, peripheralRecord);
+        %
+        % deviceRecord     - Device information from FINDDEVICE.
+        % peripheralRecord - Peripheral information from % FINDPERIPHERAL.
+        % type             - Motion type of the device. See also 
+        %                    Zaber.MotionType.
+        % units            - Unit conversion table for the device. See
+        %                    also Zaber.DeviceUnits.
+        %
+        % See also finddevice, findperipheral
+            
+            if (nargin > 2)
+                peripheral = aPeripheralRecord;
+            else
+                peripheral = aDeviceRecord.Peripherals(1);
+            end
+            
+            type = Zaber.MotionType(peripheral.MotionType);
+            units = Zaber.DeviceUnits();
+            units.PositionUnitScale = double(peripheral.PositionUnitScale);
+            units.VelocityUnitScale = double(peripheral.VelocityUnitScale);
+            units.AccelerationUnitScale = double(peripheral.AccelerationUnitScale);
+        end
+    end
+    
+end
+
+
+##### SOURCE END #####
+--></body></html>

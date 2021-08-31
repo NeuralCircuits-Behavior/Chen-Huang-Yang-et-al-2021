@@ -1,0 +1,335 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>IoPort</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="IoPort.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Public instance properties</a></li><li><a href="#4">Protected instance properties</a></li><li><a href="#5">Public instance methods</a></li><li><a href="#6">Protetcted instance methods</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> (Abstract) IoPort &lt; handle
+</pre><pre class="codeinput"><span class="comment">%   IOPORT Interface for the I/O ports on Zaber controllers.</span>
+<span class="comment">%   This class defines the general-purpose interface for the</span>
+<span class="comment">%   analog and digital I/O ports found on some Zaber devices.</span>
+<span class="comment">%</span>
+<span class="comment">%   See also Zaber.Device.IO</span>
+
+<span class="comment">%   Author: Zaber Technologies Software Team &lt;contact@zaber.com&gt;</span>
+</pre><h2 id="3">Public instance properties</h2><pre class="codeinput">    properties (SetAccess = protected)
+
+        <span class="comment">% ANALOGINPUTCOUNT The number of analog inputs available.</span>
+        AnalogInputCount
+
+        <span class="comment">% ANALOGOUTPUTCOUNT The number of analog outputs available.</span>
+        AnalogOutputCount
+
+        <span class="comment">% DIGITALINPUTCOUNT The number of digital input bits available.</span>
+        DigitalInputCount
+
+        <span class="comment">% DIGITALOUTPUTCOUNT The number of digital output bits available.</span>
+        DigitalOutputCount
+    <span class="keyword">end</span>
+</pre><h2 id="4">Protected instance properties</h2><pre class="codeinput">    properties (Access = protected)
+        <span class="comment">% DEVICE The device this set of ports is associated with.</span>
+        Device
+    <span class="keyword">end</span>
+</pre><h2 id="5">Public instance methods</h2><pre class="codeinput">    methods (Abstract)
+
+        <span class="comment">% READANALOGINPUT Read the value of an analog input.</span>
+        <span class="comment">% value = io.READANALOGINPUT(index);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - The 1-based index of the analog input to read.</span>
+        <span class="comment">% value - The voltage read on the specified input.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Will throw an error if the index is out of range or there is a</span>
+        <span class="comment">% communication error.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also AnalogInputCount, writeanalogoutput, readanalogoutput,</span>
+        <span class="comment">% readdigitalinput</span>
+        value = readanaloginput(obj, aIndex)
+
+
+        <span class="comment">% WRITEANALOGOUTPUT Set the value of an analog output</span>
+        <span class="comment">% io.WRITEANALOGOUTPUT(index, value);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - 1-based index of the port to write to.</span>
+        <span class="comment">% value - New voltage to output.</span>
+        <span class="comment">%</span>
+        <span class="comment">% NOTE no devices currently support analog outputs. This method</span>
+        <span class="comment">% will always throw an error.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also AnalogOutputCount, readanalogoutput, readanaloginput,</span>
+        <span class="comment">% writedigitaloutput</span>
+        writeanalogoutput(obj, aIndex, aValue)
+
+
+        <span class="comment">% READANALOGOUTPUT Read back the value of an analog output.</span>
+        <span class="comment">% value = io.READANALOGOUTPUT(index);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - The 1-based index of the analog output to read.</span>
+        <span class="comment">% value - The voltage currently being output on the specified port.</span>
+        <span class="comment">%</span>
+        <span class="comment">% NOTE no devices currently support analog outputs. This method</span>
+        <span class="comment">% will always throw an error.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also AnalogOutputCount, writeanalogoutput, readanaloginput,</span>
+        <span class="comment">% readdigitalinput</span>
+        value = readanalogoutput(obj, aIndex)
+
+
+        <span class="comment">% READDIGITALINPUT Read one or more digital input bits.</span>
+        <span class="comment">% bits = io.READDIGITALINPUT();</span>
+        <span class="comment">% bit = io.READDIGITALINPUT(index);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - Optional 1-based index of the bit to read. If not given,</span>
+        <span class="comment">%         the output will be an array of bits starting with the</span>
+        <span class="comment">%         lowest-numbered input bit. If specified, the output will</span>
+        <span class="comment">%         be a single bit value.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also DigitalInputCount, writedigitaloutput,</span>
+        <span class="comment">% readdigitaloutput, readanaloginput</span>
+        bits = readdigitalinput(obj, aIndex)
+
+
+        <span class="comment">% WRITEDIGITALOUTPUT Set the value of one or more digital output bits.</span>
+        <span class="comment">% io.WRITEDIGITALOUTPUT(startIndex, bits);</span>
+        <span class="comment">%</span>
+        <span class="comment">% startIndex - 1-based index of the first bit to write.</span>
+        <span class="comment">% bits       - Array of bit values to write. The first entry will</span>
+        <span class="comment">%              be written to the output bit corresponding to</span>
+        <span class="comment">%              startIndex, end next entry to the next higher</span>
+        <span class="comment">%              numbered output bit, and so on.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also DigitalOutputCount, readdigitaloutput, readdigitalinput,</span>
+        <span class="comment">% writeanalogoutput</span>
+        writedigitaloutput(obj, aStartIndex, aBits)
+
+
+        <span class="comment">% READDIGITALOUTPUT Read back one or more digital output bits.</span>
+        <span class="comment">% bits = io.READDIGITALOUTPUT();</span>
+        <span class="comment">% bit = io.READDIGITALOUTPUT(index);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - Optional 1-based index of the bit to read. If not given,</span>
+        <span class="comment">%         the output will be an array of bits starting with the</span>
+        <span class="comment">%         lowest-numbered output port bit. If specified, the output</span>
+        <span class="comment">%         will be a single bit value.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also DigitalOutputCount, writedigitaloutput,</span>
+        <span class="comment">% readdigitalinput, readanaloginput</span>
+        bits = readdigitaloutput(obj, aIndex)
+    <span class="keyword">end</span>
+</pre><h2 id="6">Protetcted instance methods</h2><pre class="codeinput">    methods (Access = protected)
+        <span class="keyword">function</span> obj = IoPort(aDevice)
+            <span class="comment">% IOPORT Initializes properties to their default values.</span>
+            <span class="comment">% This constructor is meant to be called by subclass constructors</span>
+            <span class="comment">% only.</span>
+            obj.Device = aDevice;
+            obj.AnalogInputCount = 0;
+            obj.AnalogOutputCount = 0;
+            obj.DigitalInputCount = 0;
+            obj.DigitalOutputCount = 0;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef (Abstract) IoPort < handle
+%   IOPORT Interface for the I/O ports on Zaber controllers.
+%   This class defines the general-purpose interface for the
+%   analog and digital I/O ports found on some Zaber devices.
+%
+%   See also Zaber.Device.IO
+
+%   Author: Zaber Technologies Software Team <contact@zaber.com>
+
+    
+%% Public instance properties
+    properties (SetAccess = protected)
+        
+        % ANALOGINPUTCOUNT The number of analog inputs available.
+        AnalogInputCount
+        
+        % ANALOGOUTPUTCOUNT The number of analog outputs available.
+        AnalogOutputCount
+        
+        % DIGITALINPUTCOUNT The number of digital input bits available.
+        DigitalInputCount
+        
+        % DIGITALOUTPUTCOUNT The number of digital output bits available.
+        DigitalOutputCount
+    end
+    
+    
+ %% Protected instance properties
+    properties (Access = protected)
+        % DEVICE The device this set of ports is associated with.
+        Device
+    end
+    
+    
+ %% Public instance methods
+    methods (Abstract)
+        
+        % READANALOGINPUT Read the value of an analog input.
+        % value = io.READANALOGINPUT(index);
+        %
+        % index - The 1-based index of the analog input to read.
+        % value - The voltage read on the specified input.
+        %
+        % Will throw an error if the index is out of range or there is a
+        % communication error.
+        %
+        % See also AnalogInputCount, writeanalogoutput, readanalogoutput,
+        % readdigitalinput
+        value = readanaloginput(obj, aIndex)
+        
+        
+        % WRITEANALOGOUTPUT Set the value of an analog output
+        % io.WRITEANALOGOUTPUT(index, value);
+        %
+        % index - 1-based index of the port to write to.
+        % value - New voltage to output.
+        %
+        % NOTE no devices currently support analog outputs. This method
+        % will always throw an error.
+        %
+        % See also AnalogOutputCount, readanalogoutput, readanaloginput,
+        % writedigitaloutput
+        writeanalogoutput(obj, aIndex, aValue)
+        
+        
+        % READANALOGOUTPUT Read back the value of an analog output.
+        % value = io.READANALOGOUTPUT(index);
+        %
+        % index - The 1-based index of the analog output to read.
+        % value - The voltage currently being output on the specified port.
+        %
+        % NOTE no devices currently support analog outputs. This method
+        % will always throw an error.
+        %
+        % See also AnalogOutputCount, writeanalogoutput, readanaloginput,
+        % readdigitalinput 
+        value = readanalogoutput(obj, aIndex)
+        
+        
+        % READDIGITALINPUT Read one or more digital input bits.
+        % bits = io.READDIGITALINPUT();
+        % bit = io.READDIGITALINPUT(index);
+        %
+        % index - Optional 1-based index of the bit to read. If not given,
+        %         the output will be an array of bits starting with the
+        %         lowest-numbered input bit. If specified, the output will
+        %         be a single bit value.        
+        %
+        % See also DigitalInputCount, writedigitaloutput,
+        % readdigitaloutput, readanaloginput
+        bits = readdigitalinput(obj, aIndex)
+        
+        
+        % WRITEDIGITALOUTPUT Set the value of one or more digital output bits.
+        % io.WRITEDIGITALOUTPUT(startIndex, bits);
+        %
+        % startIndex - 1-based index of the first bit to write.
+        % bits       - Array of bit values to write. The first entry will
+        %              be written to the output bit corresponding to
+        %              startIndex, end next entry to the next higher
+        %              numbered output bit, and so on.
+        %
+        % See also DigitalOutputCount, readdigitaloutput, readdigitalinput,
+        % writeanalogoutput
+        writedigitaloutput(obj, aStartIndex, aBits)
+        
+        
+        % READDIGITALOUTPUT Read back one or more digital output bits.
+        % bits = io.READDIGITALOUTPUT();
+        % bit = io.READDIGITALOUTPUT(index);
+        %
+        % index - Optional 1-based index of the bit to read. If not given,
+        %         the output will be an array of bits starting with the
+        %         lowest-numbered output port bit. If specified, the output 
+        %         will be a single bit value.   
+        %
+        % See also DigitalOutputCount, writedigitaloutput,
+        % readdigitalinput, readanaloginput
+        bits = readdigitaloutput(obj, aIndex)
+    end
+    
+    
+ %% Protetcted instance methods
+    methods (Access = protected)
+        function obj = IoPort(aDevice)
+            % IOPORT Initializes properties to their default values.
+            % This constructor is meant to be called by subclass constructors
+            % only.
+            obj.Device = aDevice;
+            obj.AnalogInputCount = 0;
+            obj.AnalogOutputCount = 0;
+            obj.DigitalInputCount = 0;
+            obj.DigitalOutputCount = 0;
+        end
+    end
+    
+end
+
+
+##### SOURCE END #####
+--></body></html>

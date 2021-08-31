@@ -1,0 +1,271 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>BinaryErrorType</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="BinaryErrorType.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">%   BINARYERRORTYPE Enumeration to assist with interpreting Zaber Binary protocol codes.</span>
+
+<span class="comment">%   THIS IS A GENERATED FILE - DO NOT EDIT. See DeviceDatabaseUpdate.py.</span>
+
+<span class="keyword">classdef</span> BinaryErrorType &lt; int32
+    <span class="keyword">enumeration</span>
+        Absolute_Position_Invalid                  (20),
+        Acceleration_Invalid                       (43),
+        Acceleration_Only_Invalid                  (113),
+        Address_Invalid                            (5),
+        Alias_Invalid                              (48),
+        Analog_Input_Pin_Invalid                   (76),
+        Analog_Input_Pin_Invalid_2                 (134),
+        Auto_Reply_Disabled_Mode_Invalid           (101),
+        Auto_Home_Disabled_Mode_Invalid            (105),
+        Axis_Device_Number_Invalid                 (26),
+        Axis_Invalid                               (25),
+        Baud_Rate_Invalid                          (122),
+        Baud_Rate_or_Protocol_Invalid              (124),
+        Bit_1_Invalid                              (4001),
+        Bit_10_Invalid                             (4010),
+        Bit_11_Invalid                             (4011),
+        Bit_13_Invalid                             (4013),
+        Bit_14_Invalid                             (4014),
+        Bit_15_Invalid                             (4015),
+        Bit_2_Invalid                              (4002),
+        Busy                                       (255),
+        Cannot_Home                                (1),
+        Closed_Loop_Mode_Invalid                   (118),
+        Command_Invalid                            (64),
+        Current_Position_Invalid                   (45),
+        Cycle_Distance_Invalid                     (80),
+        Deceleration_Only_Invalid                  (114),
+        Device_Direction_Invalid                   (121),
+        Device_ID_Unknown                          (50),
+        Device_Number_Invalid                      (2),
+        Device_Parked                              (6501),
+        Digital_Input_Pin_Invalid                  (68),
+        Digital_Input_Pin_Invalid_2                (126),
+        Digital_Output_Mask_Invalid                (74),
+        Digital_Output_Mask_Invalid_2              (132),
+        Digital_Output_Pin_Invalid                 (71),
+        Digital_Output_Pin_Invalid_2               (129),
+        Disable_Auto_Home_Invalid                  (4008),
+        Filter_Holder_ID_Invalid                   (81),
+        Hold_Current_Invalid                       (39),
+        Home_Sensor_Type_Invalid                   (104),
+        Home_Speed_Invalid                         (41),
+        Home_Status_Invalid                        (103),
+        Home_Switch_Invalid                        (4012),
+        Index_Distance_Invalid                     (79),
+        Inversion_Invalid                          (27),
+        Joystick_Calibration_Mode_Invalid          (33),
+        Knob_Direction_Invalid                     (108),
+        Knob_Disabled_Mode_Invalid                 (107),
+        Knob_Movement_Mode_Invalid                 (109),
+        Knob_Velocity_Profile_Invalid              (112),
+        Knob_Velocity_Scale_Invalid                (111),
+        Load_Event_Invalid                         (30),
+        Lock_State_Invalid                         (49),
+        Manual_Move_Tracking_Disabled_Mode_Invalid (116),
+        Maximum_Position_Invalid                   (44),
+        Maximum_Relative_Move_Invalid              (46),
+        Message_ID_Mode_Invalid                    (102),
+        Minimum_Position_Invalid                   (106),
+        Mode_Invalid                               (40),
+        Move_Index_Number_Invalid                  (78),
+        Move_Position_Invalid                      (1800),
+        Move_Position_Not_Homed                    (1801),
+        Move_Tracking_Mode_Invalid                 (115),
+        Move_Tracking_Period_Invalid               (117),
+        Offset_Invalid                             (47),
+        Park_State_Invalid                         (65),
+        Peripheral_ID_Invalid                      (36),
+        Protocol_Invalid                           (123),
+        Register_Address_Invalid                   (701),
+        Register_Value_Invalid                     (702),
+        Relative_Position_Invalid                  (21),
+        Relative_Position_Limited                  (2146),
+        Resolution_Invalid                         (37),
+        Return_Event_Invalid                       (31),
+        Return_Position_Invalid                    (1700),
+        Run_Current_Invalid                        (38),
+        Save_Position_Invalid                      (1600),
+        Save_Position_Not_Homed                    (1601),
+        Setting_Invalid                            (53),
+        Settings_Locked                            (3600),
+        Slip_Tracking_Period_Invalid               (119),
+        Speed_Invalid                              (42),
+        Stall_Timeout_Invalid                      (120),
+        Stored_Position_Invalid                    (18),
+        Temperature_High                           (67),
+        Velocity_Invalid                           (22),
+        Velocity_Profile_Invalid                   (28),
+        Velocity_Scale_Invalid                     (29),
+        Voltage_High                               (15),
+        Voltage_Low                                (14)
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%   BINARYERRORTYPE Enumeration to assist with interpreting Zaber Binary protocol codes.
+
+%   THIS IS A GENERATED FILE - DO NOT EDIT. See DeviceDatabaseUpdate.py.
+
+classdef BinaryErrorType < int32
+    enumeration
+        Absolute_Position_Invalid                  (20),
+        Acceleration_Invalid                       (43),
+        Acceleration_Only_Invalid                  (113),
+        Address_Invalid                            (5),
+        Alias_Invalid                              (48),
+        Analog_Input_Pin_Invalid                   (76),
+        Analog_Input_Pin_Invalid_2                 (134),
+        Auto_Reply_Disabled_Mode_Invalid           (101),
+        Auto_Home_Disabled_Mode_Invalid            (105),
+        Axis_Device_Number_Invalid                 (26),
+        Axis_Invalid                               (25),
+        Baud_Rate_Invalid                          (122),
+        Baud_Rate_or_Protocol_Invalid              (124),
+        Bit_1_Invalid                              (4001),
+        Bit_10_Invalid                             (4010),
+        Bit_11_Invalid                             (4011),
+        Bit_13_Invalid                             (4013),
+        Bit_14_Invalid                             (4014),
+        Bit_15_Invalid                             (4015),
+        Bit_2_Invalid                              (4002),
+        Busy                                       (255),
+        Cannot_Home                                (1),
+        Closed_Loop_Mode_Invalid                   (118),
+        Command_Invalid                            (64),
+        Current_Position_Invalid                   (45),
+        Cycle_Distance_Invalid                     (80),
+        Deceleration_Only_Invalid                  (114),
+        Device_Direction_Invalid                   (121),
+        Device_ID_Unknown                          (50),
+        Device_Number_Invalid                      (2),
+        Device_Parked                              (6501),
+        Digital_Input_Pin_Invalid                  (68),
+        Digital_Input_Pin_Invalid_2                (126),
+        Digital_Output_Mask_Invalid                (74),
+        Digital_Output_Mask_Invalid_2              (132),
+        Digital_Output_Pin_Invalid                 (71),
+        Digital_Output_Pin_Invalid_2               (129),
+        Disable_Auto_Home_Invalid                  (4008),
+        Filter_Holder_ID_Invalid                   (81),
+        Hold_Current_Invalid                       (39),
+        Home_Sensor_Type_Invalid                   (104),
+        Home_Speed_Invalid                         (41),
+        Home_Status_Invalid                        (103),
+        Home_Switch_Invalid                        (4012),
+        Index_Distance_Invalid                     (79),
+        Inversion_Invalid                          (27),
+        Joystick_Calibration_Mode_Invalid          (33),
+        Knob_Direction_Invalid                     (108),
+        Knob_Disabled_Mode_Invalid                 (107),
+        Knob_Movement_Mode_Invalid                 (109),
+        Knob_Velocity_Profile_Invalid              (112),
+        Knob_Velocity_Scale_Invalid                (111),
+        Load_Event_Invalid                         (30),
+        Lock_State_Invalid                         (49),
+        Manual_Move_Tracking_Disabled_Mode_Invalid (116),
+        Maximum_Position_Invalid                   (44),
+        Maximum_Relative_Move_Invalid              (46),
+        Message_ID_Mode_Invalid                    (102),
+        Minimum_Position_Invalid                   (106),
+        Mode_Invalid                               (40),
+        Move_Index_Number_Invalid                  (78),
+        Move_Position_Invalid                      (1800),
+        Move_Position_Not_Homed                    (1801),
+        Move_Tracking_Mode_Invalid                 (115),
+        Move_Tracking_Period_Invalid               (117),
+        Offset_Invalid                             (47),
+        Park_State_Invalid                         (65),
+        Peripheral_ID_Invalid                      (36),
+        Protocol_Invalid                           (123),
+        Register_Address_Invalid                   (701),
+        Register_Value_Invalid                     (702),
+        Relative_Position_Invalid                  (21),
+        Relative_Position_Limited                  (2146),
+        Resolution_Invalid                         (37),
+        Return_Event_Invalid                       (31),
+        Return_Position_Invalid                    (1700),
+        Run_Current_Invalid                        (38),
+        Save_Position_Invalid                      (1600),
+        Save_Position_Not_Homed                    (1601),
+        Setting_Invalid                            (53),
+        Settings_Locked                            (3600),
+        Slip_Tracking_Period_Invalid               (119),
+        Speed_Invalid                              (42),
+        Stall_Timeout_Invalid                      (120),
+        Stored_Position_Invalid                    (18),
+        Temperature_High                           (67),
+        Velocity_Invalid                           (22),
+        Velocity_Profile_Invalid                   (28),
+        Velocity_Scale_Invalid                     (29),
+        Voltage_High                               (15),
+        Voltage_Low                                (14)
+    end
+end
+
+##### SOURCE END #####
+--></body></html>

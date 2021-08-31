@@ -1,0 +1,409 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Example_Advanced</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="Example_Advanced.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><pre class="codeinput"><span class="comment">% This is an ADVANCED example for an uncommon use case. This example</span>
+<span class="comment">% demonstrates how to automatically detect Zaber devices without knowing</span>
+<span class="comment">% what protocol or baud rate they're using; it will scan a selected serial</span>
+<span class="comment">% port with various settings it finds some Zaber devices, then it will</span>
+<span class="comment">% make them move using the generic device representations provided by the</span>
+<span class="comment">% Zaber toolbox.</span>
+
+<span class="comment">% It's more common to already know what protocol and serial port settings</span>
+<span class="comment">% you're using, and how your devices are set up. See the Ascii and Binary</span>
+<span class="comment">% examples for simpler, more common usage.</span>
+
+
+<span class="comment">% This example uses only one port.  You could try this same detection</span>
+<span class="comment">% procedure with each available serial port until you find something, but</span>
+<span class="comment">% that could cause problems if you have other serial hardware hooked up.</span>
+
+<span class="comment">% You probably need to change the port name depending on your</span>
+<span class="comment">% OS and hardware setup.</span>
+portName = <span class="string">'COM4'</span>;
+port = serial(portName);
+
+<span class="comment">% Set default serial port properties for both protocols.</span>
+set(port, <span class="keyword">...</span>
+    <span class="string">'DataBits'</span>, 8, <span class="keyword">...</span>
+    <span class="string">'FlowControl'</span>, <span class="string">'none'</span>, <span class="keyword">...</span>
+    <span class="string">'Parity'</span>, <span class="string">'none'</span>, <span class="keyword">...</span>
+    <span class="string">'StopBits'</span>, 1, <span class="keyword">...</span>
+    <span class="string">'Terminator'</span>,<span class="string">'CR/LF'</span>);
+
+<span class="comment">% There are cases where the Zaber toolbox deliberately waits for</span>
+<span class="comment">% port reception to time out. To reduce the wait time and suppress</span>
+<span class="comment">% timeout messages, use the following two commands.</span>
+set(port, <span class="string">'Timeout'</span>, 0.5)
+warning <span class="string">off</span> <span class="string">MATLAB:serial:fread:unsuccessfulRead</span>
+warning <span class="string">off</span> <span class="string">MATLAB:serial:fgetl:unsuccessfulRead</span>
+
+
+<span class="comment">% List of supported baud rates to try.</span>
+baudRates = [ 115200 57600 38400 19200 9600 ];
+
+<span class="comment">% Try each baud rate until we get a response.</span>
+protocol = [];
+i = 1;
+<span class="keyword">while</span> ((i &lt;= length(baudRates)) &amp;&amp; ~isa(protocol, <span class="string">'Zaber.Protocol'</span>))
+
+    baudRate = baudRates(i);
+    fprintf(<span class="string">'Attempting detection on %s at %d baud...\n'</span>, <span class="keyword">...</span>
+        portName, baudRate);
+    set(port, <span class="string">'BaudRate'</span>, baudRate);
+
+    <span class="comment">% Open the port.</span>
+    <span class="keyword">if</span> (strcmp(port.Status, <span class="string">'open'</span>))
+        fclose(port);
+    <span class="keyword">end</span>
+
+    fopen(port);
+
+    <span class="keyword">try</span>
+        <span class="comment">% Try to detect a protocol on this port.</span>
+        protocol = Zaber.Protocol.detect(port);
+        <span class="keyword">if</span> (isa(protocol, <span class="string">'Zaber.BinaryProtocol'</span>))
+            fprintf(<span class="string">'Detected binary protocol!\n'</span>);
+        <span class="keyword">elseif</span> (isa(protocol, <span class="string">'Zaber.AsciiProtocol'</span>))
+            fprintf(<span class="string">'Detected ASCII protocol!\n'</span>);
+        <span class="keyword">end</span>
+
+    <span class="keyword">catch</span> exception
+        <span class="comment">% Clean up the port if an error occurs, otherwise it remains locked.</span>
+        fclose(port);
+        fprintf(<span class="string">'Error while attempting to detect the protocol.\n'</span>);
+        rethrow(exception);
+    <span class="keyword">end</span>
+
+    i = i + 1;
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> (~isa(protocol, <span class="string">'Zaber.Protocol'</span>))
+    fclose(port);
+    error(<span class="string">'Failed to detect any Zaber devices on port %s.'</span>, portName);
+<span class="keyword">end</span>
+
+
+<span class="keyword">try</span>
+    <span class="comment">% We've found some devices on this port. Now what we know the protocol</span>
+    <span class="comment">% and baud rate, we can enumerate the devices and detect their</span>
+    <span class="comment">% properties.</span>
+    devices = protocol.finddevices();
+
+<span class="keyword">catch</span> exception
+    <span class="comment">% Clean up the port if an error occurs, otherwise it remains locked.</span>
+    fclose(port);
+    rethrow(exception);
+<span class="keyword">end</span>
+
+fprintf(<span class="string">'Found %d devices:\n'</span>, length(devices));
+
+
+<span class="comment">% Loop over the devices we found and put the parts that move into a</span>
+<span class="comment">% separate list.</span>
+axes = [];
+<span class="keyword">for</span> (i = 1:length(devices))
+    device = devices(i);
+    disp(device);
+
+    <span class="comment">% For the movement section, generate a list of just the axes.</span>
+    <span class="keyword">if</span> (device.IsAxis)
+        axes = [axes, device];
+    <span class="keyword">end</span>
+
+    <span class="keyword">for</span> (j = 1:length(device.Axes))
+        <span class="keyword">if</span> (device.Axes(j).IsAxis)
+            axes = [axes, device.Axes(j)];
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+<span class="comment">% Now loop over the moving parts, print information about them, and</span>
+<span class="comment">% optionally make them move.</span>
+choice = 0;
+<span class="keyword">if</span> (~isempty(axes))
+    choice = menu(<span class="string">'OK to make the devices move?'</span>,<span class="string">'Yes'</span>,<span class="string">'No'</span>);
+    <span class="keyword">if</span> (choice == 1)
+        <span class="keyword">for</span> (i = 1:length(axes))
+            <span class="keyword">try</span>
+                device = axes(i);
+                <span class="keyword">if</span> (device.MotionType ~= Zaber.MotionType.None)
+                    fprintf(<span class="string">'Moving device %d axis %d (%s)...\n'</span>, <span class="keyword">...</span>
+                        device.DeviceNo, device.AxisNo, device.Name);
+
+                    range = double(device.getrange());
+                    <span class="keyword">if</span> (~isempty(device.Units))
+                        range = device.Units.nativetoposition(range);
+                    <span class="keyword">end</span>
+
+                    fprintf(<span class="string">'- Moving to home.\n'</span>);
+                    device.home();
+                    device.waitforidle();
+
+                    fprintf(<span class="string">'- Range = %s\n'</span>, mat2str(range));
+                    targetPos = range(1) + 0.1 * (range(2) - range(1));
+                    fprintf(<span class="string">'- Moving to %s.\n'</span>, mat2str(targetPos));
+                    <span class="keyword">if</span> (~isempty(device.Units))
+                        targetPos = device.Units.positiontonative(targetPos);
+                    <span class="keyword">end</span>
+
+                    device.moveabsolute(targetPos);
+                    device.waitforidle();
+
+                <span class="keyword">else</span>
+                    fprintf(<span class="string">'Skipping device %d because it doesn''t move.'</span>, i);
+                <span class="keyword">end</span>
+
+                fprintf(<span class="string">'\n'</span>);
+
+            <span class="keyword">catch</span> exception
+                <span class="comment">% Clean up the port if an error occurs, otherwise it remains locked.</span>
+                fclose(port);
+                fprintf(<span class="string">'There was an error while moving devices.\n'</span>);
+                rethrow(exception);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+fclose(port);
+delete(port);
+clear <span class="string">all</span>;
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+% This is an ADVANCED example for an uncommon use case. This example
+% demonstrates how to automatically detect Zaber devices without knowing
+% what protocol or baud rate they're using; it will scan a selected serial
+% port with various settings it finds some Zaber devices, then it will 
+% make them move using the generic device representations provided by the
+% Zaber toolbox.
+
+% It's more common to already know what protocol and serial port settings
+% you're using, and how your devices are set up. See the Ascii and Binary
+% examples for simpler, more common usage.
+
+
+% This example uses only one port.  You could try this same detection
+% procedure with each available serial port until you find something, but
+% that could cause problems if you have other serial hardware hooked up.
+
+% You probably need to change the port name depending on your
+% OS and hardware setup.
+portName = 'COM4';
+port = serial(portName);
+
+% Set default serial port properties for both protocols.
+set(port, ...
+    'DataBits', 8, ...
+    'FlowControl', 'none', ...
+    'Parity', 'none', ...
+    'StopBits', 1, ...
+    'Terminator','CR/LF');
+
+% There are cases where the Zaber toolbox deliberately waits for
+% port reception to time out. To reduce the wait time and suppress
+% timeout messages, use the following two commands.
+set(port, 'Timeout', 0.5)
+warning off MATLAB:serial:fread:unsuccessfulRead
+warning off MATLAB:serial:fgetl:unsuccessfulRead
+
+
+% List of supported baud rates to try.
+baudRates = [ 115200 57600 38400 19200 9600 ];
+
+% Try each baud rate until we get a response.
+protocol = [];
+i = 1;
+while ((i <= length(baudRates)) && ~isa(protocol, 'Zaber.Protocol'))
+    
+    baudRate = baudRates(i);
+    fprintf('Attempting detection on %s at %d baud...\n', ...
+        portName, baudRate);
+    set(port, 'BaudRate', baudRate);
+    
+    % Open the port.
+    if (strcmp(port.Status, 'open'))
+        fclose(port);
+    end
+    
+    fopen(port);
+    
+    try
+        % Try to detect a protocol on this port.
+        protocol = Zaber.Protocol.detect(port);
+        if (isa(protocol, 'Zaber.BinaryProtocol'))
+            fprintf('Detected binary protocol!\n');
+        elseif (isa(protocol, 'Zaber.AsciiProtocol'))
+            fprintf('Detected ASCII protocol!\n');
+        end
+
+    catch exception
+        % Clean up the port if an error occurs, otherwise it remains locked.
+        fclose(port);
+        fprintf('Error while attempting to detect the protocol.\n');
+        rethrow(exception);
+    end
+    
+    i = i + 1;
+end
+
+if (~isa(protocol, 'Zaber.Protocol'))
+    fclose(port);
+    error('Failed to detect any Zaber devices on port %s.', portName);
+end
+
+
+try
+    % We've found some devices on this port. Now what we know the protocol
+    % and baud rate, we can enumerate the devices and detect their
+    % properties.
+    devices = protocol.finddevices();
+    
+catch exception
+    % Clean up the port if an error occurs, otherwise it remains locked.
+    fclose(port);
+    rethrow(exception);
+end
+   
+fprintf('Found %d devices:\n', length(devices));
+
+
+% Loop over the devices we found and put the parts that move into a
+% separate list.
+axes = [];
+for (i = 1:length(devices))
+    device = devices(i);
+    disp(device);
+    
+    % For the movement section, generate a list of just the axes.
+    if (device.IsAxis)
+        axes = [axes, device];
+    end
+    
+    for (j = 1:length(device.Axes))
+        if (device.Axes(j).IsAxis)
+            axes = [axes, device.Axes(j)];
+        end
+    end
+end
+
+
+% Now loop over the moving parts, print information about them, and
+% optionally make them move.
+choice = 0;
+if (~isempty(axes))
+    choice = menu('OK to make the devices move?','Yes','No');
+    if (choice == 1)
+        for (i = 1:length(axes))
+            try
+                device = axes(i);
+                if (device.MotionType ~= Zaber.MotionType.None)
+                    fprintf('Moving device %d axis %d (%s)...\n', ...
+                        device.DeviceNo, device.AxisNo, device.Name);
+
+                    range = double(device.getrange());
+                    if (~isempty(device.Units))                   
+                        range = device.Units.nativetoposition(range);
+                    end
+                    
+                    fprintf('- Moving to home.\n');
+                    device.home();
+                    device.waitforidle();
+                    
+                    fprintf('- Range = %s\n', mat2str(range));
+                    targetPos = range(1) + 0.1 * (range(2) - range(1));
+                    fprintf('- Moving to %s.\n', mat2str(targetPos));
+                    if (~isempty(device.Units))                   
+                        targetPos = device.Units.positiontonative(targetPos);
+                    end
+
+                    device.moveabsolute(targetPos);
+                    device.waitforidle();
+                    
+                else
+                    fprintf('Skipping device %d because it doesn''t move.', i);
+                end
+                
+                fprintf('\n');
+
+            catch exception
+                % Clean up the port if an error occurs, otherwise it remains locked.
+                fclose(port);
+                fprintf('There was an error while moving devices.\n');
+                rethrow(exception);
+            end
+        end
+    end
+end
+
+fclose(port);
+delete(port);
+clear all;
+
+##### SOURCE END #####
+--></body></html>

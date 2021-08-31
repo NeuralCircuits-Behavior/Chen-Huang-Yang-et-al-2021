@@ -1,0 +1,391 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>DeviceUnits</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-01-13"><meta name="DC.source" content="DeviceUnits.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Public instance properties</a></li><li><a href="#4">Public instance methods</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> DeviceUnits &lt; handle
+</pre><pre class="codeinput"><span class="comment">%   DEVICEUNITS Unit conversion helper for Zaber devices.</span>
+<span class="comment">%   This class is used to store the unit scale factors for Zaber devices.</span>
+<span class="comment">%   Unit conversions vary from device to device according to variations in</span>
+<span class="comment">%   physical characteristics.</span>
+<span class="comment">%</span>
+<span class="comment">%   Note that for most devices, the device's resolutions setting must be</span>
+<span class="comment">%   factored into the conversions. The scale properties found in this</span>
+<span class="comment">%   class are typically measures of the number of device "steps" per</span>
+<span class="comment">%   standard unit, but native device units are "microsteps" of which there</span>
+<span class="comment">%   are "resolution" amount per step. So for example the native quantity</span>
+<span class="comment">%   for position is the position scale times the number of meters times</span>
+<span class="comment">%   the device resolution.</span>
+<span class="comment">%</span>
+<span class="comment">%   See also Zaber.Device.Units</span>
+
+<span class="comment">%   Author: Zaber Technologies Software Team &lt;contact@zaber.com&gt;</span>
+</pre><h2 id="3">Public instance properties</h2><pre class="codeinput">    properties
+        <span class="comment">% POSITIONUNITSCALE Number of coarse position units per meter or</span>
+        <span class="comment">% degree.</span>
+        PositionUnitScale
+
+        <span class="comment">% VELOCITYUNITSCALE Number of coarse velocity units per m/s or</span>
+        <span class="comment">% degrees/s.</span>
+        VelocityUnitScale
+
+        <span class="comment">% ACCELERATIONUNITSCALE Number of coarse acceleration units per</span>
+        <span class="comment">% m/s^2 or degrees/s^2.</span>
+        AccelerationUnitScale
+
+        <span class="comment">% FORCEUNITSCALE Number of force units per newton.</span>
+        ForceUnitScale
+
+        <span class="comment">% RESOLUTION Device resolution in units of microstep per step,</span>
+        <span class="comment">% where applicable. Set to 1 if not applicable.</span>
+        Resolution
+    <span class="keyword">end</span>
+</pre><h2 id="4">Public instance methods</h2><pre class="codeinput">    methods
+        <span class="keyword">function</span> obj = DeviceUnits()
+        <span class="comment">% DEVICEUNITS Constructor. Initializes conversions to unity.</span>
+            obj.PositionUnitScale = 1.0;
+            obj.VelocityUnitScale = 1.0;
+            obj.AccelerationUnitScale = 1.0;
+            obj.ForceUnitScale = 1.0;
+            obj.Resolution = 1.0;
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> result = positiontonative(obj, aPosition)
+        <span class="comment">% POSITIONTONATIVE Convert position to device units.</span>
+        <span class="comment">% microsteps = units.POSITIONTONATIVE(position);</span>
+        <span class="comment">%</span>
+        <span class="comment">% position   - The desired position for the device. Units are</span>
+        <span class="comment">%              meters if it is a linear device, or degrees if it</span>
+        <span class="comment">%              is a rotary device.</span>
+        <span class="comment">% microsteps - The number to send to the device in a move</span>
+        <span class="comment">%              absolute command to reach the desired position.</span>
+
+            result = double(aPosition) * obj.PositionUnitScale * double(obj.Resolution);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> result = nativetoposition(obj, aPosition)
+        <span class="comment">% NATIVETOPOSITION Convert device position units to standard.</span>
+        <span class="comment">% siUnits = units.NATIVETOPOSITION(position);</span>
+        <span class="comment">%</span>
+        <span class="comment">% position - The current position of the device in its native</span>
+        <span class="comment">%            units.</span>
+        <span class="comment">% siUnits  - The device position converted to meters for linear</span>
+        <span class="comment">%            devices or degrees for rotary devices.</span>
+
+            result = (double(aPosition) / double(obj.Resolution)) / obj.PositionUnitScale;
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> result = velocitytonative(obj, aVelocity)
+        <span class="comment">% VELOCITYTONATIVE Convert velocity to device units.</span>
+        <span class="comment">% microsteps = units.VELOCITYTONATIVE(position);</span>
+        <span class="comment">%</span>
+        <span class="comment">% velocity   - The desired velocity for the device. Units are</span>
+        <span class="comment">%              meters per second if it is a linear device, or</span>
+        <span class="comment">%              degrees per second if it is a rotary device.</span>
+        <span class="comment">% microsteps - The number to send to the device in a move</span>
+        <span class="comment">%              at velocity command to reach the desired speed.</span>
+
+            result = double(aVelocity) * obj.VelocityUnitScale * double(obj.Resolution);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> result = nativetovelocity(obj, aVelocity)
+        <span class="comment">% NATIVETOVELOCITY Convert device velocity units to standard.</span>
+        <span class="comment">% siUnits = units.NATIVETOVELOCITY(velocity);</span>
+        <span class="comment">%</span>
+        <span class="comment">% velocity - A velocity of the device in its native units.</span>
+        <span class="comment">% siUnits  - The device velocity converted to meters per second</span>
+        <span class="comment">%            for linear devices or degrees per second for rotary</span>
+        <span class="comment">%            devices.</span>
+
+            result = (double(aVelocity) / double(obj.Resolution)) / obj.VelocityUnitScale;
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> result = accelerationtonative(obj, aAccel)
+        <span class="comment">% ACCELERATIONTONATIVE Convert acceleration to device units.</span>
+        <span class="comment">% microsteps = units.ACCELERATIONTONATIVE(accel);</span>
+        <span class="comment">%</span>
+        <span class="comment">% accel      - The desired acceleration for the device. Units are</span>
+        <span class="comment">%              meters per second squared if it is a linear device, or</span>
+        <span class="comment">%              degrees per second squared if it is a rotary device.</span>
+        <span class="comment">% microsteps - The number to send to the device when changing</span>
+        <span class="comment">%              an acceleration setting.</span>
+
+            result = double(aAccel) * obj.AccelerationUnitScale * double(obj.Resolution);
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> result = nativetoacceleration(obj, aAccel)
+        <span class="comment">% NATIVETOACCELERATION Convert device acceleration units to standard.</span>
+        <span class="comment">% siUnits = units.NATIVETOACCELERATION(accel);</span>
+        <span class="comment">%</span>
+        <span class="comment">% accel   - An acceleration of the device in its native units.</span>
+        <span class="comment">% siUnits - The device acceleration converted to meters per second</span>
+        <span class="comment">%           squared for linear devices or degrees per second</span>
+        <span class="comment">%           squared for rotary devices.</span>
+
+            result = (double(aAccel) / double(obj.Resolution)) / obj.AccelerationUnitScale;
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> result = forcetonative(obj, aNewtons)
+        <span class="comment">% FORCETONATIVE Convert force in newtons to device units.</span>
+        <span class="comment">% deviceunits = units.FORCETONATIVE(newtons);</span>
+        <span class="comment">%</span>
+        <span class="comment">% newtons    - The desired force output from the device, in</span>
+        <span class="comment">%              newtons. Note that only some device types support</span>
+        <span class="comment">%              force output mode.</span>
+        <span class="comment">% deviceunits - The number to send to the device when issuing a</span>
+        <span class="comment">%               force output command.</span>
+
+            result = double(aNewtons) * obj.ForceUnitScale;
+        <span class="keyword">end</span>
+
+
+        <span class="keyword">function</span> result = nativetoforce(obj, aDeviceUnits)
+        <span class="comment">% NATIVETOFORCE Convert device force units to newtons.</span>
+        <span class="comment">% newtons = units.NATIVETOFORCE(deviceunits);</span>
+        <span class="comment">%</span>
+        <span class="comment">% deviceunits - A force measurement from the device, in its own</span>
+        <span class="comment">%               units.</span>
+        <span class="comment">% newtons - The device force converted to newtons.</span>
+
+            result = double(aDeviceUnits) / obj.ForceUnitScale;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef DeviceUnits < handle
+%   DEVICEUNITS Unit conversion helper for Zaber devices.
+%   This class is used to store the unit scale factors for Zaber devices.
+%   Unit conversions vary from device to device according to variations in
+%   physical characteristics.
+%
+%   Note that for most devices, the device's resolutions setting must be
+%   factored into the conversions. The scale properties found in this
+%   class are typically measures of the number of device "steps" per
+%   standard unit, but native device units are "microsteps" of which there
+%   are "resolution" amount per step. So for example the native quantity
+%   for position is the position scale times the number of meters times
+%   the device resolution.
+%
+%   See also Zaber.Device.Units
+ 
+%   Author: Zaber Technologies Software Team <contact@zaber.com>
+ 
+
+%% Public instance properties
+    properties
+        % POSITIONUNITSCALE Number of coarse position units per meter or 
+        % degree.
+        PositionUnitScale
+        
+        % VELOCITYUNITSCALE Number of coarse velocity units per m/s or 
+        % degrees/s.
+        VelocityUnitScale
+        
+        % ACCELERATIONUNITSCALE Number of coarse acceleration units per 
+        % m/s^2 or degrees/s^2.
+        AccelerationUnitScale
+        
+        % FORCEUNITSCALE Number of force units per newton.
+        ForceUnitScale
+        
+        % RESOLUTION Device resolution in units of microstep per step,
+        % where applicable. Set to 1 if not applicable.
+        Resolution
+    end
+    
+    
+ %% Public instance methods
+    methods
+        function obj = DeviceUnits()
+        % DEVICEUNITS Constructor. Initializes conversions to unity.
+            obj.PositionUnitScale = 1.0;
+            obj.VelocityUnitScale = 1.0;
+            obj.AccelerationUnitScale = 1.0;
+            obj.ForceUnitScale = 1.0;
+            obj.Resolution = 1.0;
+        end
+
+        
+        function result = positiontonative(obj, aPosition)
+        % POSITIONTONATIVE Convert position to device units.
+        % microsteps = units.POSITIONTONATIVE(position);
+        %
+        % position   - The desired position for the device. Units are
+        %              meters if it is a linear device, or degrees if it
+        %              is a rotary device.
+        % microsteps - The number to send to the device in a move
+        %              absolute command to reach the desired position.
+        
+            result = double(aPosition) * obj.PositionUnitScale * double(obj.Resolution);
+        end
+
+        
+        function result = nativetoposition(obj, aPosition)
+        % NATIVETOPOSITION Convert device position units to standard.
+        % siUnits = units.NATIVETOPOSITION(position);
+        %
+        % position - The current position of the device in its native
+        %            units.
+        % siUnits  - The device position converted to meters for linear
+        %            devices or degrees for rotary devices.
+        
+            result = (double(aPosition) / double(obj.Resolution)) / obj.PositionUnitScale;
+        end
+
+        
+        function result = velocitytonative(obj, aVelocity)
+        % VELOCITYTONATIVE Convert velocity to device units.
+        % microsteps = units.VELOCITYTONATIVE(position);
+        %
+        % velocity   - The desired velocity for the device. Units are
+        %              meters per second if it is a linear device, or 
+        %              degrees per second if it is a rotary device.
+        % microsteps - The number to send to the device in a move
+        %              at velocity command to reach the desired speed.
+        
+            result = double(aVelocity) * obj.VelocityUnitScale * double(obj.Resolution);
+        end
+
+        
+        function result = nativetovelocity(obj, aVelocity)
+        % NATIVETOVELOCITY Convert device velocity units to standard.
+        % siUnits = units.NATIVETOVELOCITY(velocity);
+        %
+        % velocity - A velocity of the device in its native units.
+        % siUnits  - The device velocity converted to meters per second 
+        %            for linear devices or degrees per second for rotary
+        %            devices. 
+        
+            result = (double(aVelocity) / double(obj.Resolution)) / obj.VelocityUnitScale;
+        end
+
+        
+        function result = accelerationtonative(obj, aAccel)
+        % ACCELERATIONTONATIVE Convert acceleration to device units.
+        % microsteps = units.ACCELERATIONTONATIVE(accel);
+        %
+        % accel      - The desired acceleration for the device. Units are
+        %              meters per second squared if it is a linear device, or 
+        %              degrees per second squared if it is a rotary device.
+        % microsteps - The number to send to the device when changing
+        %              an acceleration setting.
+        
+            result = double(aAccel) * obj.AccelerationUnitScale * double(obj.Resolution);
+        end
+
+        
+        function result = nativetoacceleration(obj, aAccel)
+        % NATIVETOACCELERATION Convert device acceleration units to standard.
+        % siUnits = units.NATIVETOACCELERATION(accel);
+        %
+        % accel   - An acceleration of the device in its native units.
+        % siUnits - The device acceleration converted to meters per second 
+        %           squared for linear devices or degrees per second
+        %           squared for rotary devices. 
+        
+            result = (double(aAccel) / double(obj.Resolution)) / obj.AccelerationUnitScale;
+        end
+
+        
+        function result = forcetonative(obj, aNewtons)
+        % FORCETONATIVE Convert force in newtons to device units.
+        % deviceunits = units.FORCETONATIVE(newtons);
+        %
+        % newtons    - The desired force output from the device, in 
+        %              newtons. Note that only some device types support
+        %              force output mode.
+        % deviceunits - The number to send to the device when issuing a
+        %               force output command.
+        
+            result = double(aNewtons) * obj.ForceUnitScale;
+        end
+
+        
+        function result = nativetoforce(obj, aDeviceUnits)
+        % NATIVETOFORCE Convert device force units to newtons.
+        % newtons = units.NATIVETOFORCE(deviceunits);
+        %
+        % deviceunits - A force measurement from the device, in its own
+        %               units.
+        % newtons - The device force converted to newtons.
+        
+            result = double(aDeviceUnits) / obj.ForceUnitScale;
+        end
+    end
+    
+end
+
+
+##### SOURCE END #####
+--></body></html>

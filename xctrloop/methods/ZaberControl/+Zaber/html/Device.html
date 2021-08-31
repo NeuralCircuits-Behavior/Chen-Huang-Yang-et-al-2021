@@ -1,0 +1,776 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Device</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-15"><meta name="DC.source" content="Device.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">Public instance properties</a></li><li><a href="#4">Public instance methods.</a></li><li><a href="#5">Public static methods</a></li><li><a href="#6">Protected instance methods</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> (Abstract) Device &lt; handle
+</pre><pre class="codeinput"><span class="comment">%   DEVICE Base class for all Zaber devices.</span>
+<span class="comment">%   This class defines the general-purpose interface for all Zaber</span>
+<span class="comment">%   devices regardless of protocol or capability.</span>
+<span class="comment">%</span>
+<span class="comment">%   See also AsciiDevice, BinaryDevice, Protocol</span>
+
+<span class="comment">%   Author: Zaber Technologies Software Team &lt;contact@zaber.com&gt;</span>
+</pre><h2 id="3">Public instance properties</h2><pre class="codeinput">    properties (SetAccess=protected)
+        <span class="comment">% PROTOCOL The Protocol instance (and port) this device is on.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also Zaber.Protocol, Zaber.BinaryProtocol,</span>
+        <span class="comment">% Zaber.AsciiProtocol</span>
+        Protocol
+
+        <span class="comment">% DEVICENO The device's address on the daisy chain.</span>
+        DeviceNo
+
+        <span class="comment">% AXISNO 1-based axis index if this device is a peripheral.</span>
+        AxisNo
+
+        <span class="comment">% DEVICEID Numerical identifier for the device controller type.</span>
+        DeviceId
+
+        <span class="comment">% PERIPHERALID Numerical identifier for the device peripheral type.</span>
+        PeripheralId
+
+        <span class="comment">% NAME Human-readable name for the device.</span>
+        Name
+
+        <span class="comment">% ISAXIS True if this device honors motion commands.</span>
+        IsAxis
+
+        <span class="comment">% AXES Array of peripheral devices attached, if any.</span>
+        Axes
+
+        <span class="comment">% FIRMWAREVERSION Device's firmware version.</span>
+        <span class="comment">% The version number is represented as a floating point number</span>
+        <span class="comment">% where the integer part is the major version and the remainder the</span>
+        <span class="comment">% minor version. 0 means unknown.</span>
+        FirmwareVersion
+
+        <span class="comment">% MOTIONTYPE Type of motion produced by the device, if any.</span>
+        <span class="comment">% Use this to determine whether the device is capable of movement,</span>
+        <span class="comment">% and what units of measure are appropriate.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also Zaber.MotionType</span>
+        MotionType
+
+        <span class="comment">% UNITS Physical unit conversion factors for this device.</span>
+        <span class="comment">% If empty, this device either doesn't support simple unit</span>
+        <span class="comment">% conversions due to its motion type, or does not move.</span>
+        <span class="comment">% See also MotionType, Zaber.DeviceUnits</span>
+        Units
+
+        <span class="comment">% IO I/O port interface if this device has I/O ports.</span>
+        <span class="comment">% See also Zaber.IoPort</span>
+        IO
+    <span class="keyword">end</span>
+</pre><h2 id="4">Public instance methods.</h2><pre class="codeinput">    methods (Abstract)
+
+        <span class="comment">% REQUEST Convenience method to transact with a device.</span>
+        <span class="comment">% reply = device.REQUEST(command, data);</span>
+        <span class="comment">%</span>
+        <span class="comment">% command - Message to send to the device. This is a byte for the</span>
+        <span class="comment">%           binary protocol or a string for the ASCII protocol.</span>
+        <span class="comment">% data    - Arguments for the command. In the binary protocol this</span>
+        <span class="comment">%           is a single integer. In the ASCII protocol this can be</span>
+        <span class="comment">%           the empty array, a number, a string, or an array of</span>
+        <span class="comment">%           numbers or strings.</span>
+        <span class="comment">%</span>
+        <span class="comment">% reply   - Response from the device. Type is either BinaryMessage</span>
+        <span class="comment">%           or AsciiMessage.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This method ignores timeouts and will block until a message</span>
+        <span class="comment">% is received.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also Zaber.AsciiDevice.request, Zaber.BinaryDevice.request</span>
+        reply = request(obj, aCommand, aData)
+
+
+        <span class="comment">% GET Read a setting from the device.</span>
+        <span class="comment">% value = device.get(setting)</span>
+        <span class="comment">%</span>
+        <span class="comment">% setting - Identifier for the setting to read. For the Binary</span>
+        <span class="comment">%           protocol this is a number and for the ASCII protocol</span>
+        <span class="comment">%           it's a name string. See the relevant Zaber protocol</span>
+        <span class="comment">%           manual for values.</span>
+        <span class="comment">% value   - Current value of the setting. The type depends on the</span>
+        <span class="comment">%           protocol and the setting, but is usually numeric.</span>
+        <span class="comment">%</span>
+        <span class="comment">% The behavior of this method is protocol-specific, but generally</span>
+        <span class="comment">% it will read and return a setting from the device. In the event</span>
+        <span class="comment">% of a communication error, an error will be thrown. If</span>
+        <span class="comment">% communication succeeds but the device returns an error response,</span>
+        <span class="comment">% a warning will be printed and the empty array returned.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also set</span>
+        value = get(obj, aSetting)
+
+
+        <span class="comment">% SET Write a value to a device setting.</span>
+        <span class="comment">% result = device.set(setting, value)</span>
+        <span class="comment">%</span>
+        <span class="comment">% setting - Identifier for the setting to write. For the Binary</span>
+        <span class="comment">%           protocol this is a number and for the ASCII protocol</span>
+        <span class="comment">%           it's a name string. See the relevant Zaber protocol</span>
+        <span class="comment">%           manual for values.</span>
+        <span class="comment">% value   - New value of the setting. The type depends on the</span>
+        <span class="comment">%           protocol and the setting, but is usually numeric.</span>
+        <span class="comment">% result  - True if the write succeeded, or the reply message if</span>
+        <span class="comment">%           the device returned an error response.</span>
+        <span class="comment">%</span>
+        <span class="comment">% The behavior of this method is protocol-specific, but generally</span>
+        <span class="comment">% it will attempt to change the value of a seting on the device.</span>
+        <span class="comment">% Errors will be thrown if there is a communication error. If the</span>
+        <span class="comment">% setting does not exist, the setting is read-only, or if the</span>
+        <span class="comment">% value provided is out of range for the setting (ie if the device</span>
+        <span class="comment">% returns an error response) then a warning will be printed and</span>
+        <span class="comment">% the device's response message will be returned.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also get</span>
+        result = set(obj, aSetting, aValue)
+
+
+        <span class="comment">% GETRANGE Determine the movement limits of the device.</span>
+        <span class="comment">% range = device.GETRANGE();</span>
+        <span class="comment">%</span>
+        <span class="comment">% range - A 1x2 matrix with the first entry being the lower bound</span>
+        <span class="comment">%         on legal device position and the second entry being the</span>
+        <span class="comment">%         upper bound. Empty array of the concept doesn't apply.</span>
+        <span class="comment">%         For a multi-axis controller the result will be an Nx2</span>
+        <span class="comment">%         array where N is the number of axes. For rotary devices</span>
+        <span class="comment">%         the range will be one full rotation. In all cases the</span>
+        <span class="comment">%         device can be configured to have a restricted range of</span>
+        <span class="comment">%         movement, and in that situation the user-configured range</span>
+        <span class="comment">%         will be returned.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Reads device settings to determine the device's current idea of</span>
+        <span class="comment">% its range of movement. Returns the empty array if the concept</span>
+        <span class="comment">% does not apply to the device type.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also getposition, getnumindices, moveabsolute</span>
+        range = getrange(obj)
+
+
+        <span class="comment">% WAITFORIDLE Block until the device stops moving.</span>
+        <span class="comment">% error = device.WAITFORIDLE();</span>
+        <span class="comment">% error = device.WAITFORIDLE(interval);</span>
+        <span class="comment">%</span>
+        <span class="comment">% interval - Optional; number of seconds to wait between checks</span>
+        <span class="comment">%            of the device's state. Defaults to 0.1 seconds.</span>
+        <span class="comment">% error    - Return value, normally empty. If the device</span>
+        <span class="comment">%            entered an error state while this method was</span>
+        <span class="comment">%            checking for idleness, this method will return the</span>
+        <span class="comment">%            error message.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This method will ping the device repeatedly until the device</span>
+        <span class="comment">% either becomes idle or produces an error response.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note the behavior of this command is protocol-specific. See the</span>
+        <span class="comment">% protocol-specific implementations for more details.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also stop, moveabsolute, moverelative, moveatvelocity,</span>
+        <span class="comment">% moveindexed, home</span>
+        error = waitforidle(obj, aPingInterval)
+
+
+        <span class="comment">% HOME Move the device to its home position.</span>
+        <span class="comment">% error = device.HOME();</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note the behavior of this command is protocol-specific. See the</span>
+        <span class="comment">% protocol-specific implementations for more details.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also getposition, stop, moveabsolute, moverelative,</span>
+        <span class="comment">% moveatvelocity, moveindexed</span>
+        error = home(obj)
+
+
+        <span class="comment">% MOVEABSOLUTE Move the device to an absolute position.</span>
+        <span class="comment">% error = device.moveabsolute(position);</span>
+        <span class="comment">%</span>
+        <span class="comment">% position - Position to move to, in native device units.</span>
+        <span class="comment">% error    - Error information from the device, if any.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note the behavior of this command is protocol-specific. See the</span>
+        <span class="comment">% protocol-specific implementations for more details.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also home, stop, waitforidle, getposition, moverelative,</span>
+        <span class="comment">% moveatvelocity, moveindexed, Units</span>
+        error = moveabsolute(obj, aPosition)
+
+
+        <span class="comment">% MOVERELATIVE Move the device by a relative amount.</span>
+        <span class="comment">% error = device.MOVERELATIVE(delta);</span>
+        <span class="comment">%</span>
+        <span class="comment">% delta    - Distance to move by, in native device units.</span>
+        <span class="comment">% error    - Error information from the device, if any.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note the behavior of this command is protocol-specific. See the</span>
+        <span class="comment">% protocol-specific implementations for more details.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also home, stop, waitforidle, getposition, moveabsolute,</span>
+        <span class="comment">% moveatvelocity, moveindexed, Units</span>
+        error = moverelative(obj, aPosition)
+
+
+        <span class="comment">% MOVEATVELOCITY Move the device at a specified velocity.</span>
+        <span class="comment">% error = device.MOVEATVELOCITY(velocity);</span>
+        <span class="comment">%</span>
+        <span class="comment">% velocity - Speed to move at, in native device units.</span>
+        <span class="comment">% error    - Error information from the device, if any.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note the behavior of this command is protocol-specific. See the</span>
+        <span class="comment">% protocol-specific implementations for more details.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also home, stop, waitforidle, getposition, moverelative,</span>
+        <span class="comment">% moveabsolute, moveindexed, Units</span>
+        error = moveatvelocity(obj, aPosition)
+
+
+        <span class="comment">% STOP Stop the device if it is moving.</span>
+        <span class="comment">% error = device.STOP();</span>
+        <span class="comment">%</span>
+        <span class="comment">% error    - Error information from the device, if any.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also waitforidle, getposition, stop, moveabsolute,</span>
+        <span class="comment">% moverelative, moveatvelocity, moveindexed</span>
+        error = stop(obj)
+
+
+        <span class="comment">% GETPOSITION Get the current device position in native units.</span>
+        <span class="comment">% pos = device.GETPOSITION();</span>
+        <span class="comment">%</span>
+        <span class="comment">% If there is a communication error or the device is not an axis,</span>
+        <span class="comment">% the empty array will be returned.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also range, moveabsolute, moverelative, moveatvelocity,</span>
+        <span class="comment">% moveindexed, Zaber.DeviceUnits, Units</span>
+        pos = getposition(obj)
+
+
+        <span class="comment">% GETNUMINDICES Determine how many indexed positions the device has.</span>
+        <span class="comment">% num = getvice.GETNUMINDICES();</span>
+        <span class="comment">%</span>
+        <span class="comment">% Return value is the maximum position that can be passed to</span>
+        <span class="comment">% moveindexed. Returns zero on devices that do not support the</span>
+        <span class="comment">% moveindexed command.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also moveindexed, waitforidle, getposition, stop</span>
+        num = getnumindices(obj)
+
+
+        <span class="comment">% MOVEINDEXED Move to an indexed position.</span>
+        <span class="comment">% error = device.MOVEINDEXED(index);</span>
+        <span class="comment">%</span>
+        <span class="comment">% index - The index of the position to move to. Minimum value is 1,</span>
+        <span class="comment">%         and maximum value is the number returned by</span>
+        <span class="comment">%         GETNUMINDICES. Will be rejected on devices that don't</span>
+        <span class="comment">%         support indexed moves.</span>
+        <span class="comment">% error - Protocol-specific error code if the command is rejected</span>
+        <span class="comment">%         or generates an error. Empty on success.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This command is intended for use with indexed-position devices</span>
+        <span class="comment">% such as the Filter Wheel. Although the other movement commands</span>
+        <span class="comment">% will often work with such devices, this method provides an easier</span>
+        <span class="comment">% way to reach a useful position.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note the behavior of this command is protocol-specific. See the</span>
+        <span class="comment">% protocol-specific implementations for more details.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also home, stop, waitforidle, getposition, moverelative,</span>
+        <span class="comment">% moveatvelocity, moveabsolute, Units</span>
+        error = moveindexed(obj, aIndex)
+    <span class="keyword">end</span>
+</pre><h2 id="5">Public static methods</h2><pre class="codeinput">    methods (Static)
+        <span class="keyword">function</span> instance = initialize(aProtocol, aDeviceNumber, aDeviceId)
+        <span class="comment">% INITIALIZE Construct a representation for a device.</span>
+        <span class="comment">% device = Zaber.Device.INITIALIZE(protocol, address, id)</span>
+        <span class="comment">%</span>
+        <span class="comment">% protocol - Either an AsciiProtocol or a BinaryProtocol</span>
+        <span class="comment">%            instance.</span>
+        <span class="comment">% address  - The daisy chain address of the device to be</span>
+        <span class="comment">%            identified.</span>
+        <span class="comment">% id       - Optional type ID of the device. If not determined</span>
+        <span class="comment">%            through code, you can look these IDs up on Zaber's</span>
+        <span class="comment">%            website at: http://www.zaber.com/support/?tab=ID%20Mapping</span>
+        <span class="comment">% instance - An initialized subclass of Device.</span>
+        <span class="comment">%</span>
+        <span class="comment">% Given the daisy chain address and device type ID for a device</span>
+        <span class="comment">% that has been found using the given protocol, queries the device</span>
+        <span class="comment">% for its properties and constructs a new Zaber.Device subclass</span>
+        <span class="comment">% instance to represent that device.</span>
+        <span class="comment">%</span>
+        <span class="comment">% This is the main dispatch point for identifying and</span>
+        <span class="comment">% populating information about a single device. It will</span>
+        <span class="comment">% automatically dispatch to the appropriate method for the</span>
+        <span class="comment">% given protocol, and will return a Device subclass appropriate</span>
+        <span class="comment">% to the protocol. This method is used by</span>
+        <span class="comment">% Protocol.finddevices().</span>
+        <span class="comment">%</span>
+        <span class="comment">% Note depending on the protocol and baud rate, this method can</span>
+        <span class="comment">% take a couple of seconds to query all of a device's</span>
+        <span class="comment">% information.</span>
+        <span class="comment">%</span>
+        <span class="comment">% See also Protocol, AsciiDevice.initialize,</span>
+        <span class="comment">% BinaryDevice.initialize</span>
+
+            <span class="keyword">if</span> (isa(aProtocol, <span class="string">'Zaber.BinaryProtocol'</span>))
+                <span class="keyword">if</span> (nargin &gt; 2)
+                    instance = Zaber.BinaryDevice.initialize(aProtocol, aDeviceNumber, aDeviceId);
+                <span class="keyword">else</span>
+                    instance = Zaber.BinaryDevice.initialize(aProtocol, aDeviceNumber);
+                <span class="keyword">end</span>
+            <span class="keyword">elseif</span> (isa(aProtocol, <span class="string">'Zaber.AsciiProtocol'</span>))
+                <span class="keyword">if</span> (nargin &gt; 2)
+                    instance = Zaber.AsciiDevice.initialize(aProtocol, aDeviceNumber, aDeviceId);
+                <span class="keyword">else</span>
+                    instance = Zaber.AsciiDevice.initialize(aProtocol, aDeviceNumber);
+                <span class="keyword">end</span>
+            <span class="keyword">else</span>
+                error(<span class="string">'Zaber:Device:initialize:badProtocol'</span>, <span class="keyword">...</span>
+                      <span class="string">'Protocol is not a known protocol type.'</span>);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><h2 id="6">Protected instance methods</h2><pre class="codeinput">    methods (Access = protected)
+        <span class="keyword">function</span> obj = Device(aProtocol, aDeviceNumber, aDeviceId)
+            <span class="comment">% DEVICE Initializes properties to their default values.</span>
+            <span class="comment">% This constructor is meant to be called by subclass constructors</span>
+            <span class="comment">% only.</span>
+            obj.Protocol = aProtocol;
+            obj.DeviceNo = aDeviceNumber;
+            obj.AxisNo = 0;
+            obj.DeviceId = aDeviceId;
+            obj.PeripheralId = 0;
+            obj.IsAxis = false;
+            obj.Axes = [];
+            obj.FirmwareVersion = 0;
+            obj.MotionType = Zaber.MotionType.None;
+            obj.Units = [];
+            obj.Name = <span class="string">'Unitialized device class instance'</span>;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+classdef (Abstract) Device < handle
+%   DEVICE Base class for all Zaber devices.
+%   This class defines the general-purpose interface for all Zaber
+%   devices regardless of protocol or capability.
+%
+%   See also AsciiDevice, BinaryDevice, Protocol
+
+%   Author: Zaber Technologies Software Team <contact@zaber.com>
+
+
+%% Public instance properties
+    properties (SetAccess=protected)
+        % PROTOCOL The Protocol instance (and port) this device is on.
+        %
+        % See also Zaber.Protocol, Zaber.BinaryProtocol,
+        % Zaber.AsciiProtocol
+        Protocol
+        
+        % DEVICENO The device's address on the daisy chain.
+        DeviceNo
+        
+        % AXISNO 1-based axis index if this device is a peripheral.
+        AxisNo
+        
+        % DEVICEID Numerical identifier for the device controller type.
+        DeviceId
+        
+        % PERIPHERALID Numerical identifier for the device peripheral type.
+        PeripheralId
+        
+        % NAME Human-readable name for the device.
+        Name
+        
+        % ISAXIS True if this device honors motion commands.
+        IsAxis
+        
+        % AXES Array of peripheral devices attached, if any.
+        Axes
+        
+        % FIRMWAREVERSION Device's firmware version.
+        % The version number is represented as a floating point number
+        % where the integer part is the major version and the remainder the
+        % minor version. 0 means unknown.
+        FirmwareVersion
+        
+        % MOTIONTYPE Type of motion produced by the device, if any.
+        % Use this to determine whether the device is capable of movement,
+        % and what units of measure are appropriate.
+        %
+        % See also Zaber.MotionType
+        MotionType
+        
+        % UNITS Physical unit conversion factors for this device.
+        % If empty, this device either doesn't support simple unit
+        % conversions due to its motion type, or does not move.
+        % See also MotionType, Zaber.DeviceUnits
+        Units
+        
+        % IO I/O port interface if this device has I/O ports.
+        % See also Zaber.IoPort
+        IO
+    end
+    
+    
+ %% Public instance methods.
+    methods (Abstract)
+        
+        % REQUEST Convenience method to transact with a device.
+        % reply = device.REQUEST(command, data);
+        %
+        % command - Message to send to the device. This is a byte for the
+        %           binary protocol or a string for the ASCII protocol.
+        % data    - Arguments for the command. In the binary protocol this
+        %           is a single integer. In the ASCII protocol this can be
+        %           the empty array, a number, a string, or an array of
+        %           numbers or strings.
+        %           
+        % reply   - Response from the device. Type is either BinaryMessage
+        %           or AsciiMessage.
+        %
+        % This method ignores timeouts and will block until a message
+        % is received.
+        %
+        % See also Zaber.AsciiDevice.request, Zaber.BinaryDevice.request
+        reply = request(obj, aCommand, aData)
+        
+
+        % GET Read a setting from the device.
+        % value = device.get(setting)
+        %
+        % setting - Identifier for the setting to read. For the Binary
+        %           protocol this is a number and for the ASCII protocol
+        %           it's a name string. See the relevant Zaber protocol
+        %           manual for values.
+        % value   - Current value of the setting. The type depends on the
+        %           protocol and the setting, but is usually numeric.
+        %
+        % The behavior of this method is protocol-specific, but generally
+        % it will read and return a setting from the device. In the event
+        % of a communication error, an error will be thrown. If
+        % communication succeeds but the device returns an error response,
+        % a warning will be printed and the empty array returned.
+        %
+        % See also set
+        value = get(obj, aSetting)
+            
+        
+        % SET Write a value to a device setting.
+        % result = device.set(setting, value)
+        %
+        % setting - Identifier for the setting to write. For the Binary
+        %           protocol this is a number and for the ASCII protocol
+        %           it's a name string. See the relevant Zaber protocol
+        %           manual for values.
+        % value   - New value of the setting. The type depends on the
+        %           protocol and the setting, but is usually numeric.
+        % result  - True if the write succeeded, or the reply message if
+        %           the device returned an error response.
+        %
+        % The behavior of this method is protocol-specific, but generally
+        % it will attempt to change the value of a seting on the device.
+        % Errors will be thrown if there is a communication error. If the
+        % setting does not exist, the setting is read-only, or if the
+        % value provided is out of range for the setting (ie if the device
+        % returns an error response) then a warning will be printed and
+        % the device's response message will be returned.
+        %
+        % See also get
+        result = set(obj, aSetting, aValue)
+        
+        
+        % GETRANGE Determine the movement limits of the device.
+        % range = device.GETRANGE();
+        %
+        % range - A 1x2 matrix with the first entry being the lower bound
+        %         on legal device position and the second entry being the
+        %         upper bound. Empty array of the concept doesn't apply.
+        %         For a multi-axis controller the result will be an Nx2
+        %         array where N is the number of axes. For rotary devices
+        %         the range will be one full rotation. In all cases the
+        %         device can be configured to have a restricted range of
+        %         movement, and in that situation the user-configured range
+        %         will be returned.
+        %
+        % Reads device settings to determine the device's current idea of
+        % its range of movement. Returns the empty array if the concept
+        % does not apply to the device type.
+        %
+        % See also getposition, getnumindices, moveabsolute
+        range = getrange(obj)
+        
+        
+        % WAITFORIDLE Block until the device stops moving.
+        % error = device.WAITFORIDLE();
+        % error = device.WAITFORIDLE(interval);
+        %
+        % interval - Optional; number of seconds to wait between checks
+        %            of the device's state. Defaults to 0.1 seconds.
+        % error    - Return value, normally empty. If the device
+        %            entered an error state while this method was
+        %            checking for idleness, this method will return the
+        %            error message.
+        %
+        % This method will ping the device repeatedly until the device
+        % either becomes idle or produces an error response.
+        %
+        % Note the behavior of this command is protocol-specific. See the
+        % protocol-specific implementations for more details.
+        %
+        % See also stop, moveabsolute, moverelative, moveatvelocity,
+        % moveindexed, home
+        error = waitforidle(obj, aPingInterval)
+        
+        
+        % HOME Move the device to its home position.
+        % error = device.HOME();
+        %
+        % Note the behavior of this command is protocol-specific. See the
+        % protocol-specific implementations for more details.
+        %
+        % See also getposition, stop, moveabsolute, moverelative,
+        % moveatvelocity, moveindexed
+        error = home(obj)
+        
+        
+        % MOVEABSOLUTE Move the device to an absolute position.
+        % error = device.moveabsolute(position);
+        % 
+        % position - Position to move to, in native device units.
+        % error    - Error information from the device, if any.
+        %
+        % Note the behavior of this command is protocol-specific. See the
+        % protocol-specific implementations for more details.
+        %
+        % See also home, stop, waitforidle, getposition, moverelative,
+        % moveatvelocity, moveindexed, Units
+        error = moveabsolute(obj, aPosition)
+        
+        
+        % MOVERELATIVE Move the device by a relative amount.
+        % error = device.MOVERELATIVE(delta);
+        % 
+        % delta    - Distance to move by, in native device units.
+        % error    - Error information from the device, if any.
+        %
+        % Note the behavior of this command is protocol-specific. See the
+        % protocol-specific implementations for more details.
+        %
+        % See also home, stop, waitforidle, getposition, moveabsolute,
+        % moveatvelocity, moveindexed, Units
+        error = moverelative(obj, aPosition)
+        
+        
+        % MOVEATVELOCITY Move the device at a specified velocity.
+        % error = device.MOVEATVELOCITY(velocity);
+        % 
+        % velocity - Speed to move at, in native device units.
+        % error    - Error information from the device, if any.
+        %
+        % Note the behavior of this command is protocol-specific. See the
+        % protocol-specific implementations for more details.
+        %
+        % See also home, stop, waitforidle, getposition, moverelative,
+        % moveabsolute, moveindexed, Units
+        error = moveatvelocity(obj, aPosition)
+        
+        
+        % STOP Stop the device if it is moving.
+        % error = device.STOP();
+        %
+        % error    - Error information from the device, if any.
+        %
+        % See also waitforidle, getposition, stop, moveabsolute,
+        % moverelative, moveatvelocity, moveindexed
+        error = stop(obj)
+        
+        
+        % GETPOSITION Get the current device position in native units.
+        % pos = device.GETPOSITION();
+        %
+        % If there is a communication error or the device is not an axis,
+        % the empty array will be returned.
+        %
+        % See also range, moveabsolute, moverelative, moveatvelocity,
+        % moveindexed, Zaber.DeviceUnits, Units
+        pos = getposition(obj)
+        
+        
+        % GETNUMINDICES Determine how many indexed positions the device has.
+        % num = getvice.GETNUMINDICES();
+        %
+        % Return value is the maximum position that can be passed to
+        % moveindexed. Returns zero on devices that do not support the
+        % moveindexed command.
+        %
+        % See also moveindexed, waitforidle, getposition, stop
+        num = getnumindices(obj)
+        
+        
+        % MOVEINDEXED Move to an indexed position.
+        % error = device.MOVEINDEXED(index);
+        %
+        % index - The index of the position to move to. Minimum value is 1,
+        %         and maximum value is the number returned by
+        %         GETNUMINDICES. Will be rejected on devices that don't
+        %         support indexed moves.
+        % error - Protocol-specific error code if the command is rejected
+        %         or generates an error. Empty on success.
+        %
+        % This command is intended for use with indexed-position devices
+        % such as the Filter Wheel. Although the other movement commands
+        % will often work with such devices, this method provides an easier
+        % way to reach a useful position.
+        %
+        % Note the behavior of this command is protocol-specific. See the
+        % protocol-specific implementations for more details.
+        %
+        % See also home, stop, waitforidle, getposition, moverelative,
+        % moveatvelocity, moveabsolute, Units
+        error = moveindexed(obj, aIndex)
+    end
+
+    
+ %% Public static methods
+    methods (Static)
+        function instance = initialize(aProtocol, aDeviceNumber, aDeviceId)
+        % INITIALIZE Construct a representation for a device.
+        % device = Zaber.Device.INITIALIZE(protocol, address, id)
+        %
+        % protocol - Either an AsciiProtocol or a BinaryProtocol
+        %            instance.
+        % address  - The daisy chain address of the device to be
+        %            identified.
+        % id       - Optional type ID of the device. If not determined
+        %            through code, you can look these IDs up on Zaber's
+        %            website at: http://www.zaber.com/support/?tab=ID%20Mapping
+        % instance - An initialized subclass of Device.
+        % 
+        % Given the daisy chain address and device type ID for a device
+        % that has been found using the given protocol, queries the device
+        % for its properties and constructs a new Zaber.Device subclass
+        % instance to represent that device.
+        %
+        % This is the main dispatch point for identifying and
+        % populating information about a single device. It will
+        % automatically dispatch to the appropriate method for the
+        % given protocol, and will return a Device subclass appropriate
+        % to the protocol. This method is used by
+        % Protocol.finddevices().
+        %
+        % Note depending on the protocol and baud rate, this method can
+        % take a couple of seconds to query all of a device's
+        % information.
+        %
+        % See also Protocol, AsciiDevice.initialize,
+        % BinaryDevice.initialize
+        
+            if (isa(aProtocol, 'Zaber.BinaryProtocol'))
+                if (nargin > 2)
+                    instance = Zaber.BinaryDevice.initialize(aProtocol, aDeviceNumber, aDeviceId);
+                else
+                    instance = Zaber.BinaryDevice.initialize(aProtocol, aDeviceNumber);
+                end
+            elseif (isa(aProtocol, 'Zaber.AsciiProtocol'))
+                if (nargin > 2)
+                    instance = Zaber.AsciiDevice.initialize(aProtocol, aDeviceNumber, aDeviceId);
+                else
+                    instance = Zaber.AsciiDevice.initialize(aProtocol, aDeviceNumber);
+                end
+            else
+                error('Zaber:Device:initialize:badProtocol', ...
+                      'Protocol is not a known protocol type.');
+            end
+        end
+    end
+    
+    
+ %% Protected instance methods
+    methods (Access = protected)
+        function obj = Device(aProtocol, aDeviceNumber, aDeviceId)
+            % DEVICE Initializes properties to their default values.
+            % This constructor is meant to be called by subclass constructors
+            % only.
+            obj.Protocol = aProtocol;
+            obj.DeviceNo = aDeviceNumber;
+            obj.AxisNo = 0;
+            obj.DeviceId = aDeviceId;
+            obj.PeripheralId = 0;
+            obj.IsAxis = false;
+            obj.Axes = [];
+            obj.FirmwareVersion = 0;
+            obj.MotionType = Zaber.MotionType.None;
+            obj.Units = [];
+            obj.Name = 'Unitialized device class instance';
+        end
+    end
+end
+
+
+##### SOURCE END #####
+--></body></html>
