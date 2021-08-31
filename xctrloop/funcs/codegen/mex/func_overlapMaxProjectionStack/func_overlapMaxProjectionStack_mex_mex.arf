@@ -1,0 +1,16 @@
+libemlrt.lib
+libcovrt.lib
+libut.lib
+libmwmathutil.lib
+/export:mexFunction
+/export:mexfilerequiredapiversion
+/export:emlrtMexFcnProperties
+/export:func_overlapMaxProjectionStack
+/export:emxEnsureCapacity_uint16_T
+/export:emxEnsureCapacity_uint16_T1
+/export:emxFree_uint16_T
+/export:emxInit_uint16_T
+/export:emxInit_uint16_T1
+/export:func_overlapMaxProjectionStack_initialize
+/export:func_overlapMaxProjectionStack_terminate
+/export:func_overlapMaxProjectionStack_atexit
