@@ -3,5 +3,5 @@
 
 Customized code for SMART and reconstruced neuron's swc files.
 
-Han Chen1, Tianyi Huang, Yuexin Yang, Xiao Yao, Yan Huo, Yu Wang, Wenyu Zhao, Runan Ji, Hongjiang Yang, Zengcai V. Guo  
+Han Chen, Tianyi Huang, Yuexin Yang, Xiao Yao, Yan Huo, Yu Wang, Wenyu Zhao, Runan Ji, Hongjiang Yang, Zengcai V. Guo  
 **Sparse imaging and reconstruction tomography for high-speed high-resolution whole brain imaging**
