@@ -1,0 +1,7 @@
+% default configure parameters for xcontrol
+% CH, 2017/7/11
+
+% stage -----------------------------------------------------------------------------------
+iniPosition_x = 25; % initiation position, mm, stage x
+iniPosition_y = 25; % initiation position, mm, stage y
+iniPosition_z = 25; % initiation position, mm, stage z

@@ -1,0 +1,238 @@
+1.24 15:26:26 Raise objectives.
+1.24 15:26:32 Initiated piezo.
+1.24 15:26:48 Shift objective to 16X.
+1.24 15:28:21 Initiated stages.
+1.24 15:51:58 Vibration ON
+1.24 15:53:21 Vibration OFF
+1.24 15:53:24 Section 0.5000 mm sample at 0.30 mm/s speed.
+1.24 15:53:24 Blade plane at 18.5004 mm.
+1.24 15:53:27 Vibration ON
+1.24 15:54:51 Vibration OFF
+1.24 15:54:53 Section 0.5000 mm sample at 0.30 mm/s speed.
+1.24 15:54:53 Blade plane at 18.0003 mm.
+1.24 15:54:55 Vibration ON
+1.24 15:56:18 Vibration OFF
+1.24 15:56:21 Section 0.5000 mm sample at 0.30 mm/s speed.
+1.24 15:56:21 Blade plane at 17.5005 mm.
+1.24 15:56:43 Pulldown objectives.
+1.24 16:01:03 Vibration ON
+1.24 16:02:26 Vibration OFF
+1.24 16:02:29 Section 0.5000 mm sample at 0.30 mm/s speed.
+1.24 16:02:29 Blade plane at 17.0011 mm.
+1.24 16:02:48 Vibration ON
+1.24 16:04:11 Vibration OFF
+1.24 16:04:14 Section 0.5000 mm sample at 0.30 mm/s speed.
+1.24 16:04:14 Blade plane at 16.5012 mm.
+1.24 16:04:53 Vibration ON
+1.24 16:06:17 Vibration OFF
+1.24 16:06:20 Section 0.5000 mm sample at 0.30 mm/s speed.
+1.24 16:06:20 Blade plane at 16.0012 mm.
+1.24 16:11:02 Set Focus plane at 15.9020 mm.
+1.24 16:11:04 Pulldown objectives.
+1.24 16:11:04 Align focus and blade plane.
+1.24 16:11:32 Set (16.9950,15.9982) as sample center.
+1.24 16:21:27 State updated: ROIsPredetermining.
+1.24 16:21:28 Start detemining ROIs. NO.1
+1.24 16:21:28 State updated: ROIsRedetermining.
+1.24 16:21:28 Finish detemining ROIs. NO.1
+1.24 16:27:09 State updated: ROIsUnfinished40X.
+1.24 16:27:10 Shift objective to 40X.
+1.24 16:27:49 State updated: ROIsPredetermining.
+1.24 16:27:49 Start moving images captured last time.
+1.24 16:27:50 Finish moving.
+1.24 16:27:54 Shift objective to 16X.
+1.24 16:27:55 Re-start detemining ROIs. NO.1
+1.24 16:27:55 State updated: ROIsRedetermining.
+1.24 16:27:55 Finish detemining ROIs. NO.1
+1.24 16:28:34 State updated: ROIsPredetermining.
+1.24 16:28:34 Start moving images captured last time.
+1.24 16:28:34 Finish moving.
+1.24 16:28:37 Re-start detemining ROIs. NO.1
+1.24 16:28:37 State updated: ROIsRedetermining.
+1.24 16:28:37 Finish detemining ROIs. NO.1
+1.24 16:32:40 State updated: ROIsUnfinished40X.
+1.24 16:32:41 Shift objective to 40X.
+1.24 16:48:06 getData error. Lost 1 frames.
+1.24 17:08:08 State updated: Patching.
+1.24 17:08:08 State updated: ROIsFinished.
+1.24 17:08:09 Shift objective to 16X.
+1.24 17:08:10 State updated: Sectioning.
+1.24 17:08:10 Blade plane at 15.6561 mm.
+1.24 17:08:10 State updated: ROIsPredetermining.
+1.24 17:08:11 Start detemining ROIs. NO.2
+1.24 17:08:11 State updated: ROIsRedetermining.
+1.24 17:08:11 Finish detemining ROIs. NO.2
+1.24 17:10:36 State updated: ROIsUnfinished40X.
+1.24 17:10:37 Shift objective to 40X.
+1.24 17:44:32 State updated: Patching.
+1.24 17:44:32 State updated: ROIsFinished.
+1.24 17:44:34 Shift objective to 16X.
+1.24 17:44:34 State updated: Sectioning.
+1.24 17:44:34 Blade plane at 15.3111 mm.
+1.24 17:44:34 State updated: ROIsPredetermining.
+1.24 17:44:35 Start detemining ROIs. NO.3
+1.24 17:44:35 State updated: ROIsRedetermining.
+1.24 17:44:35 Finish detemining ROIs. NO.3
+1.24 17:59:04 State updated: ROIsUnfinished40X.
+1.24 17:59:05 Shift objective to 40X.
+1.24 18:33:25 State updated: Patching.
+1.24 18:33:25 State updated: ROIsFinished.
+1.24 18:33:26 Shift objective to 16X.
+1.24 18:33:26 State updated: Sectioning.
+1.24 18:33:27 Blade plane at 14.9662 mm.
+1.24 18:33:27 State updated: ROIsPredetermining.
+1.24 18:33:27 Start detemining ROIs. NO.4
+1.24 18:33:27 State updated: ROIsRedetermining.
+1.24 18:33:27 Finish detemining ROIs. NO.4
+1.24 18:35:23 State updated: ROIsUnfinished40X.
+1.24 18:35:24 Shift objective to 40X.
+1.24 19:09:50 State updated: Patching.
+1.24 19:09:50 State updated: ROIsFinished.
+1.24 19:09:51 Shift objective to 16X.
+1.24 19:09:51 State updated: Sectioning.
+1.24 19:09:54 Vibration ON
+1.24 19:09:58 Vibration OFF
+1.24 19:10:01 Blade plane at 14.6212 mm.
+1.24 19:10:01 State updated: ROIsPredetermining.
+1.24 19:10:01 Start detemining ROIs. NO.5
+1.24 19:10:01 State updated: ROIsRedetermining.
+1.24 19:10:01 Finish detemining ROIs. NO.5
+1.24 19:10:34 Vibration ON
+1.24 19:11:58 Vibration OFF
+1.24 19:12:00 Section 0.5000 mm sample at 0.30 mm/s speed.
+1.24 19:12:00 Blade plane at 16.1142 mm.
+1.24 19:12:41 State updated: FinishImaging.
+1.24 19:15:09 Set Focus plane at 16.0087 mm.
+1.24 19:15:10 Pulldown objectives.
+1.24 19:15:10 Align focus and blade plane.
+1.24 19:15:19 Set Focus plane at 16.2204 mm.
+1.24 19:15:20 Pulldown objectives.
+1.24 19:15:20 Align focus and blade plane.
+1.24 19:15:40 Set Focus plane at 16.0229 mm.
+1.24 19:15:41 Pulldown objectives.
+1.24 19:15:41 Align focus and blade plane.
+1.24 19:15:49 Set Focus plane at 16.2205 mm.
+1.24 19:15:50 Pulldown objectives.
+1.24 19:15:51 Align focus and blade plane.
+1.24 19:16:06 Set Focus plane at 16.0230 mm.
+1.24 19:16:07 Pulldown objectives.
+1.24 19:16:07 Align focus and blade plane.
+1.24 19:16:14 Set Focus plane at 16.3205 mm.
+1.24 19:16:15 Pulldown objectives.
+1.24 19:16:15 Align focus and blade plane.
+1.24 19:16:21 Set Focus plane at 15.9235 mm.
+1.24 19:16:22 Pulldown objectives.
+1.24 19:16:22 Align focus and blade plane.
+1.24 19:16:27 Set Focus plane at 16.0230 mm.
+1.24 19:16:28 Pulldown objectives.
+1.24 19:16:28 Align focus and blade plane.
+1.24 19:17:55 Set Focus plane at 15.9234 mm.
+1.24 19:17:57 Pulldown objectives.
+1.24 19:17:57 Align focus and blade plane.
+1.24 19:18:20 Vibration ON
+1.24 19:19:44 Vibration OFF
+1.24 19:19:46 Section 0.5000 mm sample at 0.30 mm/s speed.
+1.24 19:19:46 Blade plane at 16.0153 mm.
+1.24 19:20:02 Set Focus plane at 16.4152 mm.
+1.24 19:20:04 Pulldown objectives.
+1.24 19:20:04 Align focus and blade plane.
+1.24 19:21:17 Set Focus plane at 16.0242 mm.
+1.24 19:21:18 Pulldown objectives.
+1.24 19:21:18 Align focus and blade plane.
+1.24 19:21:28 Pulldown objectives.
+1.24 19:21:29 Align focus and blade plane.
+1.24 19:22:33 State updated: ROIsPredetermining.
+1.24 19:22:33 Start moving images captured last time.
+1.24 19:22:33 Finish moving.
+1.24 19:22:34 Re-start detemining ROIs. NO.5
+1.24 19:22:34 State updated: ROIsRedetermining.
+1.24 19:22:34 Finish detemining ROIs. NO.5
+1.24 19:23:22 State updated: ROIsPredetermining.
+1.24 19:23:22 Start moving images captured last time.
+1.24 19:23:22 Finish moving.
+1.24 19:23:23 Re-start detemining ROIs. NO.5
+1.24 19:23:23 State updated: ROIsRedetermining.
+1.24 19:23:23 Finish detemining ROIs. NO.5
+1.24 19:23:34 State updated: ROIsPredetermining.
+1.24 19:23:35 Start moving images captured last time.
+1.24 19:23:35 Finish moving.
+1.24 19:23:35 Re-start detemining ROIs. NO.5
+1.24 19:23:35 State updated: ROIsRedetermining.
+1.24 19:23:35 Finish detemining ROIs. NO.5
+1.24 19:23:51 State updated: FinishImaging.
+1.24 19:24:08 State updated: ROIsPredetermining.
+1.24 19:24:08 Start detemining ROIs. NO.1
+1.24 19:24:08 State updated: ROIsRedetermining.
+1.24 19:24:09 Finish detemining ROIs. NO.1
+1.24 19:27:10 State updated: ROIsUnfinished40X.
+1.24 19:27:11 Shift objective to 40X.
+1.24 19:31:38 getData error. Lost 1 frames.
+1.24 19:31:55 getData error. Lost 1 frames.
+1.24 19:32:05 Auto record position: [18.589  13.950  15.715 283.511].
+1.24 19:33:05 getData error. Lost 1 frames.
+1.24 19:33:14 getData error. Lost 1 frames.
+1.24 19:33:28 getData error. Lost 1 frames.
+1.24 19:33:41 getData error. Lost 1 frames.
+1.24 19:39:56 State updated: ROIsPredetermining.
+1.24 19:39:56 Start moving images captured last time.
+1.24 19:39:57 Finish moving.
+1.24 19:40:03 Shift objective to 16X.
+1.24 19:40:03 Re-start detemining ROIs. NO.1
+1.24 19:40:03 State updated: ROIsRedetermining.
+1.24 19:40:04 Finish detemining ROIs. NO.1
+1.24 19:43:01 State updated: ROIsUnfinished40X.
+1.24 19:43:02 Shift objective to 40X.
+1.24 20:17:35 State updated: Patching.
+1.24 20:17:35 State updated: ROIsFinished.
+1.24 20:17:36 Shift objective to 16X.
+1.24 20:17:37 State updated: Sectioning.
+1.24 20:17:39 Vibration ON
+1.24 20:19:03 Vibration OFF
+1.24 20:19:07 Blade plane at 15.6701 mm.
+1.24 20:19:07 State updated: ROIsPredetermining.
+1.24 20:19:07 Start detemining ROIs. NO.2
+1.24 20:19:07 State updated: ROIsRedetermining.
+1.24 20:19:07 Finish detemining ROIs. NO.2
+1.24 20:22:20 State updated: ROIsUnfinished40X.
+1.24 20:22:21 Shift objective to 40X.
+1.24 20:52:43 getData error. Lost 1 frames.
+1.24 20:54:44 State updated: Patching.
+1.24 20:54:44 State updated: ROIsFinished.
+1.24 20:54:45 Shift objective to 16X.
+1.24 20:54:45 State updated: Sectioning.
+1.24 20:54:48 Vibration ON
+1.24 20:56:11 Vibration OFF
+1.24 20:56:15 Blade plane at 15.3252 mm.
+1.24 20:56:15 State updated: ROIsPredetermining.
+1.24 20:56:15 Start detemining ROIs. NO.3
+1.24 20:56:15 State updated: ROIsRedetermining.
+1.24 20:56:16 Finish detemining ROIs. NO.3
+1.24 20:57:36 State updated: ROIsUnfinished40X.
+1.24 20:57:37 Shift objective to 40X.
+1.24 21:34:10 State updated: Patching.
+1.24 21:34:10 State updated: ROIsFinished.
+1.24 21:34:12 Shift objective to 16X.
+1.24 21:34:12 State updated: Sectioning.
+1.24 21:34:15 Vibration ON
+1.24 21:35:38 Vibration OFF
+1.24 21:35:42 Blade plane at 14.9802 mm.
+1.24 21:35:42 State updated: ROIsPredetermining.
+1.24 21:35:43 Start detemining ROIs. NO.4
+1.24 21:35:43 State updated: ROIsRedetermining.
+1.24 21:35:43 Finish detemining ROIs. NO.4
+1.24 21:37:23 State updated: ROIsUnfinished40X.
+1.24 21:37:24 Shift objective to 40X.
+1.24 22:13:49 State updated: Patching.
+1.24 22:13:49 State updated: ROIsFinished.
+1.24 22:13:50 Shift objective to 16X.
+1.24 22:13:50 State updated: Sectioning.
+1.24 22:13:53 Vibration ON
+1.24 22:15:16 Vibration OFF
+1.24 22:15:20 Blade plane at 14.6347 mm.
+1.24 22:15:20 State updated: ROIsPredetermining.
+1.24 22:15:21 Start detemining ROIs. NO.5
+1.24 22:15:21 State updated: ROIsRedetermining.
+1.24 22:15:21 Finish detemining ROIs. NO.5
+1.24 22:34:37 No ROIs detected signals in this section.
+1.24 22:34:37 State updated: ROIsFinished.
+1.24 22:34:37 State updated: FinishImaging.
